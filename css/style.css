@@ -1,0 +1,66 @@
+body{
+    background:#000000;
+    text-align: center;
+    }
+
+p {
+margin:0;
+}
+
+a:link {
+color: #ff6600
+}
+
+a:visited {
+color: #ff6600  
+}
+
+
+a:active {
+  background: yellow;
+  color: blue;
+}
+
+body.il-post-page {
+  width: 550px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.il-post-page p {
+  color: #ffcc00; 
+  text-align: justify;
+  text-indent: 5%;
+  font-family: sans-serif;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  letter-spacing: 0.3px;
+  word-spacing: 1.0px;
+	}
+
+.il-post-page ul {
+	list-style-type: circle;
+	color: #ffcc00;
+	text-align: justify;
+	text-indent: 5%;
+	font-family: sans-serif;
+	font-size: 0.85rem;
+	line-height: 1.5;
+	letter-spacing: 0.3px;
+	word-spacing: 1.0px;
+	}
+	
+.il-post-page h1 {
+  color: #ffcc00;
+  font-size: 2rem;
+  margin-top: 4rem;
+
+}
+
+.il-post-page img {
+  max-width: 80%;
+  max-height: 500px;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+}
