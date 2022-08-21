@@ -7,24 +7,33 @@
              <link rel="icon" type="image" href="media/icon/icon.png">
              <link rel="stylesheet" href="css/style.css" media="all">        
         </head>
-        <header class="il-page-header"></header>
-        <body>
-            
+    <header class="il-page-header-full"></header>
+    <body>
+<!--<p style="color:red;" id="demo"></p>-->
 <script language="JavaScript">
-var a=Math.round(Math.random()*3);
-image = new Array();
-image[0]="media/main/sepia1.jpg";
-image[1]="media/main/sepia2.jpg";
-image[2]="media/main/sepia3.jpg";
-image[3]="media/main/sepia1.jpg";
-document.write ("<a href=main.html><img style='width: 470px; outline: solid thin rgb(43, 43, 43);' src="+image[a]+" ></a>");
+	var height_check = window.innerHeight
+	var width_check = window.innerWidth
+	var screen_ratio = height_check / width_check
+	if (screen_ratio > 1){
+		var images_count = 5
+		var images_folder_path = "media/main/vert/"
+		var a = Math.round(Math.random()*(images_count-1)) + 1;
+		var let_width = Math.round(width_check*0.67)} 
+	else {
+		var images_count = 14
+		var images_folder_path = "media/main/horiz/"
+		var a = Math.round(Math.random()*(images_count-1)) + 1;
+		var let_width = 480}
+		
+	var image_path = images_folder_path + a + ".jpg"
+	document.write ("<a href=main.html><img width="+let_width+" style='outline: solid thin rgb(43, 43, 43);' src="+image_path+" ></a> ");
+//	document.getElementById("demo").innerHTML = height_check + ',' + width_check + ',' + screen_ratio + ',' + let_width;
 </script>
-
-             
              
         </body>
-        <footer class="il-page-footer">
-                    E-mail ИБ:
-                       	<a href=mailto:il@baidakov.ru">il@baidakov.ru</a>
-             </footer>
-    </html>
+
+    <footer class="il-page-footer">
+       	  <a href="baidakov.ru">baidakov.ru</a>
+    </footer>
+</html>
+

@@ -64,3 +64,36 @@ body.il-post-page {
   margin-bottom: 0.5rem;
   cursor: pointer;
 }
+
+
+@media (min-aspect-ratio: 10/9) {
+header.il-page-header-full {
+    background: repeat center url("../media/bg/papyrus-dark.png");
+    margin-left: auto;
+    margin-right: auto;
+    height: 70px;
+    width: 480px;
+    outline: solid thin rgb(43,43,43);
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+	}
+}
+
+@media (max-aspect-ratio: 10/9) {
+header.il-page-header-full {
+    background: repeat center url("../media/bg/papyrus-dark.png");
+    margin-left: auto;
+    margin-right: auto;
+    height: 55px;
+    width: 71.5%;
+    outline: solid thin rgb(43,43,43);
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+	}
+}
+
+footer.il-page-footer {
+    font-size: 0.85rem;
+    margin: 1.5em;
+    color: #ffcc00;
+}
