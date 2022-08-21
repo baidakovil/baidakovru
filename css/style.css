@@ -1,3 +1,11 @@
+@font-face {
+font-family: 'Museo Sans Cyrl 100';
+src: url('../../media/font/MuseoSansCyrl-100.ttf')  format('truetype');
+font-weight: 500;
+font-style: normal;
+font-display: swap;
+}
+
 body{
     background:#000000;
     text-align: center;
@@ -20,6 +28,24 @@ a:active {
   background: yellow;
   color: blue;
 }
+
+table.il-main-menu {
+	border: 1px solid rgb(43,43,43);
+	padding-top: 7%;
+	padding-bottom: 7%;
+	width: 480px;
+}
+
+.il-main-menu a:hover {
+  color: #ff6600;}
+
+.il-main-menu a {
+	font-family: 'Museo Sans Cyrl 100', Cambria, 'Hoefler Text', 'Liberation Serif', Times, 'Times New Roman', 'serif';
+	color: aliceblue;
+	text-decoration: none;
+	font-size: 1.2em;
+}
+
 
 body.il-post-page {
   width: 550px;
@@ -66,6 +92,7 @@ body.il-post-page {
 }
 
 
+
 @media (min-aspect-ratio: 10/9) {
 header.il-page-header-full {
     background: repeat center url("../media/bg/papyrus-dark.png");
@@ -96,4 +123,17 @@ footer.il-page-footer {
     font-size: 0.85rem;
     margin: 1.5em;
     color: #ffcc00;
+}
+
+@media (min-aspect-ratio: 10/9) {
+footer.il-main-page-footer {
+    background: repeat center url("../media/bg/papyrus-dark.png");
+    margin-left: auto;
+    margin-right: auto;
+    height: 55px;
+    width: 480px;
+    outline: solid thin rgb(43,43,43);
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+	}
 }
