@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', function () {
-    fetch('http://127.0.0.1:5000/api/updates')
+    fetch('/api/updates')
         .then(response => {
             console.log('Raw response:', response);
-            return response.text();  // Изменено с .json() на .text()
+            return response.text();
         })
         .then(text => {
             console.log('Response text:', text);
-            return JSON.parse(text);  // Теперь парсим текст вручную
+            return JSON.parse(text);
         })
         .then(data => {
             const tbody = document.querySelector('#updates-table tbody');
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const dateCell = document.createElement('td');
                 
                 nameCell.textContent = service.name;
-                dateCell.textContent = service.last_update ? new Date(service.last_update).toLocaleString('ru-RU') : 'Нет данных';
+                dateCell.textContent = service.formatted_datetime ? new Date(service.formatted_datetime).toLocaleString('ru-RU') : 'Нет данных';
                 
                 row.appendChild(nameCell);
                 row.appendChild(dateCell);

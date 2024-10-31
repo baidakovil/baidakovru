@@ -1,30 +1,39 @@
+import logging
+import os
 import sqlite3
 
-# Подключаемся к базе данных (если её нет, она будет создана)
-conn = sqlite3.connect('services.db')
-cursor = conn.cursor()
+from pyscripts import log_config
 
-# Создаем таблицу services
-cursor.execute(
-    '''
-CREATE TABLE IF NOT EXISTS services (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    last_update TEXT
-)
-'''
-)
+logger = log_config.setup_logging()
 
-# Вставляем начальные данные
-services = [
-    ('GitHub', None),
-    # Добавьте здесь другие сервисы, если они есть
-]
 
-cursor.executemany('INSERT INTO services (name, last_update) VALUES (?, ?)', services)
+def create_database_if_not_exists():
+    logger.debug('Начинается проверка существования базы данных...')
+    db_path = os.path.join(os.path.dirname(__file__), 'services.db')
+    if not os.path.exists(db_path):
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
 
-# Сохраняем изменения и закрываем соединение
-conn.commit()
-conn.close()
+        cursor.execute(
+            '''
+            CREATE TABLE IF NOT EXISTS services (
+                name TEXT PRIMARY KEY,
+                update_moment DATETIME,
+                raw_datetime TEXT,
+                formatted_datetime DATETIME,
+                update_desc TEXT,
+                raw_response TEXT
+            )
+            '''
+        )
 
-print("База данных создана успешно.")
+        conn.commit()
+        conn.close()
+        logger.info('База данных создана')
+    else:
+        logger.info('База данных уже существует')
+
+
+if __name__ == "__main__":
+    logger.info("Condition if __name__ == __main__ satisfied: creating database...")
+    create_database_if_not_exists()

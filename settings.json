@@ -1,0 +1,10 @@
+{
+  "python.sortImports.args": ["--profile", "black"],
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true
+  },
+  "[python]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "ms-python.python"
+  }
+}

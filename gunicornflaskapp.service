@@ -1,0 +1,17 @@
+[Unit]
+Description=Gunicorn instance to serve myflaskapp
+After=network.target
+
+[Service]
+User=baidakov
+Group=baidakov
+WorkingDirectory=$HOME/baidakov.ru
+Environment="PATH=$HOME/baidakov.ru/venv/bin"
+ExecStart=/bin/bash -c '\
+    $HOME/baidakov.ru/venv/bin/python $HOME/baidakov.ru/scheduler.py & \
+    $HOME/baidakov.ru/venv/bin/gunicorn --config gunicorn.conf.py wsgi:app'
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
