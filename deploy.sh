@@ -36,6 +36,19 @@ source $VENV_DIR/bin/activate
 # Install or upgrade all dependencies
 sudo $VENV_DIR/bin/pip install --upgrade -r requirements.txt
 
+# Create and set up .env file
+echo "$ENV_FILE" > $APP_DIR/.env
+sudo chown www-data:www-data $APP_DIR/.env
+sudo chmod 600 $APP_DIR/.env
+
+# Create and set up log folder
+sudo mkdir -p $LOG_DIR
+sudo chown -R www-data:www-data $LOG_DIR
+sudo chmod 755 $LOG_DIR
+
+# Create or update the database
+sudo -E $VENV_DIR/bin/python -m pyscripts.create_database
+
 # Copy nginx configuration if changed
 if ! cmp -s "$NGINX_CONFIG_SRC" "$NGINX_CONFIG_DEST"; then
     sudo cp "$NGINX_CONFIG_SRC" "$NGINX_CONFIG_DEST"
@@ -58,11 +71,6 @@ if ! cmp -s "$GUNICORN_SERVICE_SRC" "$GUNICORN_SERVICE_DEST"; then
 else
     echo "Gunicorn service file unchanged."
 fi
-
-# Create and set up log folder
-sudo mkdir -p $LOG_DIR
-sudo chown -R www-data:www-data $LOG_DIR
-sudo chmod 755 $LOG_DIR
 
 # Reload systemd, restart gunicorn and nginx
 sudo systemctl daemon-reload

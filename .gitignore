@@ -1,4 +1,5 @@
 .env
+.env.sensetive
 __pycache__
 venv
 database.db

@@ -16,6 +16,7 @@ jobs:
         host: ${{ secrets.SERVER_IP }}
         username: ${{ secrets.SERVER_USERNAME }}
         key: ${{ secrets.SERVER_SSH_KEY }}
+        envs: ENV_FILE
         script: |
           # Define variables
           APP_DIR="/var/www/baidakovru"
@@ -26,4 +27,4 @@ jobs:
           sudo chown ${{ secrets.SERVER_USERNAME }}:${{ secrets.SERVER_USERNAME }} $APP_DIR
           
           # Run deploy.sh script
-          bash $DEPLOY_SCRIPT
+          ENV_FILE='${{ secrets.ENV_FILE }}' bash $DEPLOY_SCRIPT
