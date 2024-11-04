@@ -1,11 +1,15 @@
 import json
-import logging
 import os
 import sqlite3
+
+from dotenv import load_dotenv
 
 from pyscripts import log_config
 from pyscripts.create_database import create_database_if_not_exists
 from upscripts import github
+
+load_dotenv()
+DB_PATH = os.getenv('DB_PATH')
 
 logger = log_config.setup_logging()
 
@@ -16,8 +20,7 @@ def update_all_services():
     create_database_if_not_exists()
 
     # Подключаемся к базе данных
-    db_path = os.path.join(os.path.dirname(__file__), '..', 'database.db')
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     # Обновляем GitHub

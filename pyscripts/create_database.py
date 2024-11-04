@@ -1,17 +1,20 @@
-import logging
 import os
 import sqlite3
 
+from dotenv import load_dotenv
+
 from pyscripts import log_config
+
+load_dotenv()
+DB_PATH = os.getenv('DB_PATH')
 
 logger = log_config.setup_logging()
 
 
 def create_database_if_not_exists():
     logger.debug('Начинается проверка существования базы данных...')
-    db_path = os.path.join(os.path.dirname(__file__), '..', 'database.db')
-    if not os.path.exists(db_path):
-        conn = sqlite3.connect(db_path)
+    if not os.path.exists(DB_PATH):
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
 
         cursor.execute(

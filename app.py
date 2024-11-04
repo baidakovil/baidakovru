@@ -1,4 +1,4 @@
-import logging  # Import logging after log_config
+import logging
 import os
 import sqlite3
 from logging.handlers import RotatingFileHandler
@@ -9,12 +9,12 @@ from flask import Flask, jsonify, send_from_directory
 from pyscripts import log_config
 
 load_dotenv()
-
-app = Flask(__name__, static_folder='styles', static_url_path='/styles')
+DB_PATH = os.getenv('DB_PATH')
 
 logger = log_config.setup_logging()
-
 logger.info('Application startup')
+
+app = Flask(__name__, static_folder='styles', static_url_path='/styles')
 
 
 @app.route('/')
@@ -30,7 +30,7 @@ def serve_js(filename):
 @app.route('/api/updates', methods=['GET'])
 def get_updates():
     try:
-        conn = sqlite3.connect('database.db')
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
         cursor.execute("SELECT name, formatted_datetime FROM services")
         services = cursor.fetchall()
