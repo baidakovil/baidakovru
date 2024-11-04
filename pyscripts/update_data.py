@@ -3,8 +3,8 @@ import logging
 import os
 import sqlite3
 
-from db.create_database import create_database_if_not_exists
 from pyscripts import log_config
+from pyscripts.create_database import create_database_if_not_exists
 from upscripts import github
 
 logger = log_config.setup_logging()
@@ -16,7 +16,7 @@ def update_all_services():
     create_database_if_not_exists()
 
     # Подключаемся к базе данных
-    db_path = os.path.join(os.path.dirname(__file__), '..', 'db', 'services.db')
+    db_path = os.path.join(os.path.dirname(__file__), '..', 'database.db')
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 

@@ -5,7 +5,7 @@ from logging.handlers import RotatingFileHandler
 
 def setup_logging():
     # Create logs directory if it doesn't exist
-    log_dir = "/var/log/baidakov.ru"
+    log_dir = "/var/log/baidakovru"
     os.makedirs(log_dir, exist_ok=True)
 
     # Set up formatters

@@ -9,7 +9,7 @@ logger = log_config.setup_logging()
 
 def create_database_if_not_exists():
     logger.debug('Начинается проверка существования базы данных...')
-    db_path = os.path.join(os.path.dirname(__file__), 'services.db')
+    db_path = os.path.join(os.path.dirname(__file__), '..', 'database.db')
     if not os.path.exists(db_path):
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()

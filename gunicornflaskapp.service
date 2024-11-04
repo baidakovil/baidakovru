@@ -3,13 +3,13 @@ Description=Gunicorn instance to serve myflaskapp
 After=network.target
 
 [Service]
-User=baidakov
-Group=baidakov
-WorkingDirectory=$HOME/baidakov.ru
-Environment="PATH=$HOME/baidakov.ru/venv/bin"
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/baidakovru
+Environment="PATH=/var/www/baidakovru/venv/bin"
 ExecStart=/bin/bash -c '\
-    $HOME/baidakov.ru/venv/bin/python $HOME/baidakov.ru/scheduler.py & \
-    $HOME/baidakov.ru/venv/bin/gunicorn --config gunicorn.conf.py wsgi:app'
+    /var/www/baidakovru/venv/bin/python /var/www/baidakovru/scheduler.py & \
+    /var/www/baidakovru/venv/bin/gunicorn --config gunicorn.conf.py wsgi:app'
 Restart=always
 RestartSec=10
 

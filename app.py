@@ -30,7 +30,7 @@ def serve_js(filename):
 @app.route('/api/updates', methods=['GET'])
 def get_updates():
     try:
-        conn = sqlite3.connect('./db/services.db')
+        conn = sqlite3.connect('database.db')
         cursor = conn.cursor()
         cursor.execute("SELECT name, formatted_datetime FROM services")
         services = cursor.fetchall()
