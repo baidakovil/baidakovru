@@ -5,17 +5,26 @@ set -e
 
 # Define variables
 APP_DIR="/var/www/baidakovru"
-REPO_URL="https://github.com/baidakovil/baidakovru.git"
-VENV_DIR="$APP_DIR/venv"
-NGINX_CONFIG_SRC="nginx_config"
-NGINX_CONFIG_DEST="/etc/nginx/sites-available/baidakovru"
+BACKUP_DIR="/var/backups/baidakovru"
 GUNICORN_SERVICE_SRC="systemd/gunicornflaskapp.service"
 GUNICORN_SERVICE_DEST="/etc/systemd/system/gunicornflaskapp.service"
 LOG_DIR="/var/log/baidakovru"
+NGINX_CONFIG_SRC="nginx_config"
+NGINX_CONFIG_DEST="/etc/nginx/sites-available/baidakovru"
+REPO_URL="https://github.com/baidakovil/baidakovru.git"
+TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+VENV_DIR="$APP_DIR/venv"
 
 # Update system and install required packages
 sudo apt update
 sudo apt install -y python3-venv python3-pip nginx git
+
+# Backup current version
+sudo mkdir -p $BACKUP_DIR
+sudo tar -czf $BACKUP_DIR/backup_$TIMESTAMP.tar.gz /var/www/baidakovru
+
+# Rotate backups (keep only last 5)
+sudo ls -t $BACKUP_DIR/backup_*.tar.gz | tail -n +6 | xargs sudo rm -f
 
 # Clone or update the repository
 if [ ! -d "$APP_DIR" ]; then
@@ -78,4 +87,14 @@ sudo systemctl restart gunicornflaskapp
 sudo systemctl enable gunicornflaskapp.service
 sudo systemctl restart nginx
 
-echo "Deployment completed successfully!"
+echo "Deployment completed successfully"
+
+# Test if the application is running
+echo "Testing application..."
+response=$(curl -sS -o /dev/null -w "%{http_code}" http://localhost)
+if [ $response = "200" ]; then
+    echo "Application is running successfully."
+else
+    echo "Error: Application is not running. HTTP status code: $response"
+    exit 1
+fi
