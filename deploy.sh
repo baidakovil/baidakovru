@@ -5,25 +5,39 @@ set -e
 
 # Update system and install required packages
 sudo apt update
-sudo apt install -y python3-venv python3-pip nginx
+sudo apt install -y python3-venv python3-pip nginx git
 
 # Change to home directory
 cd $HOME
 
-# Clone your git repository (replace with your actual repo URL)
-git clone https://github.com/baidakovil/baidakov.ru.git $HOME/baidakov.ru
+# Clone or update the repository
+if [ ! -d "$HOME/baidakov.ru" ]; then
+    git clone https://github.com/baidakovil/baidakov.ru.git $HOME/baidakov.ru
+else
+    cd $HOME/baidakov.ru
+    git pull origin main
+fi
+
 cd $HOME/baidakov.ru
 
 # Create and activate virtual environment
-python3 -m venv venv
+if [ ! -d "venv" ]; then
+    python3 -m venv venv
+fi
 source venv/bin/activate
 
-# Install all dependencies
-pip install -r requirements.txt
+# Install or upgrade all dependencies
+pip install --upgrade -r requirements.txt
 
 # Copy nginx configuration
 sudo cp configs/nginx_config /etc/nginx/sites-available/baidakov.ru
-sudo ln -s /etc/nginx/sites-available/baidakov.ru /etc/nginx/sites-enabled/
+sudo ln -sf /etc/nginx/sites-available/baidakov.ru /etc/nginx/sites-enabled/
+
+# Remove default nginx site config
+sudo rm -f /etc/nginx/sites-enabled/default
+
+# Test nginx configuration
+sudo nginx -t
 
 # Copy gunicorn systemd service file
 sudo cp gunicornflaskapp.service /etc/systemd/system/
@@ -33,11 +47,10 @@ sudo mkdir -p /var/log/baidakov.ru
 sudo chown -R $USER:$USER /var/log/baidakov.ru
 sudo chmod 755 /var/log/baidakov.ru
 
-# Start gunicorn service
-sudo systemctl start gunicornflaskapp
+# Reload systemd, restart gunicorn and nginx
+sudo systemctl daemon-reload
+sudo systemctl restart gunicornflaskapp
 sudo systemctl enable gunicornflaskapp.service
-
-# Restart nginx
 sudo systemctl restart nginx
 
 # Set up the database (if needed)

@@ -17,55 +17,5 @@ jobs:
         username: ${{ secrets.SERVER_USERNAME }}
         key: ${{ secrets.SERVER_SSH_KEY }}
         script: |
-          # Change to home directory
-          cd $HOME
-
-          # Check if the repository exists
-          if [ ! -d "$HOME/baidakov.ru" ]; then
-            # Clone the repository if it doesn't exist
-            git clone https://github.com/baidakovil/baidakov.ru.git $HOME/baidakov.ru
-          fi
-
-          # Change to the project directory
-          cd $HOME/baidakov.ru
-
-          # Pull the latest changes
-          git pull origin main
-
-          # Create virtual environment if it doesn't exist
-          if [ ! -d "venv" ]; then
-            python3 -m venv venv
-          fi
-
-          # Activate virtual environment
-          source venv/bin/activate
-
-          # Install or upgrade dependencies
-          pip install --upgrade -r requirements.txt
-
-          # Check and update nginx configuration if changed
-          if ! sudo diff -q nginx.conf /etc/nginx/sites-available/baidakov.ru &>/dev/null; then
-            echo "Updating nginx configuration..."
-            sudo cp nginx.conf /etc/nginx/sites-available/baidakov.ru
-            sudo ln -sf /etc/nginx/sites-available/baidakov.ru /etc/nginx/sites-enabled/
-            # Test nginx configuration
-            sudo nginx -t && sudo systemctl reload nginx
-          else
-            echo "Nginx configuration is up to date."
-          fi
-
-          # Test nginx configuration
-          sudo nginx -t
-
-          # Copy gunicorn systemd service file (if needed)
-          sudo cp gunicornflaskapp.service /etc/systemd/system/
-
-          # Reload systemd, restart gunicorn and nginx
-          sudo systemctl daemon-reload
-          sudo systemctl restart gunicornflaskapp
-          sudo systemctl restart nginx
-
-          # Set up the database (if needed)
-          python db/create_database.py
-
-          echo "Deployment completed successfully!"
+          # Run deploy.sh script
+          bash $HOME/baidakov.ru/deploy.sh
