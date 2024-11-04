@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Ошибка</title>
+    <link rel="stylesheet" href="/styles/styles.css">
+    <style>
+        .error-container {
+            text-align: center;
+            margin-top: 50px;
+        }
+        .error-quad {
+            display: inline-block;
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(45deg, #f4f4f4 25%, transparent 25%),
+                        linear-gradient(-45deg, #f4f4f4 25%, transparent 25%),
+                        linear-gradient(45deg, transparent 75%, #f4f4f4 75%),
+                        linear-gradient(-45deg, transparent 75%, #f4f4f4 75%);
+            background-size: 40px 40px;
+            background-color: #ffffff;
+            margin-bottom: 20px;
+        }
+        .error-message {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .error-description {
+            font-size: 18px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-quad"></div>
+        <h1 class="error-message">Упс! Что-то пошло не так.</h1>
+        <p class="error-description">Произошла ошибка. Пожалуйста, попробуйте позже или вернитесь на <a href="/">главную страницу</a>.</p>
+    </div>
+</body>
+</html>

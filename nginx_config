@@ -48,7 +48,7 @@ http {
     keepalive_timeout 5;
 
     # path for static files
-    root /path/to/app/current/public;
+    root /var/www/baidakovru;
 
     location / {
       # checks for static file, if not found proxy to app
@@ -65,9 +65,9 @@ http {
       proxy_pass http://app_server;
     }
 
-    error_page 500 502 503 504 /500.html;
-    location = /500.html {
-      root /path/to/app/current/public;
+    error_page 404 500 502 503 504 /500.html;
+    location = /errorpages/error.html {
+      root /var/www/baidakovru;
     }
   }
 }
