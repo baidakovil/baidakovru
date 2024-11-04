@@ -4,7 +4,7 @@ import sqlite3
 from logging.handlers import RotatingFileHandler
 
 from dotenv import load_dotenv
-from flask import Flask, jsonify, send_from_directory
+from flask import Flask, jsonify, request, send_from_directory
 
 from pyscripts import log_config
 
@@ -52,6 +52,15 @@ def add_header(response):
     response.headers['Content-Security-Policy'] = "frame-ancestors 'none'"
     response.headers['X-XSS-Protection'] = '1; mode=block'
     return response
+
+
+@app.route('/api/log-error', methods=['POST'])
+def log_error():
+    error_data = request.json
+    logger.error(
+        f"Client-side error: {error_data['message']}\nStack: {error_data['stack']}"
+    )
+    return jsonify({"status": "error logged"}), 200
 
 
 if __name__ == '__main__':

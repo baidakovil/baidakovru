@@ -1,7 +1,28 @@
 document.addEventListener('DOMContentLoaded', function () {
+    function logError(error) {
+        const errorData = {
+            message: error.message,
+            stack: error.stack
+        };
+        
+        fetch('/api/log-error', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(errorData),
+        })
+        .then(response => response.json())
+        .then(data => console.log('Error logged:', data))
+        .catch(err => console.error('Failed to log error:', err));
+    }
+
     fetch('/api/updates')
         .then(response => {
             console.log('Raw response:', response);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
             return response.text();
         })
         .then(text => {
@@ -16,12 +37,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 const dateCell = document.createElement('td');
                 
                 nameCell.textContent = service.name;
-                dateCell.textContent = service.formatted_datetime ? new Date(service.formatted_datetime).toLocaleString('ru-RU') : 'Нет данных';
+                dateCell.textContent = service.formatted_datetime ? service.formatted_datetime : 'Нет данных';
                 
                 row.appendChild(nameCell);
                 row.appendChild(dateCell);
                 tbody.appendChild(row);
             });
         })
-        .catch(error => console.error('Ошибка при загрузке данных:', error));
+        .catch(error => {
+            console.error('Ошибка при загрузке данных:', error);
+            logError(error);
+        });
 });
