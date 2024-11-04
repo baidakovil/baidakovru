@@ -9,7 +9,7 @@ WorkingDirectory=/var/www/baidakovru
 Environment="PATH=/var/www/baidakovru/venv/bin"
 ExecStart=/bin/bash -c '\
     /var/www/baidakovru/venv/bin/python /var/www/baidakovru/scheduler.py & \
-    /var/www/baidakovru/venv/bin/gunicorn --config gunicorn.conf.py wsgi:app'
+    /var/www/baidakovru/venv/bin/gunicorn --config gunicorn.conf.py app:app'
 Restart=always
 RestartSec=10
 
