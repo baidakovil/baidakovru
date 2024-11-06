@@ -9,8 +9,8 @@ BACKUP_DIR="/var/backups/baidakovru"
 GUNICORN_SERVICE_SRC="systemd/gunicornflaskapp.service"
 GUNICORN_SERVICE_DEST="/etc/systemd/system/gunicornflaskapp.service"
 LOG_DIR="/var/log/baidakovru"
-NGINX_CONFIG_SRC="nginx_config"
-NGINX_CONFIG_DEST="/etc/nginx/sites-available/baidakovru"
+NGINX_CONFIG_SRC="nginx.conf"
+NGINX_CONFIG_DEST="/etc/nginx/nginx.conf"
 REPO_URL="https://github.com/baidakovil/baidakovru.git"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 VENV_DIR="$APP_DIR/venv"
@@ -63,7 +63,6 @@ sudo -E $VENV_DIR/bin/python -m pyscripts.create_database
 # Copy nginx configuration if changed
 if ! cmp -s "$NGINX_CONFIG_SRC" "$NGINX_CONFIG_DEST"; then
     sudo cp "$NGINX_CONFIG_SRC" "$NGINX_CONFIG_DEST"
-    sudo ln -sf "$NGINX_CONFIG_DEST" /etc/nginx/sites-enabled/
     echo "Nginx configuration updated."
 else
     echo "Nginx configuration unchanged."
