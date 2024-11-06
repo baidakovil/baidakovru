@@ -1,4 +1,5 @@
 import logging
+import os
 import signal
 import sqlite3
 import sys
@@ -10,13 +11,18 @@ from flask import Flask, jsonify, request, send_from_directory
 from pyscripts import log_config
 
 load_dotenv()
+
 DB_PATH = os.getenv('DB_PATH')
+SECRET_KEY = os.getenv('SECRET_KEY')
+FLASK_DEBUG = os.getenv('FLASK_DEBUG').lower() in ('true', '1', 't')
+FLASK_PORT = int(os.getenv('FLASK_PORT'))
+FLASK_HOST = os.getenv('FLASK_HOST')
 
 logger = log_config.setup_logging()
 logger.info('Application startup')
 
 app = Flask(__name__, static_folder='styles', static_url_path='/styles')
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['SECRET_KEY'] = SECRET_KEY
 
 
 @app.route('/')
@@ -74,7 +80,4 @@ def sigterm_handler(signum, frame):
 signal.signal(signal.SIGTERM, sigterm_handler)
 
 if __name__ == '__main__':
-    debug = os.environ.get('FLASK_DEBUG', 'False').lower() in ('true', '1', 't')
-    port = int(os.environ.get('FLASK_PORT', 5000))
-    host = os.environ.get('FLASK_HOST', '127.0.0.1')
-    app.run(debug=debug, host=host, port=port)
+    app.run(debug=FLASK_DEBUG, host=FLASK_HOST, port=FLASK_PORT)
