@@ -1,9 +1,10 @@
 name: Deploy to Server
 
 on:
-  push:
-    branches:
-      - main  # or whatever your production branch is
+  # push:
+  #   branches:
+  #     - main
+  workflow_dispatch:
 
 jobs:
   deploy:
