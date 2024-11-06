@@ -36,6 +36,8 @@ http {
     return 444;
   }
 
+  set $app_dir /var/www/baidakovru;
+
   server {
     # use 'listen 80 deferred;' for Linux
     # use 'listen 80 accept_filter=httpready;' for FreeBSD
@@ -48,7 +50,7 @@ http {
     keepalive_timeout 5;
 
     # path for static files
-    root /var/www/baidakovru;
+    root $app_dir;
 
     location / {
       # checks for static file, if not found proxy to app
@@ -67,7 +69,7 @@ http {
 
     error_page 404 500 502 503 504 /500.html;
     location = /errorpages/error.html {
-      root /var/www/baidakovru;
+      root $app_dir;
     }
   }
 }
