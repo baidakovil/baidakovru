@@ -21,7 +21,7 @@ sudo apt install -y python3-venv python3-pip nginx git
 
 # Backup current version
 sudo mkdir -p $BACKUP_DIR
-sudo tar -czf $BACKUP_DIR/backup_$TIMESTAMP.tar.gz /var/www/baidakovru
+sudo tar -czf $BACKUP_DIR/backup_$TIMESTAMP.tar.gz $APP_DIR 
 
 # Rotate backups (keep only last 5)
 sudo ls -t $BACKUP_DIR/backup_*.tar.gz | tail -n +6 | xargs sudo rm -f
@@ -47,8 +47,10 @@ sudo $VENV_DIR/bin/pip install --upgrade -r requirements.txt
 
 # Create and set up .env file
 echo "$ENV_FILE" > $APP_DIR/.env
-sudo chown www-data:www-data $APP_DIR/.env
-sudo chmod 600 $APP_DIR/.env
+
+# Set ownership and permissions of application directory
+sudo chown www-data:www-data $APP_DIR
+sudo chmod 600 $APP_DIR
 
 # Create and set up log folder
 sudo mkdir -p $LOG_DIR
