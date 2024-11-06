@@ -22,10 +22,25 @@ jobs:
           # Define variables
           APP_DIR="/var/www/baidakovru"
           DEPLOY_SCRIPT="$APP_DIR/deploy.sh"
+          REPO_URL="https://github.com/baidakovil/baidakovru.git"
           
           # Ensure the directory exists and has correct permissions
           sudo mkdir -p $APP_DIR
           sudo chown ${{ secrets.SERVER_USERNAME }}:${{ secrets.SERVER_USERNAME }} $APP_DIR
           
+          # Check if deploy.sh exists, if not, clone the repository
+          if [ ! -f "$DEPLOY_SCRIPT" ]; then
+            echo "deploy.sh not found. Cloning repository..."
+            git clone $REPO_URL $APP_DIR
+          fi
+          
+          # Ensure deploy.sh is executable
+          sudo chmod +x $DEPLOY_SCRIPT
+          
           # Run deploy.sh script
-          ENV_FILE='${{ secrets.ENV_FILE }}' bash $DEPLOY_SCRIPT
+          if [ -f "$DEPLOY_SCRIPT" ]; then
+            ENV_FILE='${{ secrets.ENV_FILE }}' bash $DEPLOY_SCRIPT
+          else
+            echo "Error: deploy.sh still not found after attempted clone. Deployment failed."
+            exit 1
+          fi
