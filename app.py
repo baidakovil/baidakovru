@@ -15,6 +15,7 @@ logger = log_config.setup_logging()
 logger.info('Application startup')
 
 app = Flask(__name__, static_folder='styles', static_url_path='/styles')
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 
 @app.route('/')
