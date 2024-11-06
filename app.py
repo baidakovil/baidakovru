@@ -1,6 +1,7 @@
 import logging
-import os
+import signal
 import sqlite3
+import sys
 from logging.handlers import RotatingFileHandler
 
 from dotenv import load_dotenv
@@ -63,6 +64,14 @@ def log_error():
     )
     return jsonify({"status": "error logged"}), 200
 
+
+def sigterm_handler(signum, frame):
+    logger.info("Received SIGTERM. Shutting down gracefully...")
+    # Perform any necessary cleanup here in future
+    sys.exit(0)
+
+
+signal.signal(signal.SIGTERM, sigterm_handler)
 
 if __name__ == '__main__':
     debug = os.environ.get('FLASK_DEBUG', 'False').lower() in ('true', '1', 't')
