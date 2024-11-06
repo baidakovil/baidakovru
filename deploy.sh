@@ -6,7 +6,7 @@ set -e
 # Define variables
 APP_DIR="/var/www/baidakovru"
 BACKUP_DIR="/var/backups/baidakovru"
-GUNICORN_SERVICE_SRC="systemd/gunicornflaskapp.service"
+GUNICORN_SERVICE_SRC="gunicornflaskapp.service"
 GUNICORN_SERVICE_DEST="/etc/systemd/system/gunicornflaskapp.service"
 LOG_DIR="/var/log/baidakovru"
 NGINX_CONFIG_SRC="nginx.conf"
