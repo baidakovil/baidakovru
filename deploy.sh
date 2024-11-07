@@ -48,6 +48,9 @@ sudo $VENV_DIR/bin/pip install --upgrade -r requirements.txt
 # Create and set up .env file
 echo "$ENV_FILE" > $APP_DIR/.env
 
+# Create or update the database
+sudo -E $VENV_DIR/bin/python -m pyscripts.create_database
+
 # Set ownership and permissions of application directory
 sudo chown -R www-data:www-data $APP_DIR
 sudo chmod -R 755 $APP_DIR
@@ -56,9 +59,6 @@ sudo chmod -R 755 $APP_DIR
 sudo mkdir -p $LOG_DIR
 sudo chown -R www-data:www-data $LOG_DIR
 sudo chmod 755 $LOG_DIR
-
-# Create or update the database
-sudo -E $VENV_DIR/bin/python -m pyscripts.create_database
 
 # Copy nginx configuration if changed
 if ! cmp -s "$NGINX_CONFIG_SRC" "$NGINX_CONFIG_DEST"; then
