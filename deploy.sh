@@ -49,8 +49,8 @@ sudo $VENV_DIR/bin/pip install --upgrade -r requirements.txt
 echo "$ENV_FILE" > $APP_DIR/.env
 
 # Set ownership and permissions of application directory
-sudo chown www-data:www-data $APP_DIR
-sudo chmod 600 $APP_DIR
+sudo chown -R www-data:www-data $APP_DIR
+sudo chmod -R 755 $APP_DIR
 
 # Create and set up log folder
 sudo mkdir -p $LOG_DIR
