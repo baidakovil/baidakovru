@@ -3,6 +3,9 @@
 
 ## Todo
 
+#### Enable firewall
+Enable and properly configure the firewall for improved security.
+
 #### Backup Strategy
 Implement a regular backup strategy for the database, not just during deployment.
 
