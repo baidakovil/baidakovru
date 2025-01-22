@@ -17,7 +17,7 @@ VENV_DIR="$APP_DIR/venv"
 
 # Update system and install required packages
 sudo apt update
-sudo apt install -y python3-venv python3-pip nginx git
+sudo apt install -y python3-venv python3-pip nginx git certbot python3-certbot-nginx
 
 # Backup current version
 sudo mkdir -p $BACKUP_DIR
@@ -47,6 +47,9 @@ sudo $VENV_DIR/bin/pip install --upgrade -r requirements.txt
 
 # Create and set up .env file
 echo "$ENV_FILE" > $APP_DIR/.env
+
+# Source the .env file to load environment variables
+source $APP_DIR/.env
 
 # Create or update the database
 sudo -E $VENV_DIR/bin/python -m pyscripts.create_database
@@ -80,6 +83,19 @@ if ! cmp -s "$GUNICORN_SERVICE_SRC" "$GUNICORN_SERVICE_DEST"; then
     echo "Gunicorn service file updated."
 else
     echo "Gunicorn service file unchanged."
+fi
+
+# Obtain SSL certificates if they do not already exist
+if [ ! -f "/etc/letsencrypt/live/baidakov.ru/fullchain.pem" ]; then
+    sudo certbot --nginx -d baidakov.ru -d www.baidakov.ru --non-interactive --agree-tos --email $CERTBOT_EMAIL
+    echo "Certbot executed with email: $CERTBOT_EMAIL"
+    if [ $? -eq 0 ]; then
+        echo "Certbot command executed successfully."
+    else
+        echo "Certbot command failed."
+    fi
+else
+    echo "SSL certificates already exist."
 fi
 
 # Reload systemd, restart gunicorn and nginx
