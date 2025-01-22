@@ -28,12 +28,12 @@ sudo ls -t $BACKUP_DIR/backup_*.tar.gz | tail -n +6 | xargs sudo rm -f
 
 # Clone or update the repository
 if [ ! -d "$APP_DIR" ]; then
-    echo "No app dir $APP_DIR was found. Start git clone"
-    sudo git clone $REPO_URL $APP_DIR
+    echo "App dir $APP_DIR was not found. Something wrong. Exiting"
+    exit 1
 else
     echo "App dir $APP_DIR is found. Start git pull"
     cd $APP_DIR
-    sudo git config --global --add safe.directory $APP_DIR
+    sudo -u www-data git pull origin main
     sudo git pull origin main
 fi
 
