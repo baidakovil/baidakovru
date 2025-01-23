@@ -36,6 +36,7 @@ else
     sudo chown -R www-data:www-data $APP_DIR
     sudo chmod -R 2775 $APP_DIR
     cd $APP_DIR
+    sudo -u www-data git stash
     sudo -u www-data git stash clear
     sudo -u www-data git pull origin main
 fi
