@@ -30,11 +30,9 @@ jobs:
             sudo mkdir -p $APP_DIR || { echo "Failed to create app directory"; exit 1; }
             sudo chown -R www-data:www-data $APP_DIR || { echo "Failed to change ownership"; exit 1; }
             sudo chmod -R 2775 $APP_DIR || { echo "Failed to change permissions"; exit 1; }
-            sudo usermod -aG www-data root || { echo "Failed to add user to group"; exit 1; }
-            sudo git config core.fileMode false
-            sudo -u www-data git config --global --add safe.directory $APP_DIR
-            echo "Cloning repository"
             sudo -u www-data git clone $REPO_URL $APP_DIR || { echo "Failed to clone repository"; exit 1; }
+            sudo -u www-data git config --global --add safe.directory $APP_DIR || { echo "Failed to add APP_DIR to git safe dir"; exit 1; }
+            sudo -u www-data git config core.fileMode false || { echo "Failed to set git permission ignoring"; exit 1; }
           fi
                     
           # Run deploy.sh script after ensurin it is exist and executable
