@@ -68,6 +68,19 @@ sudo mkdir -p $LOG_DIR
 sudo chown -R www-data:www-data $LOG_DIR
 sudo chmod -R 2775 $LOG_DIR
 
+# Obtain SSL certificates if they do not already exist
+if [ ! -f "/etc/letsencrypt/live/baidakov.ru/fullchain.pem" ]; then
+    sudo certbot --nginx -d baidakov.ru -d www.baidakov.ru --non-interactive --agree-tos --email $CERTBOT_EMAIL
+    echo "Certbot executed with email: $CERTBOT_EMAIL"
+    if [ $? -eq 0 ]; then
+        echo "Certbot command executed successfully."
+    else
+        echo "Certbot command failed."
+    fi
+else
+    echo "SSL certificates already exist."
+fi
+
 # Copy nginx configuration if changed
 if ! cmp -s "$NGINX_CONFIG_SRC" "$NGINX_CONFIG_DEST"; then
     sudo cp "$NGINX_CONFIG_SRC" "$NGINX_CONFIG_DEST"
@@ -88,19 +101,6 @@ if ! cmp -s "$GUNICORN_SERVICE_SRC" "$GUNICORN_SERVICE_DEST"; then
     echo "Gunicorn service file updated."
 else
     echo "Gunicorn service file unchanged."
-fi
-
-# Obtain SSL certificates if they do not already exist
-if [ ! -f "/etc/letsencrypt/live/baidakov.ru/fullchain.pem" ]; then
-    sudo certbot --nginx -d baidakov.ru -d www.baidakov.ru --non-interactive --agree-tos --email $CERTBOT_EMAIL
-    echo "Certbot executed with email: $CERTBOT_EMAIL"
-    if [ $? -eq 0 ]; then
-        echo "Certbot command executed successfully."
-    else
-        echo "Certbot command failed."
-    fi
-else
-    echo "SSL certificates already exist."
 fi
 
 # Reload systemd, restart gunicorn and nginx
