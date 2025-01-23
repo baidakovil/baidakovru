@@ -33,7 +33,6 @@ if [ ! -d "$APP_DIR" ]; then
 else
     echo "App dir $APP_DIR is found. Start git pull"
     cd $APP_DIR
-    sudo -u www-data git pull origin main
     sudo git pull origin main
 fi
 
@@ -59,12 +58,12 @@ sudo -E $VENV_DIR/bin/python -m pyscripts.create_database
 
 # Set ownership and permissions of application directory
 sudo chown -R www-data:www-data $APP_DIR
-sudo chmod -R 755 $APP_DIR
+sudo chmod -R 2775 $APP_DIR
 
 # Create and set up log folder
 sudo mkdir -p $LOG_DIR
 sudo chown -R www-data:www-data $LOG_DIR
-sudo chmod 755 $LOG_DIR
+sudo chmod -R 2775 $LOG_DIR
 
 # Copy nginx configuration if changed
 if ! cmp -s "$NGINX_CONFIG_SRC" "$NGINX_CONFIG_DEST"; then

@@ -28,10 +28,11 @@ jobs:
           if [ ! -d "$APP_DIR" ]; then
             echo "App dir was not found. Creating folder..."
             sudo mkdir -p $APP_DIR
-            sudo chown www-data:www-data $APP_DIR
-            sudo chmod 755 $APP_DIR
+            sudo chown -R www-data:www-data $APP_DIR
+            sudo chmod -R 2775 $APP_DIR
+            sudo usermod -aG www-data root
             echo "Cloning repository"
-            sudo -u www-data git clone $REPO_URL $APP_DIR
+            sudo git clone $REPO_URL $APP_DIR
           fi
           
           # Run deploy.sh script after ensurin it is exist and executable
