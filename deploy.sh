@@ -36,7 +36,7 @@ else
     sudo chown -R www-data:www-data $APP_DIR
     sudo chmod -R 2775 $APP_DIR
     cd $APP_DIR
-    sudo git pull origin main
+    sudo -u www-data git pull origin main
 fi
 
 cd $APP_DIR
