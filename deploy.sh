@@ -12,6 +12,7 @@ LOG_DIR="/var/log/baidakovru"
 NGINX_CONFIG_SRC="nginx.conf"
 NGINX_CONFIG_DEST="/etc/nginx/nginx.conf"
 REPO_URL="https://github.com/baidakovil/baidakovru.git"
+SSL_CONFIG="ssl_certificate /etc/letsencrypt/live/baidakov.ru/fullchain.pem;\nssl_certificate_key /etc/letsencrypt/live/baidakov.ru/privkey.pem;\nssl_protocols TLSv1.2 TLSv1.3;\nssl_prefer_server_ciphers on;\nssl_ciphers \"ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384\";"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 VENV_DIR="$APP_DIR/venv"
 
@@ -72,13 +73,23 @@ sudo chmod -R 2775 $LOG_DIR
 
 # Obtain SSL certificates if they do not already exist
 if [ ! -f "/etc/letsencrypt/live/baidakov.ru/fullchain.pem" ]; then
-    sudo certbot --nginx -d baidakov.ru -d www.baidakov.ru --non-interactive --agree-tos --email $CERTBOT_EMAIL
+    # Copy nginx configuration without SSL
+    sudo cp $NGINX_CONFIG_SRC $NGINX_CONFIG_DEST
+    sudo nginx -s reload
     echo "Certbot executed with email: $CERTBOT_EMAIL"
+
+    # Run certbot to obtain SSL certificates
+    sudo -E certbot --nginx -d baidakov.ru -d www.baidakov.ru --non-interactive --agree-tos --email "$CERTBOT_EMAIL"
     if [ $? -eq 0 ]; then
         echo "Certbot command executed successfully."
     else
         echo "Certbot command failed."
     fi
+    
+    # Enable SSL in nginx.conf
+    sed -i "s|{{SSL_CONFIG}}|$SSL_CONFIG|" $NGINX_CONFIG_SRC
+    sudo cp $NGINX_CONFIG_SRC $NGINX_CONFIG_DEST
+    sudo nginx -s reload
 else
     echo "SSL certificates already exist."
 fi
