@@ -32,6 +32,9 @@ if [ ! -d "$APP_DIR" ]; then
     exit 1
 else
     echo "App dir $APP_DIR is found. Start git pull"
+    # Set ownership and permissions of application directory
+    sudo chown -R www-data:www-data $APP_DIR
+    sudo chmod -R 2775 $APP_DIR
     cd $APP_DIR
     sudo git pull origin main
 fi
