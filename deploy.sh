@@ -35,6 +35,7 @@ else
     # Set ownership and permissions of application directory
     sudo chown -R www-data:www-data $APP_DIR
     sudo chmod -R 2775 $APP_DIR
+    sudo -u www-data git config core.fileMode false || { echo "Failed to set git permission ignoring"; exit 1; }
     cd $APP_DIR
     sudo -u www-data git pull origin main
 fi
