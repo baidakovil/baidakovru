@@ -28,4 +28,13 @@ echo "Keep this key secure and do not share it publicly!"
 
 # Optional: remove the private key file for security
 # Uncomment the next line if you want to remove the private key file after displaying it
-# rm "$KEY_PATH"
+rm "$KEY_PATH"
+
+# ----------------------------------------
+# To manage this, do
+# scp ~/git/baidakovru/shscripts/generate_ssh_key.sh root@ip.ip.ip.ip:/root/generate_ssh_key.sh
+# ssh user@remote_server
+# chmod +x /root/generate_ssh_key.sh
+# /root/generate_ssh_key.sh
+# copy the private key to the clipboard and paste it into the GitHub secret
+# ----------------------------------------
