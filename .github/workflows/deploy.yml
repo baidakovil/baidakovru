@@ -1,9 +1,6 @@
 name: Deploy to Server
 
 on:
-  # push:
-  #   branches:
-  #     - main
   workflow_dispatch:
 
 jobs:
@@ -17,24 +14,27 @@ jobs:
         host: ${{ secrets.SERVER_IP }}
         username: ${{ secrets.SERVER_USERNAME }}
         key: ${{ secrets.SERVER_SSH_KEY }}
-        envs: ENV_FILE
         script: |
           # Define variables
           APP_DIR="/var/www/baidakovru"
           DEPLOY_SCRIPT="$APP_DIR/deploy.sh"
           REPO_URL="https://github.com/baidakovil/baidakovru.git"
+          LOG_FILE="/tmp/deploy.log"
+
+          # Redirect all output to the log file
+          exec > >(tee -a $LOG_FILE) 2>&1
 
           # Check if deploy.sh exists, if not, clone the repository
           if [ ! -d "$APP_DIR" ]; then
             echo "App dir was not found. Creating folder..."
-            sudo mkdir -p $APP_DIR
-            sudo chown -R www-data:www-data $APP_DIR
-            sudo chmod -R 2775 $APP_DIR
-            sudo usermod -aG www-data root
+            sudo mkdir -p $APP_DIR || { echo "Failed to create app directory"; exit 1; }
+            sudo chown -R www-data:www-data $APP_DIR || { echo "Failed to change ownership"; exit 1; }
+            sudo chmod -R 2775 $APP_DIR || { echo "Failed to change permissions"; exit 1; }
+            sudo usermod -aG www-data root || { echo "Failed to add user to group"; exit 1; }
             echo "Cloning repository"
-            sudo git clone $REPO_URL $APP_DIR
+            sudo git clone $REPO_URL $APP_DIR || { echo "Failed to clone repository"; exit 1; }
           fi
-          
+                    
           # Run deploy.sh script after ensurin it is exist and executable
           if [ -f "$DEPLOY_SCRIPT" ]; then
             sudo chmod +x $DEPLOY_SCRIPT
@@ -43,3 +43,6 @@ jobs:
             echo "Error: deploy.sh not found after attempted clone. Deployment failed."
             exit 1
           fi
+
+          # Print the contents of the log file
+          cat $LOG_FILE
