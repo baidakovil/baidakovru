@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# ----------------------------------------
-# Automate SSH key generation and deployment
 echo "Load sensitive data from the same directory where the script is executed"
 SCRIPT_DIR=$(dirname "$0")
 KEY_PATH="/root/.ssh/github_actions_key"
@@ -38,12 +36,6 @@ echo "Save the private key in the server.sensitive file"
 ssh $USR@$IP "rm $KEY_PATH"
 
 echo "Script executed"
-
-# ----------------------------------------
-# install necessary packages and reboot
-sudo apt update
-sudo apt install -y nginx python3-venv python3-pip python3-certbot-nginx git certbot
-sudo reboot
 
 # ----------------------------------------
 # To manage this, do
