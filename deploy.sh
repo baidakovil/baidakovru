@@ -137,7 +137,7 @@ echo "Deployment completed successfully"
 
 # Test if the application is running
 echo "Testing application..."
-response=$(curl -sS -o /dev/null -w "%{http_code}" http://localhost)
+response=$(curl -sS -o /dev/null -w "%{http_code}" https://baidakov.ru)
 if [ $response = "200" ]; then
     echo "Application is running successfully."
 else
