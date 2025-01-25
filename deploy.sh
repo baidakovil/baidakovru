@@ -12,7 +12,6 @@ LOG_DIR="/var/log/baidakovru"
 NGINX_CONFIG_SRC="nginx.conf"
 NGINX_CONFIG_DEST="/etc/nginx/nginx.conf"
 REPO_URL="https://github.com/baidakovil/baidakovru.git"
-SSL_CONFIG="ssl_certificate /etc/letsencrypt/live/baidakov.ru/fullchain.pem;\nssl_certificate_key /etc/letsencrypt/live/baidakov.ru/privkey.pem;\nssl_protocols TLSv1.2 TLSv1.3;\nssl_prefer_server_ciphers on;\nssl_ciphers \"ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384\";"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 VENV_DIR="$APP_DIR/venv"
 
@@ -86,8 +85,8 @@ if [ ! -f "/etc/letsencrypt/live/baidakov.ru/fullchain.pem" ]; then
         echo "Certbot command failed."
     fi
     
-    # Enable SSL in nginx.conf
-    sed -i "s|{{SSL_CONFIG}}|$SSL_CONFIG|" $NGINX_CONFIG_SRC
+    # Uncomment SSL configuration in nginx.conf
+    sudo sed -i '/#SSL_CONFIG_START/,/#SSL_CONFIG_END/s/^#//' $NGINX_CONFIG_SRC
     sudo cp $NGINX_CONFIG_SRC $NGINX_CONFIG_DEST
     sudo nginx -s reload
 else
