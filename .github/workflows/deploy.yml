@@ -4,10 +4,35 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
+  prepare-server:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Prepare server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        script: |
+          sudo apt update
+          sudo apt install -y nginx python3-venv python3-pip python3-certbot-nginx git certbot
+          sudo reboot
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: prepare-server
+    steps:
+    - name: Wait for server to come back online
+      run: |
+        for i in {1..30}; do
+          if ssh -o StrictHostKeyChecking=no -i ${{ secrets.SERVER_SSH_KEY }} ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} "echo 'Server is back online'"; then
+            break
+          fi
+          echo "Waiting for server to come back online..."
+          sleep 10
+        done
+
     - name: Deploy to server
       uses: appleboy/ssh-action@master
       with:
@@ -34,7 +59,7 @@ jobs:
             sudo -u www-data git clone $REPO_URL $APP_DIR || { echo "Failed to clone repository"; exit 1; }
           fi
                     
-          # Run deploy.sh script after ensurin it is exist and executable
+          # Run deploy.sh script after ensuring it exists and is executable
           if [ -f "$DEPLOY_SCRIPT" ]; then
             sudo chmod +x $DEPLOY_SCRIPT
             ENV_FILE='${{ secrets.ENV_FILE }}' bash $DEPLOY_SCRIPT
