@@ -18,7 +18,7 @@ VENV_DIR="$APP_DIR/venv"
 
 # Update system and install required packages
 sudo apt update
-sudo apt install -y python3-venv python3-pip nginx git certbot python3-certbot-nginx
+sudo apt install -y nginx python3-venv python3-pip python3-certbot-nginx git certbot
 
 # Backup current version
 sudo mkdir -p $BACKUP_DIR

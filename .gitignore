@@ -3,4 +3,4 @@
 __pycache__
 venv
 database.db
-/shscripts/connect_to_server.sh
+/shscripts/connect_to_server_alias.sh
