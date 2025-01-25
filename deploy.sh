@@ -83,10 +83,7 @@ if [ ! -f "/etc/letsencrypt/live/baidakov.ru/fullchain.pem" ]; then
 
     # Run certbot to obtain SSL certificates
     echo "Executing certbot"
-    # Line below for development
-    sudo -E certbot --nginx -d baidakov.ru -d www.baidakov.ru --non-interactive --agree-tos --email "$CERTBOT_EMAIL" --test-cert
-    # Line below for production
-    # sudo -E certbot --nginx -d baidakov.ru -d www.baidakov.ru --non-interactive --agree-tos --email "$CERTBOT_EMAIL"
+    sudo -E certbot --nginx -d baidakov.ru -d www.baidakov.ru --non-interactive --agree-tos --email "$CERTBOT_EMAIL"
     if [ $? -eq 0 ]; then
         echo "Certbot executed successful with email: $CERTBOT_EMAIL"
     else
