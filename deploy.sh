@@ -106,8 +106,8 @@ else
 fi
 
 # Copy nginx-ssl configuration if changed
-if ! cmp -s "$NGINX_CONFIG_SRC" "${NGINX_CONFIG_PATH}/${NGINX_SSL_CONFIG_SRC}"; then
-    sudo cp "$NGINX_CONFIG_SRC" "${NGINX_CONFIG_PATH}/${NGINX_SSL_CONFIG_SRC}"
+if ! cmp -s "$NGINX_SSL_CONFIG_SRC" "${NGINX_CONFIG_PATH}/${NGINX_SSL_CONFIG_SRC}"; then
+    sudo cp "$NGINX_SSL_CONFIG_SRC" "${NGINX_CONFIG_PATH}/${NGINX_SSL_CONFIG_SRC}"
     echo "Nginx-ssl configuration updated."
 else
     echo "Nginx-ssl configuration unchanged."
