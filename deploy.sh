@@ -10,7 +10,8 @@ GUNICORN_SERVICE_SRC="gunicornflaskapp.service"
 GUNICORN_SERVICE_DEST="/etc/systemd/system/gunicornflaskapp.service"
 LOG_DIR="/var/log/baidakovru"
 NGINX_CONFIG_SRC="nginx.conf"
-NGINX_CONFIG_DEST="/etc/nginx/nginx.conf"
+NGINX_SSL_CONFIG_SRC="nginx-ssl.conf"
+NGINX_CONFIG_PATH="/etc/nginx/"
 REPO_URL="https://github.com/baidakovil/baidakovru.git"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 VENV_DIR="$APP_DIR/venv"
@@ -73,32 +74,42 @@ sudo chmod -R 2775 $LOG_DIR
 # Obtain SSL certificates if they do not already exist
 if [ ! -f "/etc/letsencrypt/live/baidakov.ru/fullchain.pem" ]; then
     # Copy nginx configuration without SSL
-    sudo cp $NGINX_CONFIG_SRC $NGINX_CONFIG_DEST
+    echo "SSL certificate was not found. Start copying nginx configuration without SSL and reload nginx"
+    sudo cp "$NGINX_CONFIG_SRC" "${NGINX_CONFIG_PATH}/${NGINX_CONFIG_SRC}"
+    # Remove nginx-ssl site config if exists
+    sudo rm -f "${NGINX_CONFIG_PATH}/${NGINX_SSL_CONFIG_SRC}"
     sudo nginx -s reload
-    echo "Certbot executed with email: $CERTBOT_EMAIL"
 
     # Run certbot to obtain SSL certificates
+    echo "Executing certbot"
     sudo -E certbot --nginx -d baidakov.ru -d www.baidakov.ru --non-interactive --agree-tos --email "$CERTBOT_EMAIL"
     if [ $? -eq 0 ]; then
-        echo "Certbot command executed successfully."
+        echo "Certbot executed successful with email: $CERTBOT_EMAIL"
     else
         echo "Certbot command failed."
     fi
     
-    # Uncomment SSL configuration in nginx.conf
-    sudo sed -i '/#SSL_CONFIG_START/,/#SSL_CONFIG_END/s/^#//' $NGINX_CONFIG_SRC
-    sudo cp $NGINX_CONFIG_SRC $NGINX_CONFIG_DEST
+    echo "Start copying nginx configuration for SSL and reload nginx"
+    sudo cp "$NGINX_SSL_CONFIG_SRC" "${NGINX_CONFIG_PATH}/${NGINX_SSL_CONFIG_SRC}"
     sudo nginx -s reload
 else
-    echo "SSL certificates already exist."
+    echo "SSL certificates already exist"
 fi
 
-# Copy nginx configuration if changed
-if ! cmp -s "$NGINX_CONFIG_SRC" "$NGINX_CONFIG_DEST"; then
-    sudo cp "$NGINX_CONFIG_SRC" "$NGINX_CONFIG_DEST"
-    echo "Nginx configuration updated."
+# Copy nginx-nossl configuration if changed
+if ! cmp -s "$NGINX_CONFIG_SRC" "${NGINX_CONFIG_PATH}/${NGINX_CONFIG_SRC}"; then
+    sudo cp "$NGINX_CONFIG_SRC" "${NGINX_CONFIG_PATH}/${NGINX_CONFIG_SRC}"
+    echo "Nginx-nossl configuration updated."
 else
-    echo "Nginx configuration unchanged."
+    echo "Nginx-nossl configuration unchanged."
+fi
+
+# Copy nginx-ssl configuration if changed
+if ! cmp -s "$NGINX_CONFIG_SRC" "${NGINX_CONFIG_PATH}/${NGINX_SSL_CONFIG_SRC}"; then
+    sudo cp "$NGINX_CONFIG_SRC" "${NGINX_CONFIG_PATH}/${NGINX_SSL_CONFIG_SRC}"
+    echo "Nginx-ssl configuration updated."
+else
+    echo "Nginx-ssl configuration unchanged."
 fi
 
 # Remove default nginx site config
