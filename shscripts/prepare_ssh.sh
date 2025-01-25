@@ -30,7 +30,7 @@ echo "Copy the private key to the variable on local machine"
 PRIVATE_KEY=$(ssh $USR@$IP "cat $KEY_PATH")
 
 echo "Set the GitHub secret"
-gh secret set SERVER_SSH_KEY -body "$PRIVATE_KEY" --repo baidakovil/baidakovru
+gh secret set SERVER_SSH_KEY --body "$PRIVATE_KEY" --repo baidakovil/baidakovru
 
 echo "Save the private key in the server.sensitive file"
 echo "SERVER_SSH_KEY=\"$PRIVATE_KEY\"" >> "$SCRIPT_DIR/server.sensitive"
