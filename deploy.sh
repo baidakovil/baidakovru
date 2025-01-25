@@ -74,11 +74,12 @@ sudo chmod -R 2775 $LOG_DIR
 # Obtain SSL certificates if they do not already exist
 if [ ! -f "/etc/letsencrypt/live/baidakov.ru/fullchain.pem" ]; then
     # Copy nginx configuration without SSL
-    echo "SSL certificate was not found. Start copying nginx configuration without SSL and reload nginx"
-    sudo cp "$NGINX_CONFIG_SRC" "${NGINX_CONFIG_PATH}/${NGINX_CONFIG_SRC}"
+    echo "SSL certificate was not found. Stop nginx and copy nginx configuration without SSL and restart nginx"
     # Remove nginx-ssl site config if exists
-    sudo rm -f "${NGINX_CONFIG_PATH}/${NGINX_SSL_CONFIG_SRC}"
-    sudo nginx -s reload
+    sudo systemctl stop nginx
+    sudo rm -f /var/run/nginx.pid
+    sudo cp "$NGINX_CONFIG_SRC" "${NGINX_CONFIG_PATH}/${NGINX_CONFIG_SRC}"
+    sudo systemctl start nginx
 
     # Run certbot to obtain SSL certificates
     echo "Executing certbot"
