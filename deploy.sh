@@ -59,9 +59,6 @@ echo "$ENV_FILE" > $APP_DIR/.env
 # Source the .env file to load environment variables
 source $APP_DIR/.env
 
-# Create or update the database
-sudo -E $VENV_DIR/bin/python -m pyscripts.create_database
-
 # Set ownership and permissions of application directory
 sudo chown -R www-data:www-data $APP_DIR
 sudo chmod -R 2775 $APP_DIR
