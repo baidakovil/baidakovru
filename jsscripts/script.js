@@ -17,6 +17,23 @@ document.addEventListener('DOMContentLoaded', function () {
         .catch(err => console.error('Failed to log error:', err));
     }
 
+    function formatDate(dateStr) {
+        const date = new Date(dateStr);
+        const currentYear = new Date().getFullYear();
+        const months = [
+            'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+            'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
+        ];
+        
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = months[date.getMonth()];
+        const year = date.getFullYear();
+        
+        return year === currentYear ? 
+            `${day} ${month}` : 
+            `${day} ${month} ${year}`;
+    }
+
     fetch('/api/updates')
         .then(response => {
             console.log('Raw response:', response);
@@ -38,13 +55,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 
                 const platformNameCell = document.createElement('td');
                 const formattedDatetimeCell = document.createElement('td');
-                const updateDescCell = document.createElement('td');
+                formattedDatetimeCell.className = 'datetime-cell';
 
                 platformNameCell.textContent = platform.platform_name;
-                formattedDatetimeCell.textContent = platform.formatted_datetime;
                 
-                // Create description content with optional link
-                updateDescCell.textContent = platform.update_desc;
+                // Create container for date and link
+                const dateContainer = document.createElement('div');
+                dateContainer.className = 'date-container';
+                
+                const dateSpan = document.createElement('span');
+                dateSpan.textContent = formatDate(platform.formatted_datetime);
+                dateContainer.appendChild(dateSpan);
+                
                 if (platform.update_url) {
                     const link = document.createElement('a');
                     link.href = platform.update_url;
@@ -54,12 +76,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     linkIcon.alt = 'Link';
                     linkIcon.className = 'link-icon';
                     link.appendChild(linkIcon);
-                    updateDescCell.appendChild(link);
+                    dateContainer.appendChild(link);
                 }
+                
+                formattedDatetimeCell.appendChild(dateContainer);
                 
                 row.appendChild(platformNameCell);
                 row.appendChild(formattedDatetimeCell);
-                row.appendChild(updateDescCell);
                 
                 tbody.appendChild(row);
             });
