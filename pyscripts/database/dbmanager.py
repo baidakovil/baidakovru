@@ -1,3 +1,4 @@
+import json
 import os
 import sqlite3
 from typing import Optional
@@ -56,34 +57,45 @@ class DatabaseManager:
         try:
             with sqlite3.connect(self.db_path) as conn:
                 cur = conn.cursor()
+
+                # Check SQLite version
+                cur.execute('SELECT sqlite_version()')
+                version = cur.fetchone()[0]
+                self.logger.info(f"SQLite version: {version}")
+
+                # Check Python's sqlite3 version
+                sqlite_version = sqlite3.sqlite_version
+                self.logger.info(f"Python sqlite3 version: {sqlite_version}")
+
                 cur.execute("SELECT version FROM schema_version")
                 return bool(cur.fetchone())
         except sqlite3.Error as e:
             self.logger.error(f"Database health check failed: {e}")
             return False
 
-    def update_platform_data(self, result: FetchResult) -> None:
-        query = """
-        INSERT OR REPLACE INTO updates 
-        (platform_id, platform_name, formatted_datetime, update_desc, update_moment) 
-        VALUES (?, ?, ?, ?, ?)
-        """
-        try:
-            with sqlite3.connect(self.db_path) as conn:
-                conn.execute(
-                    query,
-                    (
-                        result.platform_id,
-                        result.platform_name,
-                        result.formatted_datetime,
-                        result.update_desc,
-                        result.update_moment,
-                    ),
-                )
-                conn.commit()
-        except sqlite3.Error as e:
-            self.logger.error(f"Database error: {e}")
-            raise
+    def update_platform_data(self, result: FetchResult):
+        if not result:
+            return
+
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                INSERT INTO updates 
+                (platform_id, platform_name, formatted_datetime, update_desc, 
+                 update_url, raw_response)
+                VALUES (?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    result.platform_id,
+                    result.platform_name,
+                    result.formatted_datetime,
+                    result.update_desc,
+                    result.update_url,
+                    json.dumps(result.raw_response) if result.raw_response else None,
+                ),
+            )
+            conn.commit()
 
     def get_connection(self):
         """Get a database connection."""

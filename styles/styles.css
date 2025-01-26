@@ -16,3 +16,15 @@ th, td {
 th {
     background-color: #f4f4f4;
 }
+
+.link-icon {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    margin-left: 8px;
+}
+
+/* Make sure table cells with icons align properly */
+#updates-table td {
+    vertical-align: middle;
+}

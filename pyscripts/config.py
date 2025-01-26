@@ -12,7 +12,7 @@ class FetcherConfig:
     username: Optional[str] = None
     api_key: Optional[str] = None
     url_template: Optional[str] = None
-    public_name: str = "Unnamed Service"
+    platform_name: str = "Unnamed Service"
     headers: Dict[str, str] = field(default_factory=dict)
     supported_events: List[str] = field(default_factory=list)
     date_format: Dict[str, str] = field(default_factory=dict)
@@ -36,7 +36,7 @@ class Config:
         # GitHub specific configuration
         self.github = FetcherConfig(
             username=os.getenv('GITHUB_USERNAME'),
-            public_name="GitHub",
+            platform_name="GitHub",
             url_template='https://api.github.com/users/{username}/events/public',
             headers={
                 'Accept': 'application/vnd.github.v3+json',
@@ -51,9 +51,40 @@ class Config:
             date_format={'input': '%Y-%m-%dT%H:%M:%SZ', 'output': '%Y-%m-%d %H:%M:%S'},
         )
 
+        # iNaturalist specific configuration
+        self.inat = FetcherConfig(
+            username=os.getenv('INAT_USERNAME'),
+            platform_name="iNaturalist",
+            url_template='https://api.inaturalist.org/v1/observations?user_login={username}&order=desc&order_by=created_at',
+            headers={
+                'Accept': 'application/json',
+            },
+            date_format={'input': '%Y-%m-%dT%H:%M:%S%z', 'output': '%Y-%m-%d %H:%M:%S'},
+        )
+
+        # Telegram specific configuration
+        self.telegram = FetcherConfig(
+            username=os.getenv('TELEGRAM_USERNAME'),
+            platform_name="Telegram",
+            url_template='https://t.me/s/{username}',
+            headers={
+                'Accept': 'text/html',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            },
+            date_format={'input': '%Y-%m-%dT%H:%M:%S%z', 'output': '%Y-%m-%d %H:%M:%S'},
+        )
+
     @property
     def is_github_configured(self) -> bool:
         return bool(self.github.username)
+
+    @property
+    def is_inat_configured(self) -> bool:
+        return bool(self.inat.username)
+
+    @property
+    def is_telegram_configured(self) -> bool:
+        return bool(self.telegram.username)
 
 
 # Global config instance

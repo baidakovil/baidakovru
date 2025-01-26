@@ -29,44 +29,82 @@ class GitHubFetcher(BaseFetcher):
             self.logger.error(
                 f'Config for {self.platform_id} was not validated. Returning empty result.'
             )
-            return FetchResult.create_empty(self.platform_id, self.config.public_name)
+            return self.create_base_result()  # Use base result for error case
 
         url = self.config.get_url()
-        response = requests.get(url, headers=self.config.headers)
-        result = FetchResult.create_empty(self.platform_id, self.config.public_name)
+        try:
+            response = requests.get(url, headers=self.config.headers)
+            result = self.create_base_result()  # Create base result for success case
 
-        if response.status_code == 200:
-            events = response.json()
-            result.raw_response = events
-            self.logger.debug(
-                f'Fetched {len(events)} events from GitHub for {self.config.username}'
-            )
-
-            if events:
-                sorted_events = sorted(
-                    events, key=lambda x: x['created_at'], reverse=True
+            if response.status_code == 200:
+                events = response.json()
+                result.raw_response = events
+                self.logger.debug(
+                    f'Fetched {len(events)} events from GitHub for {self.config.username}'
                 )
-                for event in sorted_events:
-                    if event['type'] in self.config.supported_events:
-                        result.raw_datetime = event['created_at']
-                        result.formatted_datetime = (
-                            datetime.strptime(
-                                event['created_at'], self.config.date_format['input']
-                            )
-                            .strftime(self.config.date_format['output'])
-                            .lower()
-                        )
-                        result.update_desc = f"{event['type']} at repo {event['repo']['name']} at {event['repo']['url']}"
-                        break
 
-        elif response.status_code == 404:
-            self.logger.error(
-                f'404 when fetching updates from GitHub for {self.config.username}'
-            )
-        else:
-            self.logger.error(
-                f'Error when fetching updates from GitHub for {self.config.username}: {response.status_code}'
-            )
+                try:
+                    if events:
+                        sorted_events = sorted(
+                            events, key=lambda x: x['created_at'], reverse=True
+                        )
+                        for event in sorted_events:
+                            if event['type'] in self.config.supported_events:
+                                result.raw_datetime = event['created_at']
+                                result.formatted_datetime = (
+                                    datetime.strptime(
+                                        event['created_at'],
+                                        self.config.date_format['input'],
+                                    )
+                                    .strftime(self.config.date_format['output'])
+                                    .lower()
+                                )
+
+                                # Extract correct URL based on event type
+                                if event['type'] == 'PushEvent':
+                                    # Get URL of the last commit in the push
+                                    commits = event['payload'].get('commits', [])
+                                    if commits:
+                                        result.update_url = commits[-1]['url'].replace(
+                                            'api.github.com/repos', 'github.com'
+                                        )
+                                elif event['type'] == 'ReleaseEvent':
+                                    result.update_url = event['payload']['release'][
+                                        'html_url'
+                                    ]
+                                else:
+                                    # Fallback to repo URL if event type is unknown
+                                    result.update_url = event['repo']['url'].replace(
+                                        'api.github.com/repos', 'github.com'
+                                    )
+
+                                result.update_desc = f"{event['type']} to repository"
+                                break
+                except Exception as e:
+                    self.logger.error(f'Error parsing GitHub response: {e}')
+                    # Keep raw_response but mark parsing error in desc
+                    result.update_desc = f"Error parsing update: {str(e)}"
+
+            elif response.status_code == 404:
+                self.logger.error(
+                    f'404 when fetching updates from GitHub for {self.config.username}'
+                )
+                result.raw_response = {'error': 'Not Found', 'status': 404}
+            else:
+                self.logger.error(
+                    f'Error when fetching updates from GitHub for {self.config.username}: {response.status_code}'
+                )
+                result.raw_response = {
+                    'error': 'Bad Response',
+                    'status': response.status_code,
+                }
+
+        except Exception as e:
+            self.logger.error(f'Error fetching from GitHub: {e}')
+            result = self.create_base_result(
+                {'error': str(e)}
+            )  # Create base result with error
+            result.update_desc = f"Error fetching update: {str(e)}"
 
         self.log_finish()
         return result

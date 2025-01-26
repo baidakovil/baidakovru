@@ -5,6 +5,8 @@ from .config import config
 from .database.dbmanager import DatabaseManager
 from .fetchers.base import BaseFetcher
 from .fetchers.github import GitHubFetcher
+from .fetchers.inat import INatFetcher
+from .fetchers.telegram import TelegramFetcher
 from .log_config import setup_logging
 
 logger = setup_logging()
@@ -16,9 +18,11 @@ def get_fetchers() -> List[BaseFetcher]:
     if config.is_github_configured:
         fetchers.append(GitHubFetcher(config.github))
 
-    # Add other fetchers similarly
-    # if config.is_twitter_configured:
-    #     fetchers.append(TwitterFetcher(config.twitter))
+    if config.is_inat_configured:
+        fetchers.append(INatFetcher(config.inat))
+
+    if config.is_telegram_configured:
+        fetchers.append(TelegramFetcher(config.telegram))
 
     return fetchers
 

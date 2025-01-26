@@ -56,10 +56,30 @@ def get_updates():
             cursor = conn.cursor()
             cursor.execute(
                 """
-                SELECT platform_id, platform_name, formatted_datetime, update_desc 
-                FROM updates 
-                ORDER BY formatted_datetime DESC
-            """
+                WITH LatestDatetimes AS (
+                    -- First get the latest datetime for each platform
+                    SELECT platform_id, MAX(formatted_datetime) as max_datetime
+                    FROM updates
+                    GROUP BY platform_id
+                ),
+                LatestIds AS (
+                    -- Then for each platform's latest datetime, get the latest ID
+                    SELECT u.platform_id, MAX(u.id) as max_id
+                    FROM updates u
+                    INNER JOIN LatestDatetimes lt 
+                        ON u.platform_id = lt.platform_id 
+                        AND u.formatted_datetime = lt.max_datetime
+                    GROUP BY u.platform_id
+                )
+                -- Finally, get the full records using the latest IDs
+                SELECT u.platform_id, u.platform_name, u.formatted_datetime, 
+                       u.update_desc, u.update_url
+                FROM updates u
+                INNER JOIN LatestIds li 
+                    ON u.platform_id = li.platform_id 
+                    AND u.id = li.max_id
+                ORDER BY u.formatted_datetime DESC
+                """
             )
             updates = cursor.fetchall()
 
@@ -69,8 +89,9 @@ def get_updates():
                 'platform_name': platform_name,
                 'formatted_datetime': formatted_datetime,
                 'update_desc': update_desc,
+                'update_url': update_url,
             }
-            for platform_id, platform_name, formatted_datetime, update_desc in updates
+            for platform_id, platform_name, formatted_datetime, update_desc, update_url in updates
         ]
 
         return jsonify(data)
@@ -108,6 +129,7 @@ def sigterm_handler(signum, frame):
 
 
 signal.signal(signal.SIGTERM, sigterm_handler)
+
 
 if __name__ == '__main__':
     # Ensure database is properly initialized on startup

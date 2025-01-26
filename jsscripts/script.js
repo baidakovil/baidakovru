@@ -31,6 +31,8 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(data => {
             const tbody = document.querySelector('#updates-table tbody');
+            tbody.innerHTML = ''; // Clear existing content
+            
             data.forEach(platform => {
                 const row = document.createElement('tr');
                 
@@ -40,7 +42,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 platformNameCell.textContent = platform.platform_name;
                 formattedDatetimeCell.textContent = platform.formatted_datetime;
+                
+                // Create description content with optional link
                 updateDescCell.textContent = platform.update_desc;
+                if (platform.update_url) {
+                    const link = document.createElement('a');
+                    link.href = platform.update_url;
+                    link.target = '_blank';
+                    const linkIcon = document.createElement('img');
+                    linkIcon.src = '/styles/link_sign.svg';
+                    linkIcon.alt = 'Link';
+                    linkIcon.className = 'link-icon';
+                    link.appendChild(linkIcon);
+                    updateDescCell.appendChild(link);
+                }
                 
                 row.appendChild(platformNameCell);
                 row.appendChild(formattedDatetimeCell);

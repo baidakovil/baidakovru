@@ -21,6 +21,14 @@ class BaseFetcher(ABC):
         """Return unique identifier for the platform."""
         pass
 
+    def create_base_result(self, raw_response=None) -> FetchResult:
+        """Create base result with platform info and raw response."""
+        return FetchResult(
+            platform_id=self.platform_id,
+            platform_name=self.config.platform_name,
+            raw_response=raw_response,
+        )
+
     @abstractmethod
     def fetch(self) -> FetchResult:
         """Execute data fetch operation and return standardized result."""
