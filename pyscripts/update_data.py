@@ -6,6 +6,7 @@ from .database.dbmanager import DatabaseManager
 from .fetchers.base import BaseFetcher
 from .fetchers.github import GitHubFetcher
 from .fetchers.inat import INatFetcher
+from .fetchers.lastfm import LastFMFetcher
 from .fetchers.telegram import TelegramFetcher
 from .log_config import setup_logging
 
@@ -23,6 +24,9 @@ def get_fetchers() -> List[BaseFetcher]:
 
     if config.is_telegram_configured:
         fetchers.append(TelegramFetcher(config.telegram))
+
+    if config.is_lastfm_configured:
+        fetchers.append(LastFMFetcher(config.lastfm))
 
     return fetchers
 

@@ -18,10 +18,20 @@ class FetcherConfig:
     date_format: Dict[str, str] = field(default_factory=dict)
 
     def get_url(self) -> Optional[str]:
-        """Format service URL template with configured username."""
-        if self.url_template and self.username:
-            return self.url_template.format(username=self.username)
-        return None
+        """Format service URL template with available configuration values."""
+        if not self.url_template:
+            return None
+
+        # Build template values from all non-None fields
+        template_values = {}
+        for field_name, field_value in vars(self).items():
+            if field_value is not None:
+                template_values[field_name] = field_value
+
+        try:
+            return self.url_template.format(**template_values)
+        except KeyError:
+            return None
 
 
 class Config:
@@ -74,6 +84,18 @@ class Config:
             date_format={'input': '%Y-%m-%dT%H:%M:%S%z', 'output': '%Y-%m-%d %H:%M:%S'},
         )
 
+        # Last.fm specific configuration
+        self.lastfm = FetcherConfig(
+            username=os.getenv('LASTFM_USERNAME'),
+            api_key=os.getenv('LASTFM_API_KEY'),
+            platform_name="Last.fm",
+            url_template='http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user={username}&api_key={api_key}&format=json&limit=1',
+            headers={
+                'Accept': 'application/json',
+            },
+            date_format={'input': '%d %b %Y, %H:%M', 'output': '%Y-%m-%d %H:%M:%S'},
+        )
+
     @property
     def is_github_configured(self) -> bool:
         return bool(self.github.username)
@@ -85,6 +107,10 @@ class Config:
     @property
     def is_telegram_configured(self) -> bool:
         return bool(self.telegram.username)
+
+    @property
+    def is_lastfm_configured(self) -> bool:
+        return bool(self.lastfm.username and self.lastfm.api_key)
 
 
 # Global config instance
