@@ -31,16 +31,21 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(data => {
             const tbody = document.querySelector('#updates-table tbody');
-            data.forEach(service => {
+            data.forEach(platform => {
                 const row = document.createElement('tr');
-                const nameCell = document.createElement('td');
-                const dateCell = document.createElement('td');
                 
-                nameCell.textContent = service.name;
-                dateCell.textContent = service.formatted_datetime ? service.formatted_datetime : 'Нет данных';
+                const platformNameCell = document.createElement('td');
+                const formattedDatetimeCell = document.createElement('td');
+                const updateDescCell = document.createElement('td');
+
+                platformNameCell.textContent = platform.platform_name;
+                formattedDatetimeCell.textContent = platform.formatted_datetime;
+                updateDescCell.textContent = platform.update_desc;
                 
-                row.appendChild(nameCell);
-                row.appendChild(dateCell);
+                row.appendChild(platformNameCell);
+                row.appendChild(formattedDatetimeCell);
+                row.appendChild(updateDescCell);
+                
                 tbody.appendChild(row);
             });
         })

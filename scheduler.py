@@ -8,7 +8,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from dotenv import load_dotenv
 
 from pyscripts import log_config
-from pyscripts.update_data import update_all_services
+from pyscripts.update_data import update_all_platforms
 
 load_dotenv()
 SCHEDULER_INTERVAL_SEC = int(os.getenv('SCHEDULER_INTERVAL_SEC'))
@@ -20,7 +20,7 @@ logger = log_config.setup_logging()
 scheduler = BlockingScheduler()
 first_run_time = datetime.now() + timedelta(seconds=SCHEDULER_FIRST_RUN_SEC)
 scheduler.add_job(
-    update_all_services,
+    update_all_platforms,
     'interval',
     seconds=SCHEDULER_INTERVAL_SEC,
     next_run_time=first_run_time,

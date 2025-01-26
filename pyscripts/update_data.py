@@ -1,47 +1,42 @@
-import json
 import os
-import sqlite3
+from typing import List
 
-from dotenv import load_dotenv
+from .config import config
+from .database.dbmanager import DatabaseManager
+from .fetchers.base import BaseFetcher
+from .fetchers.github import GitHubFetcher
+from .log_config import setup_logging
 
-from pyscripts import log_config
-from pyscripts.create_database import create_database_if_not_exists
-from upscripts import github
-
-load_dotenv()
-DB_PATH = os.getenv('DB_PATH')
-
-logger = log_config.setup_logging()
+logger = setup_logging()
 
 
-def update_all_services():
-    logger.info('Starting update all the services...')
+def get_fetchers() -> List[BaseFetcher]:
+    fetchers = []
 
-    create_database_if_not_exists()
+    if config.is_github_configured:
+        fetchers.append(GitHubFetcher(config.github))
 
-    # Подключаемся к базе данных
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
+    # Add other fetchers similarly
+    # if config.is_twitter_configured:
+    #     fetchers.append(TwitterFetcher(config.twitter))
 
-    # Обновляем GitHub
+    return fetchers
 
-    github_update = github.get_last_update('baidakovil')
-    cursor.execute(
-        '''
-        INSERT OR REPLACE INTO services 
-        (name, update_moment, raw_datetime, formatted_datetime, update_desc, raw_response) 
-        VALUES (?, ?, ?, ?, ?, ?)
-    ''',
-        (
-            'GitHub',
-            github_update['update_moment'],
-            github_update['raw_datetime'],
-            github_update['formatted_datetime'],
-            github_update['update_desc'],
-            json.dumps(github_update['raw_response']),  # Convert to JSON string
-        ),
-    )
 
-    conn.commit()
-    conn.close()
-    logger.info('Finishing update all the services...')
+def update_all_platforms():
+    logger.info("Starting update for all platforms...")
+
+    db_manager = DatabaseManager(config.db_path)
+
+    if not db_manager.health_check():
+        logger.error("Database health check failed. Skipping updates.")
+        return
+
+    for fetcher in get_fetchers():
+        try:
+            result = fetcher.fetch()
+            db_manager.update_platform_data(result)
+        except Exception as e:
+            logger.error(f"Error updating {fetcher.platform_id}: {e}")
+
+    logger.info("Finished updating all platforms")

@@ -1,28 +1,30 @@
 import logging
 import os
 import signal
-import sqlite3
 import sys
-from logging.handlers import RotatingFileHandler
 
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request, send_from_directory
 
 from pyscripts import log_config
+from pyscripts.config import config
+from pyscripts.database.dbmanager import DatabaseManager
 
 load_dotenv()
 
-DB_PATH = os.getenv('DB_PATH')
 SECRET_KEY = os.getenv('SECRET_KEY')
-FLASK_DEBUG = os.getenv('FLASK_DEBUG').lower() in ('true', '1', 't')
-FLASK_PORT = int(os.getenv('FLASK_PORT'))
-FLASK_HOST = os.getenv('FLASK_HOST')
+FLASK_DEBUG = os.getenv('FLASK_DEBUG', 'false').lower() in ('true', '1', 't')
+FLASK_PORT = int(os.getenv('FLASK_PORT', '5000'))
+FLASK_HOST = os.getenv('FLASK_HOST', '127.0.0.1')
 
 logger = log_config.setup_logging()
 logger.info('Application startup')
 
 app = Flask(__name__, static_folder='styles', static_url_path='/styles')
 app.config['SECRET_KEY'] = SECRET_KEY
+
+# Initialize database manager
+db_manager = DatabaseManager(config.db_path)
 
 
 @app.route('/')
@@ -38,16 +40,32 @@ def serve_js(filename):
 @app.route('/api/updates', methods=['GET'])
 def get_updates():
     try:
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
-        cursor.execute("SELECT name, formatted_datetime FROM services")
-        services = cursor.fetchall()
-        conn.close()
+        # Check database health before operations
+        if not db_manager.health_check():
+            logger.error("Database health check failed")
+            return jsonify({'error': 'Database unavailable'}), 503
+
+        with db_manager.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                SELECT platform_id, platform_name, formatted_datetime, update_desc 
+                FROM updates 
+                ORDER BY formatted_datetime DESC
+            """
+            )
+            updates = cursor.fetchall()
 
         data = [
-            {'name': name, 'formatted_datetime': formatted_datetime}
-            for name, formatted_datetime in services
+            {
+                'platform_id': platform_id,
+                'platform_name': platform_name,
+                'formatted_datetime': formatted_datetime,
+                'update_desc': update_desc,
+            }
+            for platform_id, platform_name, formatted_datetime, update_desc in updates
         ]
+
         return jsonify(data)
     except Exception as e:
         logger.error(f'Error fetching updates: {str(e)}')
@@ -73,11 +91,20 @@ def log_error():
 
 def sigterm_handler(signum, frame):
     logger.info("Received SIGTERM. Shutting down gracefully...")
-    # Perform any necessary cleanup here in future
+    # Clean up database connections
+    try:
+        db_manager.close_all()
+    except Exception as e:
+        logger.error(f"Error during shutdown: {e}")
     sys.exit(0)
 
 
 signal.signal(signal.SIGTERM, sigterm_handler)
 
 if __name__ == '__main__':
+    # Ensure database is properly initialized on startup
+    if not db_manager.health_check():
+        logger.error("Database initialization failed. Exiting.")
+        sys.exit(1)
+
     app.run(debug=FLASK_DEBUG, host=FLASK_HOST, port=FLASK_PORT)
