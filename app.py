@@ -5,6 +5,8 @@ import sys
 
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request, send_from_directory
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 from pyscripts import log_config
 from pyscripts.config import config
@@ -26,6 +28,10 @@ app.config['SECRET_KEY'] = SECRET_KEY
 # Initialize database manager
 db_manager = DatabaseManager(config.db_path)
 
+limiter = Limiter(
+    app=app, key_func=get_remote_address, default_limits=["200 per day", "50 per hour"]
+)
+
 
 @app.route('/')
 def index():
@@ -38,6 +44,7 @@ def serve_js(filename):
 
 
 @app.route('/api/updates', methods=['GET'])
+@limiter.limit("1 per second")  # Add rate limiting
 def get_updates():
     try:
         # Check database health before operations
@@ -81,6 +88,7 @@ def add_header(response):
 
 
 @app.route('/api/log-error', methods=['POST'])
+@limiter.limit("5 per minute")  # Add rate limiting
 def log_error():
     error_data = request.json
     logger.error(
