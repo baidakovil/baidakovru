@@ -4,6 +4,7 @@ from typing import List
 from .config import config
 from .database.dbmanager import DatabaseManager
 from .fetchers.base import BaseFetcher
+from .fetchers.flightradar import FlightRadar24Fetcher
 from .fetchers.github import GitHubFetcher
 from .fetchers.inat import INatFetcher
 from .fetchers.lastfm import LastFMFetcher
@@ -32,6 +33,9 @@ def get_fetchers() -> List[BaseFetcher]:
 
     if config.is_linkedin_configured:
         fetchers.append(LinkedInFetcher(config.linkedin))
+
+    if config.is_flightradar_configured:
+        fetchers.append(FlightRadar24Fetcher(config.flightradar))
 
     logger.info(
         f"Configured {len(fetchers)} fetchers: {[type(f).__name__ for f in fetchers]}"

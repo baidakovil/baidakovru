@@ -57,13 +57,11 @@ class TelegramFetcher(BaseFetcher):
             self.logger.error(
                 f'Config for {self.platform_id} was not validated. Returning empty result.'
             )
-            return FetchResult.create_empty(self.platform_id, self.config.platform_name)
+            return self.create_base_result()
 
         url = self.config.get_url()
         response = requests.get(url, headers=self.config.headers)
-        result = FetchResult.create_empty(
-            platform_id=self.platform_id, platform_name=self.config.platform_name
-        )
+        result = self.create_base_result()
 
         if response.status_code == 200:
             html_content = response.text

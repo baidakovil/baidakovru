@@ -110,6 +110,18 @@ class Config:
             date_format={'input': '%Y-%d-%m', 'output': '%Y-%m-%d %H:%M:%S'},
         )
 
+        # FlightRadar24 specific configuration
+        self.flightradar = FetcherConfig(
+            username=os.getenv('FLIGHTRADAR_USERNAME'),
+            platform_name="myFlightradar24",
+            url_template='https://my.flightradar24.com/{username}/flights',
+            headers={
+                'Accept': 'text/html',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            },
+            date_format={'input': '%Y-%m-%d', 'output': '%Y-%m-%d %H:%M:%S'},
+        )
+
     @property
     def is_github_configured(self) -> bool:
         return bool(self.github.username)
@@ -129,6 +141,10 @@ class Config:
     @property
     def is_linkedin_configured(self) -> bool:
         return bool(self.linkedin.username)
+
+    @property
+    def is_flightradar_configured(self) -> bool:
+        return bool(self.flightradar.username)
 
 
 # Global config instance
