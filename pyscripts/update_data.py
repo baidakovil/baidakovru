@@ -7,6 +7,7 @@ from .fetchers.base import BaseFetcher
 from .fetchers.github import GitHubFetcher
 from .fetchers.inat import INatFetcher
 from .fetchers.lastfm import LastFMFetcher
+from .fetchers.linkedin import LinkedInFetcher
 from .fetchers.telegram import TelegramFetcher
 from .log_config import setup_logging
 
@@ -15,6 +16,7 @@ logger = setup_logging()
 
 def get_fetchers() -> List[BaseFetcher]:
     fetchers = []
+    logger.info("Starting fetcher configuration...")
 
     if config.is_github_configured:
         fetchers.append(GitHubFetcher(config.github))
@@ -28,6 +30,12 @@ def get_fetchers() -> List[BaseFetcher]:
     if config.is_lastfm_configured:
         fetchers.append(LastFMFetcher(config.lastfm))
 
+    if config.is_linkedin_configured:
+        fetchers.append(LinkedInFetcher(config.linkedin))
+
+    logger.info(
+        f"Configured {len(fetchers)} fetchers: {[type(f).__name__ for f in fetchers]}"
+    )
     return fetchers
 
 
@@ -40,11 +48,24 @@ def update_all_platforms():
         logger.error("Database health check failed. Skipping updates.")
         return
 
-    for fetcher in get_fetchers():
+    fetchers = get_fetchers()
+    if not fetchers:
+        logger.warning("No fetchers were configured. Check your configuration.")
+        return
+
+    for fetcher in fetchers:
+        logger.info(f"Processing fetcher: {type(fetcher).__name__}")
         try:
+            logger.debug(f"Starting fetch for {fetcher.platform_id}")
             result = fetcher.fetch()
+            logger.debug(
+                f"Successfully fetched data for {fetcher.platform_id}, updating database"
+            )
             db_manager.update_platform_data(result)
+            logger.info(f"Successfully updated data for {fetcher.platform_id}")
         except Exception as e:
-            logger.error(f"Error updating {fetcher.platform_id}: {e}")
+            logger.error(
+                f"Error updating {fetcher.platform_id}: {str(e)}", exc_info=True
+            )
 
     logger.info("Finished updating all platforms")

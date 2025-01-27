@@ -1,8 +1,14 @@
+import logging
 import os
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Dict, List, Optional
 
-from dotenv import load_dotenv
+from dotenv import find_dotenv, load_dotenv
+
+from .log_config import setup_logging
+
+logger = setup_logging()
 
 
 @dataclass
@@ -41,7 +47,7 @@ class Config:
         load_dotenv()
 
         # Database config
-        self.db_path = os.getenv('DB_PATH', 'database.db')
+        self.db_path = os.getenv('DB_PATH')
 
         # GitHub specific configuration
         self.github = FetcherConfig(
@@ -96,6 +102,14 @@ class Config:
             date_format={'input': '%d %b %Y, %H:%M', 'output': '%Y-%m-%d %H:%M:%S'},
         )
 
+        # LinkedIn specific configuration
+        self.linkedin = FetcherConfig(
+            username=os.getenv('LINKEDIN_USERNAME'),
+            platform_name="LinkedIn",
+            url_template='https://www.linkedin.com/in/{username}',
+            date_format={'input': '%Y-%d-%m', 'output': '%Y-%m-%d %H:%M:%S'},
+        )
+
     @property
     def is_github_configured(self) -> bool:
         return bool(self.github.username)
@@ -111,6 +125,10 @@ class Config:
     @property
     def is_lastfm_configured(self) -> bool:
         return bool(self.lastfm.username and self.lastfm.api_key)
+
+    @property
+    def is_linkedin_configured(self) -> bool:
+        return bool(self.linkedin.username)
 
 
 # Global config instance
