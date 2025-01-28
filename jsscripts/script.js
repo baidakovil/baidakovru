@@ -36,36 +36,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
     fetch('/api/updates')
         .then(response => {
-            console.log('Raw response:', response);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            return response.text();
-        })
-        .then(text => {
-            console.log('Response text:', text);
-            return JSON.parse(text);
+            return response.json();
         })
         .then(data => {
-            const tbody = document.querySelector('#updates-table tbody');
-            tbody.innerHTML = ''; // Clear existing content
+            const container = document.querySelector('#updates-content');
+            container.innerHTML = '';
             
             data.forEach(platform => {
-                const row = document.createElement('tr');
+                const row = document.createElement('div');
+                row.className = 'updates-row';
                 
-                const platformNameCell = document.createElement('td');
-                const formattedDatetimeCell = document.createElement('td');
-                formattedDatetimeCell.className = 'datetime-cell';
-
-                platformNameCell.textContent = platform.platform_name;
+                // Platform name
+                const platformName = document.createElement('div');
+                platformName.className = 'platform-name';
+                platformName.textContent = platform.platform_name;
                 
-                // Create container for date and link
-                const dateContainer = document.createElement('div');
-                dateContainer.className = 'date-container';
+                // Date
+                const dateCell = document.createElement('div');
+                dateCell.className = 'datetime-cell';
+                dateCell.textContent = formatDate(platform.formatted_datetime);
                 
-                const dateSpan = document.createElement('span');
-                dateSpan.textContent = formatDate(platform.formatted_datetime);
-                dateContainer.appendChild(dateSpan);
+                // Link
+                const linkCell = document.createElement('div');
+                linkCell.className = 'link-cell';
                 
                 if (platform.platform_url) {
                     const link = document.createElement('a');
@@ -76,19 +72,18 @@ document.addEventListener('DOMContentLoaded', function () {
                     linkIcon.alt = 'Link';
                     linkIcon.className = 'link-icon';
                     link.appendChild(linkIcon);
-                    dateContainer.appendChild(link);
+                    linkCell.appendChild(link);
                 }
                 
-                formattedDatetimeCell.appendChild(dateContainer);
+                row.appendChild(platformName);
+                row.appendChild(dateCell);
+                row.appendChild(linkCell);
                 
-                row.appendChild(platformNameCell);
-                row.appendChild(formattedDatetimeCell);
-                
-                tbody.appendChild(row);
+                container.appendChild(row);
             });
         })
         .catch(error => {
-            console.error('Ошибка при загрузке данных:', error);
+            console.error('Error loading data:', error);
             logError(error);
         });
 });

@@ -1,48 +1,110 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
+.header-container {
+    max-width: 500px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+.site-title, .page-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    text-align: left;
+    margin-bottom: 20px;
+    white-space: nowrap;
+
+}
+
+.updates-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.updates-grid {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    width: 100%;
 }
 
-h1 {
-    margin-bottom: 40px;
+.updates-header {
+    display: grid;
+    grid-template-columns: 1.7fr 2.3fr;
+    gap: 0px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    width: 100%;
 }
 
-table {
-    border-collapse: collapse;
-}
-
-th, td {
-    padding: 15px 35px;
-    border: 0px solid #ddd;
+.updates-header div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     text-align: left;
 }
 
-
-.link-icon {
-    width: 16px;
-    height: 16px;
-    margin-left: 20px;
+.updates-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
-/* Make sure table cells with icons align properly */
-#updates-table td {
-    vertical-align: middle;
-    
+.updates-row {
+    display: grid;
+    grid-template-columns: 1.7fr 2fr 0.3fr;
+    gap: 0px;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.platform-name, .datetime-cell, .link-cell {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .date-container {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 10px;
 }
 
-/* Стиль для первого столбца */
-#updates-table td:first-child {
-    white-space: nowrap;
-    padding-right: 30px;
+.link-icon {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
 }
 
-/* Обновленный стиль для столбца с датой */
+
+/* Базовый медиа-запрос для мобильных */
+@media screen and (max-width: 768px) {
+    .header-container {
+        margin: 30px auto;
+        padding: 0 25px;
+    }
+
+    .site-title, .page-title {
+        font-size: 24px;
+    }
+
+    .updates-container {
+        max-width: 100%;
+        padding: 0 25px;
+    }
+
+    .updates-grid {
+        gap: 20px;
+    }
+    
+    .updates-row {
+        gap: 20px;
+    }
+
+    .updates-header div {
+        margin-top: 10px;
+        white-space: normal;
+    }
+
+    .updates-header {
+        margin-bottom: 5px;
+    }
+}

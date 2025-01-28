@@ -2,22 +2,27 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Мои обновления</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./styles/styles.css">
 </head>
 <body>
-    <h1>Мои последние обновления</h1>
-    <table id="updates-table">
-        <thead>
-            <tr>
-                <th>Платформа</th>
-                <th>Последнее обновление</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Данные будут заполнены динамически -->
-        </tbody>
-    </table>
+    <div class="header-container">
+        <div class="site-title"><h1>baidakov.ru</h1></div>
+        <div class="page-title"><h1>Добро пожаловать</h1></div>
+    </div>
+    <div class="updates-container">
+        <div class="updates-grid">
+            <div class="updates-header">
+                <div>Платформа</div>
+                <div>Последнее обновление</div>
+            </div>
+            <div class="updates-content" id="updates-content"></div>
+        </div>
+    </div>
     <script src="./jsscripts/script.js"></script>
 </body>
 </html>
