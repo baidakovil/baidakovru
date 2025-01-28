@@ -2,9 +2,8 @@ from datetime import datetime
 
 import requests
 
-from ..config import FetcherConfig
 from ..models import FetchResult
-from .base import BaseFetcher
+from .base import BaseFetcher, require_config
 
 
 class FlightRadar24Fetcher(BaseFetcher):
@@ -13,13 +12,34 @@ class FlightRadar24Fetcher(BaseFetcher):
         return 'flightradar'
 
     def validate_config(self) -> bool:
-        if not self.config.username:
-            self.logger.error("FlightRadar24 username not configured")
-            return False
-        if not self.config.get_url():
-            self.logger.error("FlightRadar24 URL configuration is invalid")
-            return False
-        return True
+        return bool(self.config.username and self.config.get_url())
+
+    @require_config
+    def fetch(self) -> FetchResult:
+        """Fetch and parse latest FlightRadar24 flight."""
+        self.log_start()
+
+        url = self.config.get_url()
+        response = requests.get(url, headers=self.config.headers)
+        result = self.create_base_result()
+
+        if response.status_code == 200:
+            html_content = response.text
+            result.raw_response = html_content
+
+            date_str = self._extract_last_date(html_content)
+            if date_str:
+                result.raw_datetime = date_str
+                result.formatted_datetime = (
+                    datetime.strptime(date_str, self.config.date_format['input'])
+                    .strftime(self.config.date_format['output'])
+                    .lower()
+                )
+                result.update_url = url
+                result.update_desc = "New flight recorded"
+
+        self.log_finish()
+        return result
 
     def _extract_last_date(self, html_content: str) -> str:
         """Extract the date from the first flight entry."""
@@ -45,35 +65,3 @@ class FlightRadar24Fetcher(BaseFetcher):
         except ValueError:
             self.logger.error("Could not find date in FlightRadar24 page")
             return ""
-
-    def fetch(self) -> FetchResult:
-        """Fetch and parse latest FlightRadar24 flight."""
-        self.log_start()
-
-        if not self.validate_config():
-            self.logger.error(
-                f'Config for {self.platform_id} was not validated. Returning empty result.'
-            )
-            return self.create_base_result()
-
-        url = self.config.get_url()
-        response = requests.get(url, headers=self.config.headers)
-        result = self.create_base_result()
-
-        if response.status_code == 200:
-            html_content = response.text
-            result.raw_response = html_content
-
-            date_str = self._extract_last_date(html_content)
-            if date_str:
-                result.raw_datetime = date_str
-                result.formatted_datetime = (
-                    datetime.strptime(date_str, self.config.date_format['input'])
-                    .strftime(self.config.date_format['output'])
-                    .lower()
-                )
-                result.update_url = url
-                result.update_desc = "New flight recorded"
-
-        self.log_finish()
-        return result

@@ -129,30 +129,6 @@ class Config:
             date_format={'input': '%Y-%m-%d', 'output': '%Y-%m-%d %H:%M:%S'},
         )
 
-    @property
-    def is_github_configured(self) -> bool:
-        return bool(self.github.username)
-
-    @property
-    def is_inat_configured(self) -> bool:
-        return bool(self.inat.username)
-
-    @property
-    def is_telegram_configured(self) -> bool:
-        return bool(self.telegram.username)
-
-    @property
-    def is_lastfm_configured(self) -> bool:
-        return bool(self.lastfm.username and self.lastfm.api_key)
-
-    @property
-    def is_linkedin_configured(self) -> bool:
-        return bool(self.linkedin.username)
-
-    @property
-    def is_flightradar_configured(self) -> bool:
-        return bool(self.flightradar.username)
-
 
 # Global config instance
 config = Config()

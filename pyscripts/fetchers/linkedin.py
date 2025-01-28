@@ -2,7 +2,7 @@ from datetime import datetime
 from os import getenv
 
 from ..models import FetchResult
-from .base import BaseFetcher
+from .base import BaseFetcher, require_config
 
 
 class LinkedInFetcher(BaseFetcher):
@@ -11,21 +11,12 @@ class LinkedInFetcher(BaseFetcher):
         return 'linkedin'
 
     def validate_config(self) -> bool:
-        if not getenv('LINKEDIN_LAST_UPDATE_DATE'):
-            self.logger.error("LINKEDIN_LAST_UPDATE_DATE not set in environment")
-            return False
-        if not self.config.username:
-            self.logger.error("LinkedIn username not configured")
-            return False
-        return True
+        return bool(self.config.username and getenv('LINKEDIN_LAST_UPDATE_DATE'))
 
+    @require_config
     def fetch(self) -> FetchResult:
         """Fetch dummy LinkedIn data."""
         self.log_start()
-
-        if not self.validate_config():
-            return self.create_base_result()
-
         result = self.create_base_result()
 
         result.raw_datetime = getenv('LINKEDIN_LAST_UPDATE_DATE')

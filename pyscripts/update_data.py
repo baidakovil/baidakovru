@@ -16,31 +16,38 @@ logger = setup_logging()
 
 
 def get_fetchers() -> List[BaseFetcher]:
-    fetchers = []
+    """Get list of configured fetchers."""
     logger.info("Starting fetcher configuration...")
 
-    if config.is_github_configured:
-        fetchers.append(GitHubFetcher(config.github))
+    # Create all fetchers
+    all_fetchers = [
+        GitHubFetcher(config.github),
+        INatFetcher(config.inat),
+        TelegramFetcher(config.telegram),
+        LastFMFetcher(config.lastfm),
+        LinkedInFetcher(config.linkedin),
+        FlightRadar24Fetcher(config.flightradar),
+    ]
 
-    if config.is_inat_configured:
-        fetchers.append(INatFetcher(config.inat))
+    # Filter only properly configured fetchers and log unconfigured ones
+    configured_fetchers = []
+    for fetcher in all_fetchers:
+        if fetcher.validate_config():
+            configured_fetchers.append(fetcher)
+        else:
+            logger.warning(
+                f"Fetcher {fetcher.platform_id} ({type(fetcher).__name__}) is not properly configured"
+            )
 
-    if config.is_telegram_configured:
-        fetchers.append(TelegramFetcher(config.telegram))
+    if not configured_fetchers:
+        logger.warning("No fetchers were properly configured")
+    else:
+        logger.info(
+            f"Successfully configured {len(configured_fetchers)}/{len(all_fetchers)} fetchers: "
+            f"{[type(f).__name__ for f in configured_fetchers]}"
+        )
 
-    if config.is_lastfm_configured:
-        fetchers.append(LastFMFetcher(config.lastfm))
-
-    if config.is_linkedin_configured:
-        fetchers.append(LinkedInFetcher(config.linkedin))
-
-    if config.is_flightradar_configured:
-        fetchers.append(FlightRadar24Fetcher(config.flightradar))
-
-    logger.info(
-        f"Configured {len(fetchers)} fetchers: {[type(f).__name__ for f in fetchers]}"
-    )
-    return fetchers
+    return configured_fetchers
 
 
 def update_all_platforms():

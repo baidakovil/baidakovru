@@ -4,7 +4,7 @@ import requests
 
 from ..config import FetcherConfig
 from ..models import FetchResult
-from .base import BaseFetcher
+from .base import BaseFetcher, require_config
 
 
 class GitHubFetcher(BaseFetcher):
@@ -13,23 +13,12 @@ class GitHubFetcher(BaseFetcher):
         return 'github'
 
     def validate_config(self) -> bool:
-        if not self.config.username:
-            self.logger.error("GitHub username not configured")
-            return False
-        if not self.config.get_url():
-            self.logger.error("GitHub URL configuration is invalid")
-            return False
-        return True
+        return bool(self.config.username and self.config.get_url())
 
+    @require_config
     def fetch(self) -> FetchResult:
         """Fetch and parse latest GitHub user activity events."""
         self.log_start()
-
-        if not self.validate_config():
-            self.logger.error(
-                f'Config for {self.platform_id} was not validated. Returning empty result.'
-            )
-            return self.create_base_result()  # Use base result for error case
 
         url = self.config.get_url()
         try:

@@ -4,7 +4,7 @@ import requests
 
 from ..config import FetcherConfig
 from ..models import FetchResult
-from .base import BaseFetcher
+from .base import BaseFetcher, require_config
 
 
 class INatFetcher(BaseFetcher):
@@ -13,21 +13,12 @@ class INatFetcher(BaseFetcher):
         return 'inat'
 
     def validate_config(self) -> bool:
-        if not self.config.username:
-            self.logger.error("iNaturalist username not configured")
-            return False
-        if not self.config.get_url():
-            self.logger.error("iNaturalist URL configuration is invalid")
-            return False
-        return True
+        return bool(self.config.username and self.config.get_url())
 
+    @require_config
     def fetch(self) -> FetchResult:
         """Fetch and parse latest iNaturalist observations."""
         self.log_start()
-
-        if not self.validate_config():
-            self.logger.error(f'Config for {self.platform_id} was not validated')
-            return self.create_base_result()
 
         url = self.config.get_url()
         try:

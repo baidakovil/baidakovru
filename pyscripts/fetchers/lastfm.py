@@ -3,8 +3,8 @@ from datetime import datetime
 import requests
 
 from ..config import FetcherConfig
+from ..fetchers.base import BaseFetcher, require_config
 from ..models import FetchResult
-from .base import BaseFetcher
 
 
 class LastFMFetcher(BaseFetcher):
@@ -13,21 +13,14 @@ class LastFMFetcher(BaseFetcher):
         return 'lastfm'
 
     def validate_config(self) -> bool:
-        if not self.config.username:
-            self.logger.error("Last.fm username not configured")
-            return False
-        if not self.config.api_key:
-            self.logger.error("Last.fm API key not configured")
-            return False
-        return True
+        return bool(
+            self.config.username and self.config.api_key and self.config.get_url()
+        )
 
+    @require_config
     def fetch(self) -> FetchResult:
         """Fetch and parse latest Last.fm scrobbles."""
         self.log_start()
-
-        if not self.validate_config():
-            self.logger.error(f'Config for {self.platform_id} was not validated')
-            return self.create_base_result()
 
         url = self.config.get_url()
         try:

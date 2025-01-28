@@ -1,10 +1,26 @@
 from abc import ABC, abstractmethod
+from functools import wraps
 
 from ..config import FetcherConfig
 from ..log_config import setup_logging
 from ..models import FetchResult
 
 logger = setup_logging()
+
+
+def require_config(f):
+    """Decorator to check if fetcher is properly configured before fetching."""
+
+    @wraps(f)
+    def wrapper(self, *args, **kwargs):
+        if not self.validate_config():
+            self.logger.warning(
+                f'Fetcher {self.platform_id} is not properly configured'
+            )
+            return self.create_base_result({'error': 'Fetcher not configured'})
+        return f(self, *args, **kwargs)
+
+    return wrapper
 
 
 class BaseFetcher(ABC):
@@ -31,6 +47,7 @@ class BaseFetcher(ABC):
         )
 
     @abstractmethod
+    @require_config
     def fetch(self) -> FetchResult:
         """Execute data fetch operation and return standardized result."""
         pass
