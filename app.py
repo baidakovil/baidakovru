@@ -73,7 +73,7 @@ def get_updates():
                 )
                 -- Finally, get the full records using the latest IDs
                 SELECT u.platform_id, u.platform_name, u.formatted_datetime, 
-                       u.update_desc, u.update_url
+                       u.update_desc, u.platform_url
                 FROM updates u
                 INNER JOIN LatestIds li 
                     ON u.platform_id = li.platform_id 
@@ -89,9 +89,9 @@ def get_updates():
                 'platform_name': platform_name,
                 'formatted_datetime': formatted_datetime,
                 'update_desc': update_desc,
-                'update_url': update_url,
+                'platform_url': platform_url,
             }
-            for platform_id, platform_name, formatted_datetime, update_desc, update_url in updates
+            for platform_id, platform_name, formatted_datetime, update_desc, platform_url in updates
         ]
 
         return jsonify(data)

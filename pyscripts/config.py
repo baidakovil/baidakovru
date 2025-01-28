@@ -22,6 +22,7 @@ class FetcherConfig:
     headers: Dict[str, str] = field(default_factory=dict)
     supported_events: List[str] = field(default_factory=list)
     date_format: Dict[str, str] = field(default_factory=dict)
+    platform_url: Optional[str] = None
 
     def get_url(self) -> Optional[str]:
         """Format service URL template with available configuration values."""
@@ -54,6 +55,7 @@ class Config:
             username=os.getenv('GITHUB_USERNAME'),
             platform_name="GitHub",
             url_template='https://api.github.com/users/{username}/events/public',
+            platform_url=os.getenv('GITHUB_PLATFORM_URL'),
             headers={
                 'Accept': 'application/vnd.github.v3+json',
             },
@@ -72,6 +74,7 @@ class Config:
             username=os.getenv('INAT_USERNAME'),
             platform_name="iNaturalist",
             url_template='https://api.inaturalist.org/v1/observations?user_login={username}&order=desc&order_by=created_at',
+            platform_url=os.getenv('INAT_PLATFORM_URL'),
             headers={
                 'Accept': 'application/json',
             },
@@ -83,6 +86,7 @@ class Config:
             username=os.getenv('TELEGRAM_USERNAME'),
             platform_name="Telegram",
             url_template='https://t.me/s/{username}',
+            platform_url=os.getenv('TELEGRAM_PLATFORM_URL'),
             headers={
                 'Accept': 'text/html',
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
@@ -96,6 +100,7 @@ class Config:
             api_key=os.getenv('LASTFM_API_KEY'),
             platform_name="Last.fm",
             url_template='http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user={username}&api_key={api_key}&format=json&limit=1',
+            platform_url=os.getenv('LASTFM_PLATFORM_URL'),
             headers={
                 'Accept': 'application/json',
             },
@@ -107,6 +112,7 @@ class Config:
             username=os.getenv('LINKEDIN_USERNAME'),
             platform_name="LinkedIn",
             url_template='https://www.linkedin.com/in/{username}',
+            platform_url=os.getenv('LINKEDIN_PLATFORM_URL'),
             date_format={'input': '%Y-%d-%m', 'output': '%Y-%m-%d %H:%M:%S'},
         )
 
@@ -115,6 +121,7 @@ class Config:
             username=os.getenv('FLIGHTRADAR_USERNAME'),
             platform_name="myFlightradar24",
             url_template='https://my.flightradar24.com/{username}/flights',
+            platform_url=os.getenv('FLIGHTRADAR_PLATFORM_URL'),
             headers={
                 'Accept': 'text/html',
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',

@@ -1,6 +1,6 @@
 """Database schema and initialization functions."""
 
-SCHEMA_VERSION = 3  # Increment version for schema change
+SCHEMA_VERSION = 4  # Increment version for schema change
 
 CREATE_TABLES_SQL = {
     'schema_version': """
@@ -16,6 +16,7 @@ CREATE_TABLES_SQL = {
             formatted_datetime TEXT,
             update_desc TEXT,
             update_url TEXT,
+            platform_url TEXT,
             raw_response TEXT,
             update_moment TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )

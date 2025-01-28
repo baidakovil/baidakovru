@@ -67,9 +67,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 dateSpan.textContent = formatDate(platform.formatted_datetime);
                 dateContainer.appendChild(dateSpan);
                 
-                if (platform.update_url) {
+                if (platform.platform_url) {
                     const link = document.createElement('a');
-                    link.href = platform.update_url;
+                    link.href = platform.platform_url;
                     link.target = '_blank';
                     const linkIcon = document.createElement('img');
                     linkIcon.src = '/styles/link_sign.svg';

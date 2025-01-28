@@ -27,6 +27,7 @@ class BaseFetcher(ABC):
             platform_id=self.platform_id,
             platform_name=self.config.platform_name,
             raw_response=raw_response,
+            platform_url=self.config.platform_url,
         )
 
     @abstractmethod
