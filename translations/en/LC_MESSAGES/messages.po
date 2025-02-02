@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  1.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-02-02 20:02+0300\n"
+"POT-Creation-Date: 2025-02-02 23:40+0300\n"
 "PO-Revision-Date: 2024-01-01 00:00+0000\n"
 "Last-Translator: YOUR NAME <your@email.com>\n"
 "Language: en\n"
@@ -13,6 +13,47 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
+
+#: pyscripts/date_formatters.py:21
+msgid "Прям вот-вот"
+msgstr "Just now"
+
+#: pyscripts/date_formatters.py:23
+#, python-format
+msgid "%(hour)d часов назад"
+msgstr "%(hour)d hours ago"
+
+#: pyscripts/date_formatters.py:25
+msgid "Сегодня"
+msgstr "Today"
+
+#: pyscripts/date_formatters.py:28
+#, python-format
+msgid "%(day)d дней назад"
+msgstr "%(day)d days ago"
+
+#: pyscripts/date_formatters.py:31
+#, python-format
+msgid "%(week)d недель назад"
+msgstr "%(week)d weeks ago"
+
+#: pyscripts/date_formatters.py:34
+#, python-format
+msgid "%(month)d месяцев назад"
+msgstr "%(month)d month ago"
+
+#: pyscripts/date_formatters.py:37
+#, python-format
+msgid "%(year)d лет назад"
+msgstr "(year)d years ago"
+
+#: pyscripts/date_formatters.py:39 pyscripts/date_formatters.py:62
+msgid "Неверная дата"
+msgstr "Invalid date"
+
+#: pyscripts/date_formatters.py:57
+msgid " в "
+msgstr " at "
 
 #: templates/about.html:3 templates/about.html:5 templates/index.html:21
 msgid "Об этом сайте"
@@ -91,4 +132,3 @@ msgstr "Last update"
 #: templates/index.html:22
 msgid "Написать"
 msgstr "Contact"
-
