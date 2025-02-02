@@ -22,23 +22,6 @@ document.addEventListener('DOMContentLoaded', function () {
         .catch(err => console.error('Failed to log error:', err));
     }
 
-    function formatDate(dateStr) {
-        const date = new Date(dateStr);
-        const currentYear = new Date().getFullYear();
-        const months = [
-            'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
-            'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
-        ];
-        
-        const day = date.getDate().toString().padStart(2, '0');
-        const month = months[date.getMonth()];
-        const year = date.getFullYear();
-        
-        return year === currentYear ? 
-            `${day} ${month}` : 
-            `${day} ${month} ${year}`;
-    }
-
     fetch(API_ENDPOINTS.updates)
         .then(response => {
             if (!response.ok) {
@@ -62,10 +45,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 platformName.className = 'platform-name';
                 platformName.textContent = platform.platform_name;
                 
-                // Date
+                // Date cell with tooltip
                 const dateCell = document.createElement('div');
                 dateCell.className = 'datetime-cell';
-                dateCell.textContent = formatDate(platform.formatted_datetime);
+                dateCell.textContent = platform.time_ago;
+                dateCell.title = platform.full_date;  // Show full date in tooltip
                 
                 // Link
                 const linkCell = document.createElement('div');

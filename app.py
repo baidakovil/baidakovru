@@ -14,6 +14,7 @@ from flask_mail import Mail, Message
 from pyscripts import log_config
 from pyscripts.config import config
 from pyscripts.database.dbmanager import DatabaseManager
+from pyscripts.date_formatters import format_full_date, format_time_ago
 
 load_dotenv()
 
@@ -183,6 +184,8 @@ def get_updates():
                 'formatted_datetime': formatted_datetime,
                 'update_desc': update_desc,
                 'platform_url': platform_url,
+                'time_ago': format_time_ago(formatted_datetime),
+                'full_date': format_full_date(formatted_datetime),
             }
             for platform_id, platform_name, formatted_datetime, update_desc, platform_url in updates
         ]

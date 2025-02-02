@@ -10,6 +10,12 @@ from .log_config import setup_logging
 
 logger = setup_logging()
 
+# Constants for standardized datetime handling
+DATETIME_FORMAT = {
+    'db': '%Y-%m-%d %H:%M:%S',
+    'iso': '%Y-%m-%dT%H:%M:%S%z',
+}
+
 
 @dataclass
 class FetcherConfig:
@@ -23,6 +29,16 @@ class FetcherConfig:
     supported_events: List[str] = field(default_factory=list)
     date_format: Dict[str, str] = field(default_factory=dict)
     platform_url: Optional[str] = None
+
+    def __post_init__(self):
+        # Ensure date_format always includes the standardized output format
+        if 'output' not in self.date_format:
+            self.date_format['output'] = DATETIME_FORMAT['db']
+        elif self.date_format['output'] != DATETIME_FORMAT['db']:
+            logger.warning(
+                f"Overriding non-standard output date format for {self.platform_name}"
+            )
+            self.date_format['output'] = DATETIME_FORMAT['db']
 
     def get_url(self) -> Optional[str]:
         """Format service URL template with available configuration values."""
@@ -66,7 +82,7 @@ class Config:
                 'CreateEvent',
                 'ForkEvent',
             ],
-            date_format={'input': '%Y-%m-%dT%H:%M:%SZ', 'output': '%Y-%m-%d %H:%M:%S'},
+            date_format={'input': '%Y-%m-%dT%H:%M:%SZ'},
         )
 
         # iNaturalist specific configuration
@@ -78,7 +94,7 @@ class Config:
             headers={
                 'Accept': 'application/json',
             },
-            date_format={'input': '%Y-%m-%dT%H:%M:%S%z', 'output': '%Y-%m-%d %H:%M:%S'},
+            date_format={'input': '%Y-%m-%dT%H:%M:%S%z'},
         )
 
         # Telegram specific configuration
@@ -91,7 +107,7 @@ class Config:
                 'Accept': 'text/html',
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
             },
-            date_format={'input': '%Y-%m-%dT%H:%M:%S%z', 'output': '%Y-%m-%d %H:%M:%S'},
+            date_format={'input': '%Y-%m-%dT%H:%M:%S%z'},
         )
 
         # Last.fm specific configuration
@@ -104,7 +120,7 @@ class Config:
             headers={
                 'Accept': 'application/json',
             },
-            date_format={'input': '%d %b %Y, %H:%M', 'output': '%Y-%m-%d %H:%M:%S'},
+            date_format={'input': '%d %b %Y, %H:%M'},
         )
 
         # LinkedIn specific configuration
@@ -113,7 +129,7 @@ class Config:
             platform_name="LinkedIn",
             url_template='https://www.linkedin.com/in/{username}',
             platform_url=os.getenv('LINKEDIN_PLATFORM_URL'),
-            date_format={'input': '%Y-%d-%m', 'output': '%Y-%m-%d %H:%M:%S'},
+            date_format={'input': '%Y-%d-%m'},
         )
 
         # FlightRadar24 specific configuration
@@ -126,7 +142,7 @@ class Config:
                 'Accept': 'text/html',
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
             },
-            date_format={'input': '%Y-%m-%d', 'output': '%Y-%m-%d %H:%M:%S'},
+            date_format={'input': '%Y-%m-%d'},
         )
 
 
