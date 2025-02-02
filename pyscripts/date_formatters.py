@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, time
 
 from flask_babel import format_date, format_datetime
 from flask_babel import gettext as _
@@ -45,19 +45,19 @@ def format_full_date(timestamp_str: str, locale: str = 'ru') -> str:
     Shows time only if it's not 00:00:00.
     Uses 24-hour format for time and localized month names.
     """
+    if not timestamp_str:
+        return _('Неверная дата')
+
     try:
         date = datetime.strptime(timestamp_str, DATETIME_FORMAT['db'])
-        if date.hour == 0 and date.minute == 0 and date.second == 0:
-            # Show only date
-            formatted = format_date(date, format='full')
-        else:
-            # Show full date and time in 24-hour format with localized preposition
-            formatted = (
-                format_datetime(date, "EEEE, d MMMM y")
-                + _(' в ')
-                + format_datetime(date, "HH:mm")
-                + _(' UTC')
-            )
-        return formatted
-    except Exception as e:
+        base_date = format_date(date, "EEEE, d MMMM y").capitalize()
+
+        # Return just the date if time is midnight
+        if date.time() == time(0, 0, 0):
+            return base_date
+
+        # Add time component with UTC
+        return f"{base_date}{_(' в ')}{format_datetime(date, 'HH:mm')}{_(' UTC')}"
+
+    except (ValueError, TypeError):
         return _('Неверная дата')
