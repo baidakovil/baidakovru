@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}Об этом сайте{% endblock %}
+{% block title %}{{ _('Об этом сайте') }}{% endblock %}
 
-{% block page_title %}Об этом сайте{% endblock %}
+{% block page_title %}{{ _('Об этом сайте') }}{% endblock %}
 
 {% block content %}
 <div class="content-container">
-    <p>Этот сайт ежедневно обновляет информацию о моих последних записях в соцсетях и в других сервисах</p>
+    {{ _('<p>Этот сайт ежедневно обновляет информацию о моих последних записях в соцсетях и в других сервисах</p>') }}
 </div>
 {% endblock %}

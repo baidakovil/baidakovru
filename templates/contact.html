@@ -1,25 +1,25 @@
 {% extends "base.html" %}
 
-{% block title %}Написать мне{% endblock %}
+{% block title %}{{ _('Написать мне') }}{% endblock %}
 
-{% block page_title %}Написать мне{% endblock %}
+{% block page_title %}{{ _('Написать мне') }}{% endblock %}
 
 {% block content %}
 <div class="content-container">
     <form id="contact-form" method="POST" action="{{ url_for('contact') }}">
         <div class="form-group">
-            <label for="subject">Тема:</label>
+            <label for="subject">{{ _('Тема:') }}</label>
             <input type="text" id="subject" name="subject" required>
         </div>
         <div class="form-group">
-            <label for="message">Сообщение:</label>
+            <label for="message">{{ _('Сообщение:') }}</label>
             <textarea id="message" name="message" rows="5" required></textarea>
         </div>
         <div class="form-group">
-            <label for="email">Адрес почты для ответа:</label>
+            <label for="email">{{ _('Адрес почты для ответа:') }}</label>
             <input type="email" id="email" name="email">
         </div>
-        <button type="submit">Отправить</button>
+        <button type="submit">{{ _('Отправить') }}</button>
         {% if message %}
         <div class="form-message {{ message_type }}">
             {{ message }}

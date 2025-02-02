@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
-{% block title %}Главная{% endblock %}
+{% block title %}{{ _('Главная') }}{% endblock %}
 
-{% block page_title %}Добро пожаловать!{% endblock %}
+{% block page_title %}{{ _('Добро пожаловать!') }}{% endblock %}
 
 {% block content %}
 <div class="updates-container">
     <div class="updates-grid">
         <div class="updates-header">
-            <div>Платформа</div>
-            <div>Последнее обновление</div>
+            <div>{{ _('Платформа') }}</div>
+            <div>{{ _('Последнее обновление') }}</div>
         </div>
         <div class="updates-content" id="updates-content"></div>
     </div>
@@ -17,9 +17,9 @@
 {% endblock %}
 
 {% block navigation %}
-<a href="{{ url_for('bio') }}">Обо мне</a> | 
-<a href="{{ url_for('about') }}">Об этом сайте</a> | 
-<a href="{{ url_for('contact') }}">Написать</a>
+<a href="{{ url_for('bio') }}">{{ _('Обо мне') }}</a> | 
+<a href="{{ url_for('about') }}">{{ _('Об этом сайте') }}</a> | 
+<a href="{{ url_for('contact') }}">{{ _('Написать') }}</a>
 {% endblock %}
 
 {% block scripts %}

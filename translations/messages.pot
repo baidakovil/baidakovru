@@ -1,0 +1,88 @@
+# Translations template for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-02-02 20:02+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: templates/about.html:3 templates/about.html:5 templates/index.html:21
+msgid "Об этом сайте"
+msgstr ""
+
+#: templates/about.html:9
+msgid ""
+"<p>Этот сайт ежедневно обновляет информацию о моих последних записях в "
+"соцсетях и в других сервисах</p>"
+msgstr ""
+
+#: templates/base.html:23
+msgid "На главную"
+msgstr ""
+
+#: templates/bio.html:3 templates/bio.html:5 templates/index.html:20
+msgid "Обо мне"
+msgstr ""
+
+#: templates/bio.html:9
+msgid ""
+"<p>Привет!</p>\n"
+"    <p>Меня зовут Байдаков Илья</p>\n"
+"    <p>Профессионально занимаюсь созданием и развитием систем "
+"автоматизированного проектирования</p>\n"
+"    <p>Силы и вдохновение мне дают наблюдения за живой природой и "
+"экстремальный туризм. Особенно хороши леса и соло-походы</p>\n"
+"    <p>Пока!</p>"
+msgstr ""
+
+#: templates/contact.html:3 templates/contact.html:5
+msgid "Написать мне"
+msgstr ""
+
+#: templates/contact.html:11
+msgid "Тема:"
+msgstr ""
+
+#: templates/contact.html:15
+msgid "Сообщение:"
+msgstr ""
+
+#: templates/contact.html:19
+msgid "Адрес почты для ответа:"
+msgstr ""
+
+#: templates/contact.html:22
+msgid "Отправить"
+msgstr ""
+
+#: templates/index.html:3
+msgid "Главная"
+msgstr ""
+
+#: templates/index.html:5
+msgid "Добро пожаловать!"
+msgstr ""
+
+#: templates/index.html:11
+msgid "Платформа"
+msgstr ""
+
+#: templates/index.html:12
+msgid "Последнее обновление"
+msgstr ""
+
+#: templates/index.html:22
+msgid "Написать"
+msgstr ""
+

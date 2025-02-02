@@ -5,11 +5,11 @@ import sys
 from traceback import format_exc
 
 from dotenv import load_dotenv
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, g, jsonify, render_template, request
+from flask_babel import Babel, gettext
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_mail import Mail, Message
-from werkzeug.utils import secure_filename
 
 from pyscripts import log_config
 from pyscripts.config import config
@@ -39,13 +39,6 @@ app.config.update(
     MAIL_RECIPIENT=os.getenv('MAIL_RECIPIENT'),
 )
 
-UPLOAD_FOLDER = 'temp_uploads'
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'}
-MAX_CONTENT_LENGTH = 5 * 1024 * 1024  # 5 MB
-
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = MAX_CONTENT_LENGTH
-
 mail = Mail(app)
 
 # Initialize database manager
@@ -54,6 +47,25 @@ db_manager = DatabaseManager(config.db_path)
 limiter = Limiter(
     app=app, key_func=get_remote_address, default_limits=["200 per day", "50 per hour"]
 )
+
+# Конфигурация Babel
+app.config['LANGUAGES'] = {'en': 'English', 'ru': 'Русский'}
+app.config['BABEL_DEFAULT_LOCALE'] = 'ru'
+
+
+def get_locale():
+    lang = request.args.get('lang')
+    if lang in app.config['LANGUAGES']:
+        return lang
+    return request.accept_languages.best_match(app.config['LANGUAGES'].keys())
+
+
+@app.context_processor
+def utility_processor():
+    return {'get_locale': get_locale}
+
+
+babel = Babel(app, locale_selector=get_locale)
 
 
 # Page routes
@@ -72,38 +84,16 @@ def about():
     return render_template('about.html')
 
 
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
     message = None
     message_type = None
-    error_details = None  # для режима разработки
 
     if request.method == 'POST':
         try:
             email = request.form['email']
             subject = request.form['subject']
             message_text = request.form['message']
-            attachment = request.files.get('attachment')
-
-            # Создаем временную директорию, если её нет
-            if not os.path.exists(UPLOAD_FOLDER):
-                os.makedirs(UPLOAD_FOLDER)
-
-            # Обработка прикрепленного файла
-            attachment_path = None
-            if attachment and attachment.filename:
-                if allowed_file(attachment.filename):
-                    filename = secure_filename(attachment.filename)
-                    attachment_path = os.path.join(
-                        app.config['UPLOAD_FOLDER'], filename
-                    )
-                    attachment.save(attachment_path)
-                else:
-                    raise ValueError("Недопустимый формат файла")
 
             # Проверяем конфигурацию
             required_settings = [
@@ -126,21 +116,7 @@ def contact():
                 reply_to=email if email else None,
             )
 
-            # Прикрепляем файл к письму, если он есть
-            if attachment_path:
-                with open(attachment_path, 'rb') as f:
-                    msg.attach(
-                        filename=secure_filename(attachment.filename),
-                        content_type=attachment.content_type,
-                        data=f.read(),
-                    )
-
             mail.send(msg)
-
-            # Удаляем временный файл
-            if attachment_path and os.path.exists(attachment_path):
-                os.remove(attachment_path)
-
             message = "Сообщение успешно отправлено!"
             message_type = "success"
 
@@ -148,32 +124,14 @@ def contact():
             message = str(ve)
             message_type = "error"
         except Exception as e:
-            error_trace = format_exc()
-            logger.error(
-                f"Failed to send email. Error: {str(e)}\nTraceback:\n{error_trace}"
-            )
+            logger.error(f"Failed to send email. Error: {str(e)}")
             message = "Произошла ошибка при отправке сообщения."
             message_type = "error"
-            if app.debug:  # Только в режиме разработки
-                error_details = f"{str(e)}\n{error_trace}"
-
-        finally:
-            # Очистка временных файлов
-            if (
-                'attachment_path' in locals()
-                and attachment_path
-                and os.path.exists(attachment_path)
-            ):
-                try:
-                    os.remove(attachment_path)
-                except:
-                    pass
 
     return render_template(
         'contact.html',
         message=message,
         message_type=message_type,
-        error_details=error_details,
     )
 
 

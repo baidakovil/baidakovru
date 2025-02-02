@@ -1,0 +1,94 @@
+
+msgid ""
+msgstr ""
+"Project-Id-Version:  1.0\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-02-02 20:02+0300\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: YOUR NAME <your@email.com>\n"
+"Language: en\n"
+"Language-Team: English\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: templates/about.html:3 templates/about.html:5 templates/index.html:21
+msgid "Об этом сайте"
+msgstr "About this site"
+
+#: templates/about.html:9
+msgid ""
+"<p>Этот сайт ежедневно обновляет информацию о моих последних записях в "
+"соцсетях и в других сервисах</p>"
+msgstr ""
+"<p>This site updates daily information about my latest posts in social "
+"networks and other services</p>"
+
+#: templates/base.html:23
+msgid "На главную"
+msgstr "Main"
+
+#: templates/bio.html:3 templates/bio.html:5 templates/index.html:20
+msgid "Обо мне"
+msgstr "About me"
+
+#: templates/bio.html:9
+msgid ""
+"<p>Привет!</p>\n"
+"    <p>Меня зовут Байдаков Илья</p>\n"
+"    <p>Профессионально занимаюсь созданием и развитием систем "
+"автоматизированного проектирования</p>\n"
+"    <p>Силы и вдохновение мне дают наблюдения за живой природой и "
+"экстремальный туризм. Особенно хороши леса и соло-походы</p>\n"
+"    <p>Пока!</p>"
+msgstr ""
+"<p>Hi!</p>\n"
+"    <p>My name is Ilya Baidakov</p>\n"
+"    <p>I am professionally engaged in the creation and development of "
+"computer-aided design system</p>\n"
+"    <p>I get inspiration and force from observing wildlife and extreme "
+"tourism. Forests and solo hikes are especially good</p>\n"
+"    <p>Bye!</p>"
+
+#: templates/contact.html:3 templates/contact.html:5
+msgid "Написать мне"
+msgstr "Contact"
+
+#: templates/contact.html:11
+msgid "Тема:"
+msgstr "Subject"
+
+#: templates/contact.html:15
+msgid "Сообщение:"
+msgstr "Message:"
+
+#: templates/contact.html:19
+msgid "Адрес почты для ответа:"
+msgstr "Address for the answer:"
+
+#: templates/contact.html:22
+msgid "Отправить"
+msgstr "Send"
+
+#: templates/index.html:3
+msgid "Главная"
+msgstr "Main"
+
+#: templates/index.html:5
+msgid "Добро пожаловать!"
+msgstr "Welcome!"
+
+#: templates/index.html:11
+msgid "Платформа"
+msgstr "Platform"
+
+#: templates/index.html:12
+msgid "Последнее обновление"
+msgstr "Last update"
+
+#: templates/index.html:22
+msgid "Написать"
+msgstr "Contact"
+
