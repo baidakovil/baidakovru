@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %} - baidakov.ru</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fonts.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="header-container">
+        <div class="site-title"><h1>baidakov.ru</h1></div>
+        <div class="page-title"><h1>{% block page_title %}{% endblock %}</h1></div>
+    </div>
+    <hr class="separator">
+
+    {% block content %}{% endblock %}
+
+    <hr class="separator">
+    <div class="navigation">
+        {% block navigation %}
+            <a href="{{ url_for('index') }}">На главную</a>
+        {% endblock %}
+    </div>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,28 +1,11 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Обно мне</title>
-    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-</head>
-<body>
-    <div class="header-container">
-        <div class="site-title"><h1>baidakov.ru</h1></div>
-        <div class="page-title"><h1>Об этом сайте</h1></div>
-    </div>
-    <hr class="separator">
+{% extends "base.html" %}
 
-    <div class="content-container">
-        <p>Этот сайт ежедневно обновляет информацию о том, когда я сделал последние записи в своих социальных сетях и в других сервисах.</p>
-        <p>Список таких сервисов показан на главной странице в порядке убывания актуальности.</p>
-    </div>
-    <hr class="separator">
-    <div class="navigation">
-        <a href="{{ url_for('index') }}">На главную</a>
-</body>
-</html>
+{% block title %}Об этом сайте{% endblock %}
+
+{% block page_title %}Об этом сайте{% endblock %}
+
+{% block content %}
+<div class="content-container">
+    <p>Этот сайт ежедневно обновляет информацию о моих последних записях в соцсетях и в других сервисах</p>
+</div>
+{% endblock %}
