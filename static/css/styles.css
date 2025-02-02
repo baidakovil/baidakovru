@@ -33,7 +33,7 @@
 
 .updates-header {
     display: grid;
-    grid-template-columns: 1.7fr 2.3fr;
+    grid-template-columns: 1.7fr 2.2fr;
     gap: 0px;
     margin-bottom: 20px;
     font-weight: bold;
@@ -45,6 +45,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
     text-align: left;
+    padding-left: 1px;
+
 }
 
 .updates-content {
@@ -55,7 +57,7 @@
 
 .updates-row {
     display: grid;
-    grid-template-columns: 1.7fr 2fr 0.3fr;
+    grid-template-columns: 1.7fr 2fr 0.2fr;
     gap: 0px;
     align-items: center;
     padding: 10px 0;
@@ -66,6 +68,15 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.platform-name {
+    padding-left: 1px;
+}
+
+.link-cell {
+    text-align: right;
+    padding-right: 1px;
 }
 
 .date-container {
@@ -171,12 +182,17 @@ button[type="submit"]:hover {
 /* Базовый медиа-запрос для мобильных */
 @media screen and (max-width: 768px) {
     .header-container {
-        margin: 30px auto;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+
+    .header-container {
         padding: 0 25px;
     }
 
     .site-title, .page-title {
-        font-size: 24px;
+        font-size: 13px;
     }
 
     .updates-container {
@@ -204,5 +220,13 @@ button[type="submit"]:hover {
 
     .updates-header {
         margin-bottom: 5px;
+    }
+
+    .separator {
+        width: 92%;
+        max-width: 100%;
+        margin: 2rem auto;
+        padding: 0 20px;
+        box-sizing: border-box;
     }
 }
