@@ -7,13 +7,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./styles/styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <div class="header-container">
         <div class="site-title"><h1>baidakov.ru</h1></div>
         <div class="page-title"><h1>Добро пожаловать!</h1></div>
     </div>
+    <hr class="separator">
     <div class="updates-container">
         <div class="updates-grid">
             <div class="updates-header">

@@ -1,11 +1,17 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // API endpoints configuration
+    const API_ENDPOINTS = {
+        updates: '/api/updates',
+        logError: '/api/log-error'
+    };
+
     function logError(error) {
         const errorData = {
             message: error.message,
             stack: error.stack
         };
         
-        fetch('/api/log-error', {
+        fetch(API_ENDPOINTS.logError, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -13,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function () {
             body: JSON.stringify(errorData),
         })
         .then(response => response.json())
-        .then(data => console.log('Error logged:', data))
         .catch(err => console.error('Failed to log error:', err));
     }
 
@@ -34,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
             `${day} ${month} ${year}`;
     }
 
-    fetch('/api/updates')
+    fetch(API_ENDPOINTS.updates)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -43,6 +48,9 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(data => {
             const container = document.querySelector('#updates-content');
+            if (!container) {
+                throw new Error('Updates container not found');
+            }
             container.innerHTML = '';
             
             data.forEach(platform => {
@@ -67,10 +75,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     const link = document.createElement('a');
                     link.href = platform.platform_url;
                     link.target = '_blank';
+                    link.rel = 'noopener noreferrer'; // Security best practice
+                    
                     const linkIcon = document.createElement('img');
-                    linkIcon.src = '/styles/link_sign.svg';
-                    linkIcon.alt = 'Link';
+                    linkIcon.src = '/static/svg/link_sign.svg'; // Updated path
+                    linkIcon.alt = 'External link';
                     linkIcon.className = 'link-icon';
+                    
                     link.appendChild(linkIcon);
                     linkCell.appendChild(link);
                 }
@@ -85,5 +96,11 @@ document.addEventListener('DOMContentLoaded', function () {
         .catch(error => {
             console.error('Error loading data:', error);
             logError(error);
+            
+            // Show user-friendly error message
+            const container = document.querySelector('#updates-content');
+            if (container) {
+                container.innerHTML = '<div class="error-message">Не удалось загрузить обновления</div>';
+            }
         });
 });
