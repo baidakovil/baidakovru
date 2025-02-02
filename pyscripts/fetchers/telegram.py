@@ -33,11 +33,8 @@ class TelegramFetcher(BaseFetcher):
                 if '+' in date_str or '-' in date_str:
                     date_str = date_str[:-3] + date_str[-2:]
 
-                result.raw_datetime = date_str
-                result.formatted_datetime = (
-                    datetime.strptime(date_str, self.config.date_format['input'])
-                    .strftime(self.config.date_format['output'])
-                    .lower()
+                result.raw_datetime, result.formatted_datetime = self.format_date(
+                    date_str
                 )
                 result.update_url = self._extract_message_url(html_content)
                 result.update_desc = "New message in Telegram channel"

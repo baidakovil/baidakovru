@@ -29,11 +29,8 @@ class FlightRadar24Fetcher(BaseFetcher):
 
             date_str = self._extract_last_date(html_content)
             if date_str:
-                result.raw_datetime = date_str
-                result.formatted_datetime = (
-                    datetime.strptime(date_str, self.config.date_format['input'])
-                    .strftime(self.config.date_format['output'])
-                    .lower()
+                result.raw_datetime, result.formatted_datetime = self.format_date(
+                    date_str
                 )
                 result.update_url = url
                 result.update_desc = "New flight recorded"

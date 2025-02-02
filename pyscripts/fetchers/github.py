@@ -39,14 +39,8 @@ class GitHubFetcher(BaseFetcher):
                         )
                         for event in sorted_events:
                             if event['type'] in self.config.supported_events:
-                                result.raw_datetime = event['created_at']
-                                result.formatted_datetime = (
-                                    datetime.strptime(
-                                        event['created_at'],
-                                        self.config.date_format['input'],
-                                    )
-                                    .strftime(self.config.date_format['output'])
-                                    .lower()
+                                result.raw_datetime, result.formatted_datetime = (
+                                    self.format_date(event['created_at'])
                                 )
 
                                 # Extract correct URL based on event type

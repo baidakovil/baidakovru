@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from datetime import datetime
 from functools import wraps
 
 from ..config import FetcherConfig
@@ -45,6 +46,18 @@ class BaseFetcher(ABC):
             raw_response=raw_response,
             platform_url=self.config.platform_url,
         )
+
+    def format_date(self, date_str: str) -> tuple[str, str]:
+        """
+        Format date string using config formats.
+        Returns tuple of (raw_datetime, formatted_datetime).
+        """
+        try:
+            dt = datetime.strptime(date_str, self.config.date_format['input'])
+            return date_str, dt.strftime(self.config.date_format['output']).lower()
+        except (ValueError, AttributeError) as e:
+            self.logger.error(f'Failed to parse date {date_str}: {e}')
+            return date_str, None
 
     @abstractmethod
     @require_config

@@ -36,13 +36,8 @@ class LastFMFetcher(BaseFetcher):
                         latest_track = data['recenttracks']['track'][0]
                         if 'date' in latest_track:
                             track_date = latest_track['date']['#text']
-                            result.raw_datetime = track_date
-                            result.formatted_datetime = (
-                                datetime.strptime(
-                                    track_date, self.config.date_format['input']
-                                )
-                                .strftime(self.config.date_format['output'])
-                                .lower()
+                            result.raw_datetime, result.formatted_datetime = (
+                                self.format_date(track_date)
                             )
                             result.update_url = (
                                 f"https://www.last.fm/user/{self.config.username}"

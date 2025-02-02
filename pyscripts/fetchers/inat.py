@@ -37,13 +37,8 @@ class INatFetcher(BaseFetcher):
                         if '+' in created_at or '-' in created_at:
                             created_at = created_at[:-3] + created_at[-2:]
 
-                        result.raw_datetime = created_at
-                        result.formatted_datetime = (
-                            datetime.strptime(
-                                created_at, self.config.date_format['input']
-                            )
-                            .strftime(self.config.date_format['output'])
-                            .lower()
+                        result.raw_datetime, result.formatted_datetime = (
+                            self.format_date(created_at)
                         )
 
                         species_name = latest_observation.get(

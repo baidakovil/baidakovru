@@ -19,12 +19,8 @@ class LinkedInFetcher(BaseFetcher):
         self.log_start()
         result = self.create_base_result()
 
-        result.raw_datetime = getenv('LINKEDIN_LAST_UPDATE_DATE')
-        result.formatted_datetime = (
-            datetime.strptime(result.raw_datetime, self.config.date_format['input'])
-            .strftime(self.config.date_format['output'])
-            .lower()
-        )
+        raw_date = getenv('LINKEDIN_LAST_UPDATE_DATE')
+        result.raw_datetime, result.formatted_datetime = self.format_date(raw_date)
         result.update_url = f'www.linkedin.com/in/{self.config.username}'
         result.update_desc = "Update info at LinkedIn"
 
