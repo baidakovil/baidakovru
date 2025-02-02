@@ -56,6 +56,7 @@ def format_full_date(timestamp_str: str, locale: str = 'ru') -> str:
                 format_datetime(date, "EEEE, d MMMM y")
                 + _(' в ')
                 + format_datetime(date, "HH:mm")
+                + _(' UTC')
             )
         return formatted
     except Exception as e:

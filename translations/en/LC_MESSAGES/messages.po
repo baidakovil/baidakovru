@@ -45,7 +45,7 @@ msgstr "%(month)d month ago"
 #: pyscripts/date_formatters.py:37
 #, python-format
 msgid "%(year)d лет назад"
-msgstr "(year)d years ago"
+msgstr "%(year)d years ago"
 
 #: pyscripts/date_formatters.py:39 pyscripts/date_formatters.py:62
 msgid "Неверная дата"
