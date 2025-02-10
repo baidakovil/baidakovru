@@ -1,0 +1,67 @@
+/* Updates Component */
+.updates-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.updates-grid {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.updates-header {
+    display: grid;
+    grid-template-columns: 1.7fr 2.2fr;
+    gap: 0px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    width: 100%;
+}
+
+.updates-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.updates-row {
+    display: grid;
+    grid-template-columns: 1.7fr 2fr 0.2fr;
+    gap: 0px;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.platform-name, .datetime-cell, .link-cell {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Media Queries */
+@media screen and (max-width: 768px) {
+    .updates-container {
+        max-width: 100%;
+        padding: 0 25px;
+    }
+
+    .updates-grid {
+        gap: 20px;
+    }
+    
+    .updates-row {
+        gap: 20px;
+    }
+
+    .updates-header {
+        margin-bottom: 5px;
+    }
+
+    .updates-header div {
+        margin-top: 10px;
+        white-space: normal;
+    }
+}
