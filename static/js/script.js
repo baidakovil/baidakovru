@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         
                         const dateScrollInner = document.createElement('div');
                         dateScrollInner.className = 'date-scroll-inner';
-                        dateScrollInner.textContent = ' long long text' + platform.full_date; // Remove semicolon from here, add space
+                        dateScrollInner.textContent = platform.update_desc + " at " + platform.full_date;
                         
                         dateScrollContainer.appendChild(dateScrollInner);
                         

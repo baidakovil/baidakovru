@@ -72,9 +72,9 @@
 .date-scroll-inner {
     white-space: nowrap;
     display: inline-block;
-    /* Remove any margins/padding that might affect width calculation */
     margin: 0;
     padding: 0;
+    color: #464646;
 }
 
 .date-scroll-container.animate-scroll .date-scroll-inner {
