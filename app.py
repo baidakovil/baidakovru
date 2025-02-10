@@ -3,9 +3,10 @@ import os
 import signal
 import sys
 from traceback import format_exc
+from typing import Dict, List, Optional, Tuple, Union
 
 from dotenv import load_dotenv
-from flask import Flask, g, jsonify, render_template, request
+from flask import Flask, Response, g, jsonify, render_template, request
 from flask_babel import Babel, gettext
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -139,43 +140,47 @@ def contact():
 # API routes
 @app.route('/api/updates', methods=['GET'])
 @limiter.limit("1 per second")
-def get_updates():
+def get_updates() -> Tuple[Response, int]:
     try:
-        # Check database health before operations
         if not db_manager.health_check():
             logger.error("Database health check failed")
             return jsonify({'error': 'Database unavailable'}), 503
 
+        updates: List[Dict] = []
         with db_manager.get_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute(
-                """
-                WITH LatestDatetimes AS (
-                    -- First get the latest datetime for each platform
-                    SELECT platform_id, MAX(formatted_datetime) as max_datetime
-                    FROM updates
-                    GROUP BY platform_id
-                ),
-                LatestIds AS (
-                    -- Then for each platform's latest datetime, get the latest ID
-                    SELECT u.platform_id, MAX(u.id) as max_id
+            try:
+                cursor = conn.cursor()
+                cursor.execute(
+                    """
+                    WITH LatestDatetimes AS (
+                        -- First get the latest datetime for each platform
+                        SELECT platform_id, MAX(formatted_datetime) as max_datetime
+                        FROM updates
+                        GROUP BY platform_id
+                    ),
+                    LatestIds AS (
+                        -- Then for each platform's latest datetime, get the latest ID
+                        SELECT u.platform_id, MAX(u.id) as max_id
+                        FROM updates u
+                        INNER JOIN LatestDatetimes lt 
+                            ON u.platform_id = lt.platform_id 
+                            AND u.formatted_datetime = lt.max_datetime
+                        GROUP BY u.platform_id
+                    )
+                    -- Finally, get the full records using the latest IDs
+                    SELECT u.platform_id, u.platform_name, u.formatted_datetime, 
+                        u.update_desc, u.platform_url
                     FROM updates u
-                    INNER JOIN LatestDatetimes lt 
-                        ON u.platform_id = lt.platform_id 
-                        AND u.formatted_datetime = lt.max_datetime
-                    GROUP BY u.platform_id
+                    INNER JOIN LatestIds li 
+                        ON u.platform_id = li.platform_id 
+                        AND u.id = li.max_id
+                    ORDER BY u.formatted_datetime DESC
+                    """
                 )
-                -- Finally, get the full records using the latest IDs
-                SELECT u.platform_id, u.platform_name, u.formatted_datetime, 
-                       u.update_desc, u.platform_url
-                FROM updates u
-                INNER JOIN LatestIds li 
-                    ON u.platform_id = li.platform_id 
-                    AND u.id = li.max_id
-                ORDER BY u.formatted_datetime DESC
-                """
-            )
-            updates = cursor.fetchall()
+                updates = cursor.fetchall()
+            except Exception as db_error:
+                logger.error(f"Database query error: {db_error}")
+                return jsonify({'error': 'Database query failed'}), 500
 
         data = [
             {
@@ -192,7 +197,7 @@ def get_updates():
 
         return jsonify(data)
     except Exception as e:
-        logger.error(f'Error fetching updates: {str(e)}')
+        logger.error(f'Error fetching updates: {str(e)}\n{format_exc()}')
         return jsonify({'error': 'Internal Server Error'}), 500
 
 

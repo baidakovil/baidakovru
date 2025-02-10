@@ -1,4 +1,22 @@
+:root {
+    --max-content-width: 500px;
+    --padding-standard: 20px;
+    --padding-mobile: 25px;
+    --color-primary: #36c;
+    --color-primary-hover: #2b5da5;
+    --color-error: #721c24;
+    --color-success: #155724;
+    --border-radius: 4px;
+}
+
 /* Typography and base elements */
+body {
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
 .site-title, .page-title {
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
@@ -18,23 +36,22 @@ a:hover {
 }
 
 /* Container layouts */
-.header-container {
-    max-width: 500px;
-    margin: 60px auto;
-    padding: 0 20px;
+.header-container, .content-container {
+    max-width: var(--max-content-width);
+    margin: 0 auto;
+    padding: 0 var(--padding-standard);
 }
 
-.content-container {
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 0 20px;
+.header-container {
+    margin-top: 60px;
+    margin-bottom: 60px;
 }
 
 .separator {
-    width: 500px;
+    width: var(--max-content-width);
     max-width: 100%;
     margin: 2rem auto;
-    padding: 0 20px;
+    padding: 0 var(--padding-standard);
     box-sizing: border-box;
 }
 
@@ -66,15 +83,17 @@ a:hover {
         font-size: 13px;
     }
 
+    .header-container, .content-container {
+        padding: var(--padding-mobile);
+    }
+
     .header-container {
         margin: 0;
-        padding: 25px;
         width: 100%;
     }
 
     .content-container {
         max-width: 100%;
-        padding: 0 25px;
     }
 
     .separator {
