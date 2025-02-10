@@ -1,18 +1,30 @@
 :root {
+    /* Layout */
     --max-content-width: 500px;
-    --padding-standard: 20px;
-    --padding-mobile: 25px;
+    --spacing-sm: 10px;
+    --spacing-md: 20px;
+    --spacing-lg: 25px;
+    --spacing-xl: 60px;
+    
+    /* Colors */
     --color-primary: #36c;
     --color-primary-hover: #2b5da5;
     --color-error: #721c24;
     --color-success: #155724;
+    --color-text: #333;
+    --color-text-secondary: #464646;
+    
+    /* Effects */
     --border-radius: 4px;
-    --primary-color: #333;
-    --secondary-color: #464646;
     --transition-timing: 0.3s ease;
-    --mask-gradient: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
-    --grid-gap: 20px;
-    --container-padding: 20px;
+    --mask-gradient: linear-gradient(to right,
+        rgba(255,255,255,1) 0%,
+        rgba(255,255,255,1) 80%,
+        rgba(255,255,255,0) 100%);
+    
+    /* Grid */
+    --grid-gap: var(--spacing-md);
+    --container-padding: var(--spacing-md);
 }
 
 /* Typography and base elements */
@@ -45,19 +57,19 @@ a:hover {
 .header-container, .content-container {
     max-width: var(--max-content-width);
     margin: 0 auto;
-    padding: 0 var(--padding-standard);
+    padding: 0 var(--container-padding);
 }
 
 .header-container {
-    margin-top: 60px;
-    margin-bottom: 60px;
+    margin-top: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
 }
 
 .separator {
     width: var(--max-content-width);
     max-width: 100%;
     margin: 2rem auto;
-    padding: 0 var(--padding-standard);
+    padding: 0 var(--container-padding);
     box-sizing: border-box;
 }
 
@@ -90,7 +102,7 @@ a:hover {
     }
 
     .header-container, .content-container {
-        padding: var(--padding-mobile);
+        padding: var(--spacing-lg);
     }
 
     .header-container {

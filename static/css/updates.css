@@ -1,6 +1,6 @@
 /* Updates Component */
 .updates-container {
-    max-width: 500px;
+    max-width: var(--max-content-width);
     margin: 0 auto;
     padding: 0 var(--container-padding);
 }
@@ -63,8 +63,8 @@
 .date-scroll-container {
     position: relative;
     overflow: hidden; /* Changed from hidden */
-    width: calc(100% - 50px); /* Increased from 40px to 45px */
-    padding-right: 30px; /* Increased from 20px to 25px */
+    width: calc(100% - var(--spacing-xl)); /* Increased from 40px to 45px */
+    padding-right: var(--spacing-lg); /* Increased from 20px to 25px */
     flex-grow: 0; /* Don't grow */
     flex-shrink: 1; /* Allow shrinking */
 }
@@ -81,11 +81,12 @@
     animation: scrollText 15s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;  /* More smooth cubic-bezier */
 }
 
+/* Improved scroll animation */
 @keyframes scrollText {
     0%, 10% {  /* Slightly longer pause at start */
         transform: translateX(0);
     }
-    45%, 55% {
+    40%, 60% {
         transform: translateX(var(--scroll-distance));
     }
     90%, 100% {  /* Slightly longer pause at end */
@@ -101,7 +102,9 @@
     top: 0;
     bottom: 0;
     width: 45px; /* Increased from 40px to 45px to match container adjustment */
-    background: var(--mask-gradient);
+    background: linear-gradient(to right,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,1) 100%);
     pointer-events: none; /* Allow clicks to pass through */
 }
 
