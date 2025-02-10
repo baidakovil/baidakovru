@@ -32,6 +32,11 @@
     gap: 0px;
     align-items: center;
     padding: 10px 0;
+    transition: all 0.3s ease;
+}
+
+.updates-row.processed {
+    grid-template-columns: 3.7fr 0fr 0.2fr;
 }
 
 .platform-name, .datetime-cell, .link-cell {
@@ -39,6 +44,72 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.platform-name.with-date {
+    grid-column: 1;
+    white-space: nowrap;
+    overflow: hidden; /* Changed from hidden to allow mask to work properly */
+    position: relative;
+    display: flex;
+    width: 100%;
+    gap: 5px; /* Use gap instead of margin for better spacing */
+}
+
+.platform-name-text {
+    flex-shrink: 0;
+}
+
+.date-scroll-container {
+    position: relative;
+    overflow: hidden; /* Changed from hidden */
+    width: calc(100% - 50px); /* Increased from 40px to 45px */
+    padding-right: 30px; /* Increased from 20px to 25px */
+    flex-grow: 0; /* Don't grow */
+    flex-shrink: 1; /* Allow shrinking */
+}
+
+.date-scroll-inner {
+    white-space: nowrap;
+    display: inline-block;
+    /* Remove any margins/padding that might affect width calculation */
+    margin: 0;
+    padding: 0;
+}
+
+.date-scroll-container.animate-scroll .date-scroll-inner {
+    animation: scrollText 15s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;  /* More smooth cubic-bezier */
+}
+
+@keyframes scrollText {
+    0%, 10% {  /* Slightly longer pause at start */
+        transform: translateX(0);
+    }
+    45%, 55% {
+        transform: translateX(var(--scroll-distance));
+    }
+    90%, 100% {  /* Slightly longer pause at end */
+        transform: translateX(0);
+    }
+}
+
+/* Add a masking container that's positioned absolutely */
+.platform-name.with-date::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 45px; /* Increased from 40px to 45px to match container adjustment */
+    background: linear-gradient(to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 1) 100%
+    );
+    pointer-events: none; /* Allow clicks to pass through */
+}
+
+.link-cell {
+    justify-self: end;
 }
 
 /* Media Queries */
