@@ -14,6 +14,10 @@ class TelegramFetcher(BaseFetcher):
     def validate_config(self) -> bool:
         return bool(self.config.username and self.config.get_url())
 
+    EVENT_TYPE_MAPPING = {
+        'html_post': 'telegram_post'  # post detected via HTML scraping
+    }
+
     @require_config
     def fetch(self) -> FetchResult:
         """Fetch and parse latest Telegram channel message."""
@@ -37,6 +41,7 @@ class TelegramFetcher(BaseFetcher):
                     date_str
                 )
                 result.update_url = self._extract_message_url(html_content)
+                result.update_event = self.EVENT_TYPE_MAPPING['html_post']
                 result.update_desc = "New message in Telegram channel"
 
         elif response.status_code == 404:

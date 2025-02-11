@@ -15,6 +15,14 @@ class GitHubFetcher(BaseFetcher):
     def validate_config(self) -> bool:
         return bool(self.config.username and self.config.get_url())
 
+    EVENT_TYPE_MAPPING = {
+        'PushEvent': 'github_push',
+        'PullRequestEvent': 'github_pr',
+        'IssuesEvent': 'github_issue',
+        'CreateEvent': 'github_create',
+        'ForkEvent': 'github_fork',
+    }
+
     @require_config
     def fetch(self) -> FetchResult:
         """Fetch and parse latest GitHub user activity events."""
@@ -61,6 +69,9 @@ class GitHubFetcher(BaseFetcher):
                                         'api.github.com/repos', 'github.com'
                                     )
 
+                                result.update_event = self.EVENT_TYPE_MAPPING.get(
+                                    event['type']
+                                )
                                 result.update_desc = f"{event['type']} to repository"
                                 break
                 except Exception as e:

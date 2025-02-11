@@ -4,9 +4,27 @@ const CONFIG = {
         logError: '/api/log-error'
     },
     ANIMATION: {
-        DURATION: 15000,
+        DURATION: 5000,
         SCROLL_MARGIN: 50,
         SCROLL_THRESHOLD: 5
+    },
+    EVENT_TYPES: {
+        // GitHub events
+        'github_push': 'New code in repository',
+        'github_pr': 'New pull request',
+        'github_issue': 'New issue activity',
+        'github_create': 'New repository created',
+        'github_fork': 'Repository forked',
+        // iNaturalist events
+        'inat_observation': 'New nature observation',
+        // Telegram events
+        'telegram_post': 'New channel post',
+        // Last.fm events
+        'lastfm_scrobble': 'Listened to track',
+        // LinkedIn events
+        'linkedin_post': 'New post',
+        // FlightRadar events
+        'fr24_flight': 'New flight recorded'
     }
 };
 
@@ -132,7 +150,7 @@ class UpdatesManager {
 
         const dateScrollInner = document.createElement('div');
         dateScrollInner.className = 'date-scroll-inner italic-text';
-        dateScrollInner.textContent = `${platform.update_desc} at ${platform.full_date}`;
+        dateScrollInner.textContent = `${CONFIG.EVENT_TYPES[platform.update_event]} at ${platform.full_date}`;
 
         dateScrollContainer.appendChild(dateScrollInner);
 

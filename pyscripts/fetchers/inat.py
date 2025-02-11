@@ -15,6 +15,10 @@ class INatFetcher(BaseFetcher):
     def validate_config(self) -> bool:
         return bool(self.config.username and self.config.get_url())
 
+    EVENT_TYPE_MAPPING = {
+        'api_observation': 'inat_observation'  # observation detected via API
+    }
+
     @require_config
     def fetch(self) -> FetchResult:
         """Fetch and parse latest iNaturalist observations."""
@@ -48,6 +52,7 @@ class INatFetcher(BaseFetcher):
                             'place_guess', 'unknown location'
                         )
                         result.update_url = f"https://www.inaturalist.org/observations/{latest_observation.get('id')}"
+                        result.update_event = self.EVENT_TYPE_MAPPING['api_observation']
                         result.update_desc = (
                             f"Observation of {species_name} at {place_name}"
                         )

@@ -14,6 +14,10 @@ class FlightRadar24Fetcher(BaseFetcher):
     def validate_config(self) -> bool:
         return bool(self.config.username and self.config.get_url())
 
+    EVENT_TYPE_MAPPING = {
+        'html_flight': 'fr24_flight'  # flight detected via HTML scraping
+    }
+
     @require_config
     def fetch(self) -> FetchResult:
         """Fetch and parse latest FlightRadar24 flight."""
@@ -33,6 +37,7 @@ class FlightRadar24Fetcher(BaseFetcher):
                     date_str
                 )
                 result.update_url = url
+                result.update_event = self.EVENT_TYPE_MAPPING['html_flight']
                 result.update_desc = "New flight recorded"
 
         self.log_finish()

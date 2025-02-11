@@ -83,7 +83,7 @@
 }
 
 .date-scroll-container.animate-scroll .date-scroll-inner {
-    animation: scrollText 15s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+    animation: scrollText 5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
 }
 
 @keyframes scrollText {

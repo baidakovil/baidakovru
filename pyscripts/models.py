@@ -9,11 +9,13 @@ class FetchResult:
 
     platform_id: str
     platform_name: str
-    formatted_datetime: str  # Store as ISO 8601 format
-    platform_url: Optional[str] = None
-    update_desc: Optional[str] = None
-    update_url: Optional[str] = None
     raw_response: Optional[Any] = None
+    raw_datetime: Optional[str] = None
+    formatted_datetime: Optional[str] = None
+    update_desc: Optional[str] = None
+    update_event: Optional[str] = None
+    update_url: Optional[str] = None
+    platform_url: Optional[str] = None
 
     def __post_init__(self):
         # Ensure datetime is in ISO format

@@ -169,7 +169,7 @@ def get_updates() -> Tuple[Response, int]:
                     )
                     -- Finally, get the full records using the latest IDs
                     SELECT u.platform_id, u.platform_name, u.formatted_datetime, 
-                        u.update_desc, u.platform_url
+                        u.update_desc, u.update_event, u.platform_url
                     FROM updates u
                     INNER JOIN LatestIds li 
                         ON u.platform_id = li.platform_id 
@@ -188,11 +188,12 @@ def get_updates() -> Tuple[Response, int]:
                 'platform_name': platform_name,
                 'formatted_datetime': formatted_datetime,
                 'update_desc': update_desc,
+                'update_event': update_event,
                 'platform_url': platform_url,
                 'time_ago': format_time_ago(formatted_datetime),
                 'full_date': format_full_date(formatted_datetime),
             }
-            for platform_id, platform_name, formatted_datetime, update_desc, platform_url in updates
+            for platform_id, platform_name, formatted_datetime, update_desc, update_event, platform_url in updates
         ]
 
         return jsonify(data)

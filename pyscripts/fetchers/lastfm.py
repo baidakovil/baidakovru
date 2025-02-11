@@ -17,6 +17,10 @@ class LastFMFetcher(BaseFetcher):
             self.config.username and self.config.api_key and self.config.get_url()
         )
 
+    EVENT_TYPE_MAPPING = {
+        'api_scrobble': 'lastfm_scrobble'  # scrobble detected via API
+    }
+
     @require_config
     def fetch(self) -> FetchResult:
         """Fetch and parse latest Last.fm scrobbles."""
@@ -42,6 +46,9 @@ class LastFMFetcher(BaseFetcher):
                             result.update_url = (
                                 f"https://www.last.fm/user/{self.config.username}"
                             )
+                            result.update_event = self.EVENT_TYPE_MAPPING[
+                                'api_scrobble'
+                            ]
                             result.update_desc = "Listening to music"
 
                 except Exception as e:

@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
 from functools import wraps
+from typing import Tuple
 
 from ..config import FetcherConfig
 from ..log_config import setup_logging
@@ -47,7 +48,7 @@ class BaseFetcher(ABC):
             platform_url=self.config.platform_url,
         )
 
-    def format_date(self, date_str: str) -> tuple[str, str]:
+    def format_date(self, date_str: str) -> Tuple[str, str]:
         """
         Format date string using config formats.
         Returns tuple of (raw_datetime, formatted_datetime).
