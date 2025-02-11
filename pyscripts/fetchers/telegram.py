@@ -31,29 +31,29 @@ class TelegramFetcher(BaseFetcher):
             html_content = response.text
             result.raw_response = html_content
 
-            date_str = self._extract_last_date(html_content)
-            if date_str:
-                # Convert timezone format from "+03:00" to "+0300" for proper parsing
-                if '+' in date_str or '-' in date_str:
-                    date_str = date_str[:-3] + date_str[-2:]
-
-                result.raw_datetime, result.formatted_datetime = self.format_date(
-                    date_str
-                )
-                result.update_url = self._extract_message_url(html_content)
-                result.update_event = self.EVENT_TYPE_MAPPING['html_post']
-                result.update_desc = "New message in Telegram channel"
-
-        elif response.status_code == 404:
-            self.logger.error(
-                f'404 when fetching updates from Telegram for {self.config.username}'
-            )
+            try:
+                date_str = self._extract_last_date(html_content)
+                if date_str:
+                    result = self._process_message(html_content, date_str)
+            except Exception as e:
+                result.mark_as_error(f"Error parsing Telegram page: {str(e)}")
+                return result
         else:
-            self.logger.error(
-                f'Error when fetching updates from Telegram for {self.config.username}: {response.status_code}'
-            )
+            result.mark_as_error(f'Telegram error: {response.status_code}')
+            return result
 
         self.log_finish()
+        return result
+
+    def _process_message(self, html_content: str, date_str: str) -> FetchResult:
+        """Process message data."""
+        result = self.create_base_result()
+        if '+' in date_str or '-' in date_str:
+            date_str = date_str[:-3] + date_str[-2:]
+        result.raw_datetime, result.formatted_datetime = self.format_date(date_str)
+        result.update_url = self._extract_message_url(html_content)
+        result.update_event = self.EVENT_TYPE_MAPPING['html_post']
+        result.update_desc = "New message in Telegram channel"
         return result
 
     def _extract_last_date(self, html_content: str) -> str:

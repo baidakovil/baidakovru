@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 import signal
@@ -153,9 +154,10 @@ def get_updates() -> Tuple[Response, int]:
                 cursor.execute(
                     """
                     WITH LatestDatetimes AS (
-                        -- First get the latest datetime for each platform
+                        -- First get the latest NON-ERROR datetime for each platform
                         SELECT platform_id, MAX(formatted_datetime) as max_datetime
                         FROM updates
+                        WHERE NOT is_error
                         GROUP BY platform_id
                     ),
                     LatestIds AS (
@@ -165,15 +167,17 @@ def get_updates() -> Tuple[Response, int]:
                         INNER JOIN LatestDatetimes lt 
                             ON u.platform_id = lt.platform_id 
                             AND u.formatted_datetime = lt.max_datetime
+                            AND NOT u.is_error
                         GROUP BY u.platform_id
                     )
                     -- Finally, get the full records using the latest IDs
                     SELECT u.platform_id, u.platform_name, u.formatted_datetime, 
-                        u.update_desc, u.update_event, u.platform_url
+                           u.update_desc, u.update_event, u.platform_url
                     FROM updates u
                     INNER JOIN LatestIds li 
                         ON u.platform_id = li.platform_id 
                         AND u.id = li.max_id
+                    WHERE NOT u.is_error
                     ORDER BY u.formatted_datetime DESC
                     """
                 )

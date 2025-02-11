@@ -48,6 +48,12 @@ class BaseFetcher(ABC):
             platform_url=self.config.platform_url,
         )
 
+    def create_error_result(self, error_message: str) -> FetchResult:
+        """Create standardized error result."""
+        result = self.create_base_result()
+        result.mark_as_error(error_message)
+        return result
+
     def format_date(self, date_str: str) -> Tuple[str, str]:
         """
         Format date string using config formats.
@@ -61,10 +67,23 @@ class BaseFetcher(ABC):
             return date_str, None
 
     @abstractmethod
-    @require_config
     def fetch(self) -> FetchResult:
-        """Execute data fetch operation and return standardized result."""
+        """Implementation of fetch operation by concrete fetchers."""
         pass
+
+    @require_config
+    def execute(self) -> FetchResult:
+        """Template method that handles logging and error handling."""
+        self.log_start()
+        try:
+            result = self.fetch()
+            return result
+        except Exception as e:
+            error_msg = f'Error fetching from {self.platform_id}: {str(e)}'
+            self.logger.error(error_msg)
+            return self.create_error_result(error_msg)
+        finally:
+            self.log_finish()
 
     @abstractmethod
     def validate_config(self) -> bool:

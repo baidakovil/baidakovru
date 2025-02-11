@@ -31,14 +31,16 @@ class FlightRadar24Fetcher(BaseFetcher):
             html_content = response.text
             result.raw_response = html_content
 
-            date_str = self._extract_last_date(html_content)
-            if date_str:
-                result.raw_datetime, result.formatted_datetime = self.format_date(
-                    date_str
-                )
-                result.update_url = url
-                result.update_event = self.EVENT_TYPE_MAPPING['html_flight']
-                result.update_desc = "New flight recorded"
+            try:
+                date_str = self._extract_last_date(html_content)
+                if date_str:
+                    result = self._process_flight(html_content, date_str)
+            except Exception as e:
+                result.mark_as_error(f"Error parsing FlightRadar24 page: {str(e)}")
+                return result
+        else:
+            result.mark_as_error(f'FlightRadar24 error: {response.status_code}')
+            return result
 
         self.log_finish()
         return result
@@ -67,3 +69,12 @@ class FlightRadar24Fetcher(BaseFetcher):
         except ValueError:
             self.logger.error("Could not find date in FlightRadar24 page")
             return ""
+
+    def _process_flight(self, html_content: str, date_str: str) -> FetchResult:
+        """Process flight data."""
+        result = self.create_base_result()
+        result.raw_datetime, result.formatted_datetime = self.format_date(date_str)
+        result.update_url = self.config.get_url()
+        result.update_event = self.EVENT_TYPE_MAPPING['html_flight']
+        result.update_desc = "New flight recorded"
+        return result

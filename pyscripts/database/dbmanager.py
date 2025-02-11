@@ -83,8 +83,8 @@ class DatabaseManager:
                 """
                 INSERT INTO updates 
                 (platform_id, platform_name, formatted_datetime, update_desc, 
-                 update_event, update_url, platform_url, raw_response)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                 update_event, update_url, platform_url, raw_response, is_error)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     result.platform_id,
@@ -95,6 +95,7 @@ class DatabaseManager:
                     result.update_url,
                     result.platform_url,
                     json.dumps(result.raw_response) if result.raw_response else None,
+                    result.is_error,
                 ),
             )
             conn.commit()

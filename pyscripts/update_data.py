@@ -67,11 +67,7 @@ def update_all_platforms():
     for fetcher in fetchers:
         logger.info(f"Processing fetcher: {type(fetcher).__name__}")
         try:
-            logger.debug(f"Starting fetch for {fetcher.platform_id}")
-            result = fetcher.fetch()
-            logger.debug(
-                f"Successfully fetched data for {fetcher.platform_id}, updating database"
-            )
+            result = fetcher.execute()  # Use execute() instead of fetch()
             db_manager.update_platform_data(result)
             logger.info(f"Successfully updated data for {fetcher.platform_id}")
         except Exception as e:
