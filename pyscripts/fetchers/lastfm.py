@@ -3,8 +3,8 @@ from datetime import datetime
 import requests
 
 from ..config import FetcherConfig
-from ..fetchers.base import BaseFetcher, require_config
 from ..models import FetchResult
+from .base import BaseFetcher, error_handler, require_config
 
 
 class LastFMFetcher(BaseFetcher):
@@ -22,6 +22,7 @@ class LastFMFetcher(BaseFetcher):
     }
 
     @require_config
+    @error_handler
     def fetch(self) -> FetchResult:
         """Fetch and parse latest Last.fm scrobbles."""
         url = self.config.get_url()

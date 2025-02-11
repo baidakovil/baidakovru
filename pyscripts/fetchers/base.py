@@ -25,6 +25,25 @@ def require_config(f):
     return wrapper
 
 
+def error_handler(f):
+    """Decorator to handle logging and error handling for fetchers."""
+
+    @wraps(f)
+    def wrapper(self, *args, **kwargs):
+        self.log_start()
+        try:
+            result = f(self, *args, **kwargs)
+            return result
+        except Exception as e:
+            error_msg = f'Error fetching from {self.platform_id}: {str(e)}'
+            self.logger.error(error_msg)
+            return self.create_error_result(error_msg)
+        finally:
+            self.log_finish()
+
+    return wrapper
+
+
 class BaseFetcher(ABC):
     """Abstract base class defining the contract for all platform fetchers."""
 
@@ -67,23 +86,10 @@ class BaseFetcher(ABC):
             return date_str, None
 
     @abstractmethod
+    @error_handler
     def fetch(self) -> FetchResult:
         """Implementation of fetch operation by concrete fetchers."""
         pass
-
-    @require_config
-    def execute(self) -> FetchResult:
-        """Template method that handles logging and error handling."""
-        self.log_start()
-        try:
-            result = self.fetch()
-            return result
-        except Exception as e:
-            error_msg = f'Error fetching from {self.platform_id}: {str(e)}'
-            self.logger.error(error_msg)
-            return self.create_error_result(error_msg)
-        finally:
-            self.log_finish()
 
     @abstractmethod
     def validate_config(self) -> bool:

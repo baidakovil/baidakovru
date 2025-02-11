@@ -3,7 +3,7 @@ from datetime import datetime
 import requests
 
 from ..models import FetchResult
-from .base import BaseFetcher, require_config
+from .base import BaseFetcher, error_handler, require_config
 
 
 class FlightRadar24Fetcher(BaseFetcher):
@@ -19,6 +19,7 @@ class FlightRadar24Fetcher(BaseFetcher):
     }
 
     @require_config
+    @error_handler
     def fetch(self) -> FetchResult:
         """Fetch and parse latest FlightRadar24 flight."""
         url = self.config.get_url()

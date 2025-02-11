@@ -4,7 +4,7 @@ import requests
 
 from ..config import FetcherConfig
 from ..models import FetchResult
-from .base import BaseFetcher, require_config
+from .base import BaseFetcher, error_handler, require_config
 
 
 class GitHubFetcher(BaseFetcher):
@@ -24,6 +24,7 @@ class GitHubFetcher(BaseFetcher):
     }
 
     @require_config
+    @error_handler
     def fetch(self) -> FetchResult:
         """Fetch and parse latest GitHub user activity events."""
         url = self.config.get_url()

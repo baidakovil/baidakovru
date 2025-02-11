@@ -4,7 +4,7 @@ import requests
 
 from ..config import FetcherConfig
 from ..models import FetchResult
-from .base import BaseFetcher, require_config
+from .base import BaseFetcher, error_handler, require_config
 
 
 class INatFetcher(BaseFetcher):
@@ -20,6 +20,7 @@ class INatFetcher(BaseFetcher):
     }
 
     @require_config
+    @error_handler
     def fetch(self) -> FetchResult:
         """Fetch and parse latest iNaturalist observations."""
         url = self.config.get_url()

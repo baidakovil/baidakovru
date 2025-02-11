@@ -2,7 +2,7 @@ from datetime import datetime
 from os import getenv
 
 from ..models import FetchResult
-from .base import BaseFetcher, require_config
+from .base import BaseFetcher, error_handler, require_config
 
 
 class LinkedInFetcher(BaseFetcher):
@@ -18,6 +18,7 @@ class LinkedInFetcher(BaseFetcher):
     }
 
     @require_config
+    @error_handler
     def fetch(self) -> FetchResult:
         """Fetch dummy LinkedIn data."""
         raw_date = getenv('LINKEDIN_LAST_UPDATE_DATE')
