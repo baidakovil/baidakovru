@@ -75,11 +75,15 @@ class UpdatesManager {
             linkIcon.alt = 'External link';
             linkIcon.className = 'link-icon';
             
+            // Add tooltip
+            const url = new URL(platform.platform_url);
+            link.title = `Go to ${url.href.replace(/^https?:\/\//, '')}`;
+
             link.appendChild(linkIcon);
             linkCell.appendChild(link);
         }
         return linkCell;
-    }
+    }   
 
     attachClickHandler(row, platformName, dateCell, platform) {
         row.addEventListener('click', () => {
