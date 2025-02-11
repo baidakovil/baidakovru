@@ -22,60 +22,38 @@ class INatFetcher(BaseFetcher):
     @require_config
     def fetch(self) -> FetchResult:
         """Fetch and parse latest iNaturalist observations."""
-        self.log_start()
-
         url = self.config.get_url()
-        try:
-            response = requests.get(url, headers=self.config.headers)
-            result = self.create_base_result()
+        response = requests.get(url, headers=self.config.headers)
 
-            if response.status_code == 200:
-                data = response.json()
-                result.raw_response = data
+        if response.status_code != 200:
+            return self.create_error_result(f'iNat API error: {response.status_code}')
 
-                try:
-                    if data.get('results') and len(data['results']) > 0:
-                        latest_observation = data['results'][0]
-                        created_at = latest_observation['created_at']
+        data = response.json()
+        result = self.create_base_result(data)
 
-                        if '+' in created_at or '-' in created_at:
-                            created_at = created_at[:-3] + created_at[-2:]
+        if not data.get('results') or len(data['results']) == 0:
+            return self.create_error_result('No observations found in iNat response')
 
-                        result.raw_datetime, result.formatted_datetime = (
-                            self.format_date(created_at)
-                        )
+        latest_observation = data['results'][0]
+        return self._process_observation(latest_observation)
 
-                        species_name = latest_observation.get(
-                            'species_guess', 'Unknown species'
-                        )
-                        place_name = latest_observation.get(
-                            'place_guess', 'unknown location'
-                        )
-                        result.update_url = f"https://www.inaturalist.org/observations/{latest_observation.get('id')}"
-                        result.update_event = self.EVENT_TYPE_MAPPING['api_observation']
-                        result.update_desc = (
-                            f"Observation of {species_name} at {place_name}"
-                        )
-                except Exception as e:
-                    self.logger.error(f'Error parsing iNat response: {e}')
-                    result.update_desc = f"Error parsing update: {str(e)}"
+    def _process_observation(self, observation: dict) -> FetchResult:
+        """Process single iNaturalist observation."""
+        result = self.create_base_result(observation)
 
-            elif response.status_code == 404:
-                self.logger.error(
-                    f'404 when fetching from iNat for {self.config.username}'
-                )
-                result.raw_response = {'error': 'Not Found', 'status': 404}
-            else:
-                self.logger.error(f'Error status from iNat: {response.status_code}')
-                result.raw_response = {
-                    'error': 'Bad Response',
-                    'status': response.status_code,
-                }
+        created_at = observation['created_at']
+        if '+' in created_at or '-' in created_at:
+            created_at = created_at[:-3] + created_at[-2:]
 
-        except Exception as e:
-            self.logger.error(f'Error fetching from iNat: {e}')
-            result = self.create_base_result({'error': str(e)})
-            result.update_desc = f"Error fetching update: {str(e)}"
+        result.raw_datetime, result.formatted_datetime = self.format_date(created_at)
 
-        self.log_finish()
+        species_name = observation.get('species_guess', 'Unknown species')
+        place_name = observation.get('place_guess', 'unknown location')
+
+        result.update_url = (
+            f"https://www.inaturalist.org/observations/{observation.get('id')}"
+        )
+        result.update_event = self.EVENT_TYPE_MAPPING['api_observation']
+        result.update_desc = f"Observation of {species_name} at {place_name}"
+
         return result

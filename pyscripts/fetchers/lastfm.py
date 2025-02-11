@@ -24,43 +24,34 @@ class LastFMFetcher(BaseFetcher):
     @require_config
     def fetch(self) -> FetchResult:
         """Fetch and parse latest Last.fm scrobbles."""
-        self.log_start()
-
         url = self.config.get_url()
-        try:
-            response = requests.get(url)
-            result = self.create_base_result()
+        response = requests.get(url)
 
-            if response.status_code == 200:
-                data = response.json()
-                result.raw_response = data
+        if response.status_code != 200:
+            return self.create_error_result(
+                f'Last.fm API error: {response.status_code}'
+            )
 
-                try:
-                    if data.get('recenttracks', {}).get('track'):
-                        result = self._process_track(data['recenttracks']['track'][0])
-                except Exception as e:
-                    result.mark_as_error(f"Error parsing Last.fm response: {str(e)}")
-                    return result
-            else:
-                result.mark_as_error(f'Last.fm API error: {response.status_code}')
-                return result
+        data = response.json()
+        result = self.create_base_result(data)
 
-        except Exception as e:
-            self.logger.error(f'Error fetching from Last.fm: {e}')
-            result = self.create_base_result({'error': str(e)})
-            result.update_desc = f"Error fetching update: {str(e)}"
+        tracks = data.get('recenttracks', {}).get('track')
+        if not tracks:
+            return self.create_error_result('No tracks found in Last.fm response')
 
-        self.log_finish()
-        return result
+        return self._process_track(tracks[0])
 
     def _process_track(self, track: dict) -> FetchResult:
         """Process single track data."""
-        result = self.create_base_result()
-        if 'date' in track:
-            result.raw_datetime, result.formatted_datetime = self.format_date(
-                track['date']['#text']
-            )
-            result.update_url = f"https://www.last.fm/user/{self.config.username}"
-            result.update_event = self.EVENT_TYPE_MAPPING['api_scrobble']
-            result.update_desc = "Listening to music"
+        result = self.create_base_result(track)
+
+        if 'date' not in track:
+            return self.create_error_result('No date information in track data')
+
+        result.raw_datetime, result.formatted_datetime = self.format_date(
+            track['date']['#text']
+        )
+        result.update_url = f"https://www.last.fm/user/{self.config.username}"
+        result.update_event = self.EVENT_TYPE_MAPPING['api_scrobble']
+        result.update_desc = "Listening to music"
         return result

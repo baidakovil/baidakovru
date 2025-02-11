@@ -26,42 +26,32 @@ class GitHubFetcher(BaseFetcher):
     @require_config
     def fetch(self) -> FetchResult:
         """Fetch and parse latest GitHub user activity events."""
-        self.log_start()
-
         url = self.config.get_url()
         response = requests.get(url, headers=self.config.headers)
-        result = self.create_base_result()
 
-        if response.status_code == 200:
-            events = response.json()
-            result.raw_response = events
+        if response.status_code == 404:
+            return self.create_error_result(
+                f'GitHub user {self.config.username} not found'
+            )
+        if response.status_code != 200:
+            return self.create_error_result(f'GitHub API error: {response.status_code}')
 
-            try:
-                if events:
-                    sorted_events = sorted(
-                        events, key=lambda x: x['created_at'], reverse=True
-                    )
-                    for event in sorted_events:
-                        if event['type'] in self.config.supported_events:
-                            result = self._process_event(event)
-                            break
-            except Exception as e:
-                result.mark_as_error(f"Error parsing GitHub response: {str(e)}")
-                return result
+        events = response.json()
+        result = self.create_base_result(events)
 
-        elif response.status_code == 404:
-            result.mark_as_error(f'GitHub user {self.config.username} not found')
-            return result
-        else:
-            result.mark_as_error(f'GitHub API error: {response.status_code}')
-            return result
+        if not events:
+            return self.create_error_result('No events found in GitHub response')
 
-        self.log_finish()
-        return result
+        sorted_events = sorted(events, key=lambda x: x['created_at'], reverse=True)
+        for event in sorted_events:
+            if event['type'] in self.config.supported_events:
+                return self._process_event(event)
+
+        return self.create_error_result('No supported events found')
 
     def _process_event(self, event: dict) -> FetchResult:
-        """Helper method to process a single GitHub event."""
-        result = self.create_base_result()
+        """Process a single GitHub event."""
+        result = self.create_base_result(event)
         result.raw_datetime, result.formatted_datetime = self.format_date(
             event['created_at']
         )

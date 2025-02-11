@@ -21,35 +21,28 @@ class TelegramFetcher(BaseFetcher):
     @require_config
     def fetch(self) -> FetchResult:
         """Fetch and parse latest Telegram channel message."""
-        self.log_start()
-
         url = self.config.get_url()
         response = requests.get(url, headers=self.config.headers)
-        result = self.create_base_result()
 
-        if response.status_code == 200:
-            html_content = response.text
-            result.raw_response = html_content
+        if response.status_code != 200:
+            return self.create_error_result(f'Telegram error: {response.status_code}')
 
-            try:
-                date_str = self._extract_last_date(html_content)
-                if date_str:
-                    result = self._process_message(html_content, date_str)
-            except Exception as e:
-                result.mark_as_error(f"Error parsing Telegram page: {str(e)}")
-                return result
-        else:
-            result.mark_as_error(f'Telegram error: {response.status_code}')
-            return result
+        html_content = response.text
+        result = self.create_base_result(html_content)
 
-        self.log_finish()
-        return result
+        date_str = self._extract_last_date(html_content)
+        if not date_str:
+            return self.create_error_result("Could not find date in Telegram page")
+
+        return self._process_message(html_content, date_str)
 
     def _process_message(self, html_content: str, date_str: str) -> FetchResult:
         """Process message data."""
-        result = self.create_base_result()
+        result = self.create_base_result(html_content)
+
         if '+' in date_str or '-' in date_str:
             date_str = date_str[:-3] + date_str[-2:]
+
         result.raw_datetime, result.formatted_datetime = self.format_date(date_str)
         result.update_url = self._extract_message_url(html_content)
         result.update_event = self.EVENT_TYPE_MAPPING['html_post']
@@ -61,25 +54,19 @@ class TelegramFetcher(BaseFetcher):
         search_str = '<time datetime="'
         date_end = '"'
 
-        try:
-            last_idx = html_content.rindex(search_str)
-            date_start = last_idx + len(search_str)
-            date_end_idx = html_content.index(date_end, date_start)
-            return html_content[date_start:date_end_idx]
-        except ValueError:
-            self.logger.error("Could not find date in Telegram page")
-            return ""
+        # Let ValueError bubble up to execute()
+        last_idx = html_content.rindex(search_str)
+        date_start = last_idx + len(search_str)
+        date_end_idx = html_content.index(date_end, date_start)
+        return html_content[date_start:date_end_idx]
 
     def _extract_message_url(self, html_content: str) -> str:
         """Extract the URL from the last message."""
         search_str = 'tgme_widget_message_date" href="'
         url_end = '">'
 
-        try:
-            last_idx = html_content.rindex(search_str)
-            url_start = last_idx + len(search_str)
-            url_end_idx = html_content.index(url_end, url_start)
-            return html_content[url_start:url_end_idx]
-        except ValueError:
-            self.logger.error("Could not find message URL in Telegram page")
-            return ""
+        # Let ValueError bubble up to execute()
+        last_idx = html_content.rindex(search_str)
+        url_start = last_idx + len(search_str)
+        url_end_idx = html_content.index(url_end, url_start)
+        return html_content[url_start:url_end_idx]
