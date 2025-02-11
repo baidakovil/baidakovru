@@ -3,7 +3,7 @@
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    src: url('../fonts/montserrat/Montserrat-Light.woff2') format('woff2');
+    src: url('../fonts/montserrat/Montserrat-Regular.woff2') format('woff2');
 }
 
 @font-face {
@@ -12,4 +12,12 @@
     font-weight: 700;
     font-display: swap;
     src: url('../fonts/montserrat/Montserrat-Bold.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    font-style: italic;
+    font-weight: 400;
+    font-display: swap;
+    src: url('../fonts/montserrat/Montserrat-Italic.woff2') format('woff2');
 }

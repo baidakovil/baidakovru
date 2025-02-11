@@ -15,7 +15,7 @@
     display: grid;
     grid-template-columns: 1.7fr 2.2fr;
     gap: 0px;
-    margin-bottom: 20px;
+    margin-bottom: var(--spacing-md);
     font-weight: bold;
     width: 100%;
 }
@@ -31,7 +31,7 @@
     grid-template-columns: 1.7fr 2fr 0.2fr;
     gap: 0;
     align-items: center;
-    padding: 10px 0;
+    padding: var(--spacing-sm) 0;
     transition: all var(--transition-timing);
 }
 
@@ -49,24 +49,28 @@
 .platform-name.with-date {
     grid-column: 1;
     white-space: nowrap;
-    overflow: hidden; /* Changed from hidden to allow mask to work properly */
+    overflow: hidden;
     position: relative;
     display: flex;
     width: 100%;
-    gap: 5px; /* Use gap instead of margin for better spacing */
+    gap: var(--spacing-sm);
+    align-items: baseline;
 }
 
 .platform-name-text {
     flex-shrink: 0;
+    line-height: inherit;
 }
 
 .date-scroll-container {
     position: relative;
-    overflow: hidden; /* Changed from hidden */
-    width: calc(100% - var(--spacing-xl)); /* Increased from 40px to 45px */
-    padding-right: var(--spacing-lg); /* Increased from 20px to 25px */
-    flex-grow: 0; /* Don't grow */
-    flex-shrink: 1; /* Allow shrinking */
+    overflow: hidden;
+    width: calc(100% - var(--spacing-xl));
+    padding-right: var(--spacing-lg);
+    flex-grow: 0;
+    flex-shrink: 1;
+    display: inline-flex;
+    align-items: baseline;
 }
 
 .date-scroll-inner {
@@ -74,49 +78,50 @@
     display: inline-block;
     margin: 0;
     padding: 0;
-    color: #464646;
+    color: var(--color-text-secondary);
+    line-height: inherit;
 }
 
 .date-scroll-container.animate-scroll .date-scroll-inner {
-    animation: scrollText 15s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;  /* More smooth cubic-bezier */
+    animation: scrollText 15s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
 }
 
-/* Improved scroll animation */
 @keyframes scrollText {
-    0%, 10% {  /* Slightly longer pause at start */
+    0%, 10% {
         transform: translateX(0);
     }
     40%, 60% {
         transform: translateX(var(--scroll-distance));
     }
-    90%, 100% {  /* Slightly longer pause at end */
+    90%, 100% {
         transform: translateX(0);
     }
 }
 
-/* Add a masking container that's positioned absolutely */
 .platform-name.with-date::after {
     content: '';
     position: absolute;
     right: 0;
     top: 0;
     bottom: 0;
-    width: 45px; /* Increased from 40px to 45px to match container adjustment */
-    background: linear-gradient(to right,
-        rgba(255,255,255,0) 0%,
-        rgba(255,255,255,1) 100%);
-    pointer-events: none; /* Allow clicks to pass through */
+    width: 45px;
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+    pointer-events: none;
 }
 
 .link-cell {
     justify-self: end;
 }
 
-/* Consolidated media queries */
+.italic-text {
+    font-family: 'Montserrat', sans-serif;
+    font-style: italic;
+}
+
 @media screen and (max-width: 768px) {
     .updates-container {
         max-width: 100%;
-        padding: 0 25px;
+        padding: 0 var(--spacing-lg);
     }
 
     .updates-grid,
@@ -125,10 +130,10 @@
     }
 
     .updates-header {
-        margin-bottom: 5px;
+        margin-bottom: var(--spacing-sm);
         
         div {
-            margin-top: 10px;
+            margin-top: var(--spacing-sm);
             white-space: normal;
         }
     }

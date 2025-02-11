@@ -6,7 +6,7 @@ const CONFIG = {
     ANIMATION: {
         DURATION: 15000,
         SCROLL_MARGIN: 50,
-        SCROLL_THRESHOLD: 5 // minimum pixels needed to trigger scroll
+        SCROLL_THRESHOLD: 5
     }
 };
 
@@ -57,7 +57,6 @@ class UpdatesManager {
         const dateCell = document.createElement('div');
         dateCell.className = 'datetime-cell';
         dateCell.textContent = platform.time_ago;
-        dateCell.title = platform.full_date;
         return dateCell;
     }
 
@@ -128,7 +127,7 @@ class UpdatesManager {
         dateScrollContainer.className = 'date-scroll-container';
 
         const dateScrollInner = document.createElement('div');
-        dateScrollInner.className = 'date-scroll-inner';
+        dateScrollInner.className = 'date-scroll-inner italic-text';
         dateScrollInner.textContent = `${platform.update_desc} at ${platform.full_date}`;
 
         dateScrollContainer.appendChild(dateScrollInner);
@@ -159,7 +158,7 @@ class UpdatesManager {
         const timeoutId = setTimeout(() => {
             dateCell.classList.remove('faded');
             platformName.classList.remove('with-date');
-            platformName.textContent = platform.platform_name; // Reset to original without semicolon
+            platformName.textContent = platform.platform_name;
             if (platformName.querySelector('.date-scroll-container')) {
                 platformName.querySelector('.date-scroll-container').remove();
             }
