@@ -84,7 +84,7 @@ class UpdatesManager {
             
             // Add tooltip
             const url = new URL(platform.platform_url);
-            link.title = `Go to ${url.href.replace(/^https?:\/\//, '')}`;
+            link.title = `${url.href.replace(/^https?:\/\//, '')}`;
 
             link.appendChild(linkIcon);
             linkCell.appendChild(link);
