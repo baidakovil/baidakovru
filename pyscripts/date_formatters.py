@@ -1,5 +1,6 @@
 from datetime import datetime, time
 
+import pytz
 from flask_babel import format_date, format_datetime
 from flask_babel import gettext as _
 
@@ -22,8 +23,12 @@ def format_time_ago(timestamp_str: str) -> str:
             return many
 
     try:
+        # Convert timestamp_str to a timezone-aware datetime object
         date = datetime.strptime(timestamp_str, DATETIME_FORMAT['db'])
-        now = datetime.now()
+        date = pytz.utc.localize(date)
+
+        # Get the current time in the same time zone
+        now = datetime.now(pytz.utc)
         diff = now - date
 
         if diff.days == 0:
