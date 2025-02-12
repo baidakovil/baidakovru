@@ -19,7 +19,7 @@ DATETIME_FORMAT = {
 
 EVENT_TYPES = {
     # GitHub events
-    'github_push': _('Отправлен код в репозиторий'),
+    'github_push': _('Код программы отправлен в репозиторий'),
     'github_pr': _('Запрос на отправку кода'),
     'github_issue': _('Открыт новый вопрос'),
     'github_create': _('Создан новый репозиторий'),
@@ -27,11 +27,11 @@ EVENT_TYPES = {
     # iNaturalist events
     'inat_observation': _('Новое наблюдение'),
     # Telegram events
-    'telegram_post': _('Новый пост'),
+    'telegram_post': _('Новый пост в блоге'),
     # Last.fm events
     'lastfm_scrobble': _('Новое прослушивание'),
     # LinkedIn events
-    'linkedin_post': _('Обновление информации'),
+    'linkedin_post': _('Новая работа'),
     # FlightRadar events
     'fr24_flight': _('Новый рейс'),
 }

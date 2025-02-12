@@ -10,6 +10,17 @@ def format_time_ago(timestamp_str: str) -> str:
     """
     Convert timestamp to human-readable format
     """
+
+    def pluralize(number, one, few, many):
+        if 11 <= number % 100 <= 14:
+            return many
+        elif number % 10 == 1:
+            return one
+        elif 2 <= number % 10 <= 4:
+            return few
+        else:
+            return many
+
     try:
         date = datetime.strptime(timestamp_str, DATETIME_FORMAT['db'])
         now = datetime.now()
@@ -18,23 +29,41 @@ def format_time_ago(timestamp_str: str) -> str:
         if diff.days == 0:
             hours = diff.seconds // 3600
             if diff.seconds < 3600:  # Less than 1 hour
-                return _('Прям вот-вот')
+                return _('Только что')
             elif hours < 9:  # Between 1 and 9 hours
                 return _('%(hour)d часов назад', hour=hours)
             else:  # Between 9 and 24 hours
                 return _('Сегодня')
+        elif diff.days == 1:
+            return _('Вчера')
         elif diff.days < 7:
             # Show full date without time for last week
-            return _('%(day)d дней назад', day=diff.days)
+            return _(
+                '%(day)d %(day_word)s назад',
+                day=diff.days,
+                day_word=pluralize(diff.days, 'день', 'дня', 'дней'),
+            )
         elif diff.days < 30:
             weeks = diff.days // 7
-            return _('%(week)d недель назад', week=weeks)
+            return _(
+                '%(week)d %(week_word)s назад',
+                week=weeks,
+                week_word=pluralize(weeks, 'неделя', 'недели', 'недель'),
+            )
         elif diff.days < 365:
             months = diff.days // 30
-            return _('%(month)d месяцев назад', month=months)
+            return _(
+                '%(month)d %(month_word)s назад',
+                month=months,
+                month_word=pluralize(months, 'месяц', 'месяца', 'месяцев'),
+            )
         else:
             years = diff.days // 365
-            return _('%(year)d лет назад', year=years)
+            return _(
+                '%(year)d %(year_word)s назад',
+                year=years,
+                year_word=pluralize(years, 'год', 'года', 'лет'),
+            )
     except Exception:
         return _('Неверная дата')
 

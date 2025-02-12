@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  1.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-02-12 19:44+0300\n"
+"POT-Creation-Date: 2025-02-12 21:25+0300\n"
 "PO-Revision-Date: 2024-01-01 00:00+0000\n"
 "Last-Translator: YOUR NAME <your@email.com>\n"
 "Language: en\n"
@@ -15,8 +15,8 @@ msgstr ""
 "Generated-By: Babel 2.17.0\n"
 
 #: pyscripts/config.py:22
-msgid "Отправлен код в репозиторий"
-msgstr "New code in repository"
+msgid "Код программы отправлен в репозиторий"
+msgstr "Code sent in repository"
 
 #: pyscripts/config.py:23
 msgid "Запрос на отправку кода"
@@ -39,7 +39,7 @@ msgid "Новое наблюдение"
 msgstr "New nature observation"
 
 #: pyscripts/config.py:30
-msgid "Новый пост"
+msgid "Новый пост в блоге"
 msgstr "New channel post"
 
 #: pyscripts/config.py:32
@@ -47,48 +47,52 @@ msgid "Новое прослушивание"
 msgstr "Listened to track"
 
 #: pyscripts/config.py:34
-msgid "Обновление информации"
-msgstr "Bio updated"
+msgid "Новая работа"
+msgstr "New job"
 
 #: pyscripts/config.py:36
 msgid "Новый рейс"
 msgstr "New flight"
 
-#: pyscripts/date_formatters.py:21
-msgid "Прям вот-вот"
+#: pyscripts/date_formatters.py:32
+msgid "Только что"
 msgstr "Just now"
 
-#: pyscripts/date_formatters.py:23
+#: pyscripts/date_formatters.py:34
 #, python-format
 msgid "%(hour)d часов назад"
 msgstr "%(hour)d hours ago"
 
-#: pyscripts/date_formatters.py:25
+#: pyscripts/date_formatters.py:36
 msgid "Сегодня"
 msgstr "Today"
 
-#: pyscripts/date_formatters.py:28
+#: pyscripts/date_formatters.py:38
+msgid "Вчера"
+msgstr "Yesterday"
+
+#: pyscripts/date_formatters.py:42
 #, python-format
-msgid "%(day)d дней назад"
+msgid "%(day)d %(day_word)s назад"
 msgstr "%(day)d days ago"
 
-#: pyscripts/date_formatters.py:31
+#: pyscripts/date_formatters.py:49
 #, python-format
-msgid "%(week)d недель назад"
+msgid "%(week)d %(week_word)s назад"
 msgstr "%(week)d weeks ago"
 
-#: pyscripts/date_formatters.py:34
+#: pyscripts/date_formatters.py:56
 #, python-format
-msgid "%(month)d месяцев назад"
-msgstr "%(month)d month ago"
+msgid "%(month)d %(month_word)s назад"
+msgstr "%(month)d months ago"
 
-#: pyscripts/date_formatters.py:37
+#: pyscripts/date_formatters.py:63
 #, python-format
-msgid "%(year)d лет назад"
+msgid "%(year)d %(year_word)s назад"
 msgstr "%(year)d years ago"
 
-#: pyscripts/date_formatters.py:39 pyscripts/date_formatters.py:49
-#: pyscripts/date_formatters.py:61
+#: pyscripts/date_formatters.py:68 pyscripts/date_formatters.py:78
+#: pyscripts/date_formatters.py:88
 msgid "Неверная дата"
 msgstr "Invalid date"
 
@@ -161,4 +165,7 @@ msgstr "Last update"
 #: templates/index.html:22
 msgid "Написать"
 msgstr "Contact"
+
+#~ msgid "Обновление информации"
+#~ msgstr "Bio updated"
 
