@@ -1,40 +1,29 @@
 const CONFIG = {
     API_ENDPOINTS: {
         updates: '/api/updates',
+        eventTypes: '/api/event-types',
         logError: '/api/log-error'
     },
     ANIMATION: {
         DURATION: 5000,
         SCROLL_MARGIN: 50,
         SCROLL_THRESHOLD: 5
-    },
-    EVENT_TYPES: {
-        // GitHub events
-        'github_push': 'New code in repository',
-        'github_pr': 'New pull request',
-        'github_issue': 'New issue activity',
-        'github_create': 'New repository created',
-        'github_fork': 'Repository forked',
-        // iNaturalist events
-        'inat_observation': 'New nature observation',
-        // Telegram events
-        'telegram_post': 'New channel post',
-        // Last.fm events
-        'lastfm_scrobble': 'Listened to track',
-        // LinkedIn events
-        'linkedin_post': 'New post',
-        // FlightRadar events
-        'fr24_flight': 'New flight recorded'
     }
 };
 
 class UpdatesManager {
     constructor() {
         this.container = document.querySelector('#updates-content');
+        this.eventTypes = {};
     }
 
     async init() {
         try {
+            // Load event types first
+            const response = await fetch(CONFIG.API_ENDPOINTS.eventTypes);
+            this.eventTypes = await response.json();
+            
+            // Then load and render updates
             const data = await this.fetchUpdates();
             this.renderUpdates(data);
         } catch (error) {
@@ -150,7 +139,7 @@ class UpdatesManager {
 
         const dateScrollInner = document.createElement('div');
         dateScrollInner.className = 'date-scroll-inner italic-text';
-        dateScrollInner.textContent = `${CONFIG.EVENT_TYPES[platform.update_event]} at ${platform.full_date}`;
+        dateScrollInner.textContent = `${this.getEventTypeDescription(platform.update_event)} @ ${platform.full_date}`;
 
         dateScrollContainer.appendChild(dateScrollInner);
 
@@ -227,6 +216,10 @@ class UpdatesManager {
         if (this.container) {
             this.container.innerHTML = '<div class="error-message">Не удалось загрузить обновления</div>';
         }
+    }
+
+    getEventTypeDescription(eventType) {
+        return this.eventTypes[eventType] || eventType;
     }
 }
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-02-02 23:40+0300\n"
+"POT-Creation-Date: 2025-02-12 19:44+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,46 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
+
+#: pyscripts/config.py:22
+msgid "Отправлен код в репозиторий"
+msgstr ""
+
+#: pyscripts/config.py:23
+msgid "Запрос на отправку кода"
+msgstr ""
+
+#: pyscripts/config.py:24
+msgid "Открыт новый вопрос"
+msgstr ""
+
+#: pyscripts/config.py:25
+msgid "Создан новый репозиторий"
+msgstr ""
+
+#: pyscripts/config.py:26
+msgid "Сделан форк репозитория"
+msgstr ""
+
+#: pyscripts/config.py:28
+msgid "Новое наблюдение"
+msgstr ""
+
+#: pyscripts/config.py:30
+msgid "Новый пост"
+msgstr ""
+
+#: pyscripts/config.py:32
+msgid "Новое прослушивание"
+msgstr ""
+
+#: pyscripts/config.py:34
+msgid "Обновление информации"
+msgstr ""
+
+#: pyscripts/config.py:36
+msgid "Новый рейс"
+msgstr ""
 
 #: pyscripts/date_formatters.py:21
 msgid "Прям вот-вот"
@@ -50,12 +90,9 @@ msgstr ""
 msgid "%(year)d лет назад"
 msgstr ""
 
-#: pyscripts/date_formatters.py:39 pyscripts/date_formatters.py:62
+#: pyscripts/date_formatters.py:39 pyscripts/date_formatters.py:49
+#: pyscripts/date_formatters.py:61
 msgid "Неверная дата"
-msgstr ""
-
-#: pyscripts/date_formatters.py:57
-msgid " в "
 msgstr ""
 
 #: templates/about.html:3 templates/about.html:5 templates/index.html:21
@@ -68,7 +105,7 @@ msgid ""
 "соцсетях и в других сервисах</p>"
 msgstr ""
 
-#: templates/base.html:23
+#: templates/base.html:27
 msgid "На главную"
 msgstr ""
 
@@ -92,18 +129,10 @@ msgid "Написать мне"
 msgstr ""
 
 #: templates/contact.html:11
-msgid "Тема:"
-msgstr ""
-
-#: templates/contact.html:15
 msgid "Сообщение:"
 msgstr ""
 
-#: templates/contact.html:19
-msgid "Адрес почты для ответа:"
-msgstr ""
-
-#: templates/contact.html:22
+#: templates/contact.html:16
 msgid "Отправить"
 msgstr ""
 

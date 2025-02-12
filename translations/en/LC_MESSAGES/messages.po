@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  1.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-02-02 23:40+0300\n"
+"POT-Creation-Date: 2025-02-12 19:44+0300\n"
 "PO-Revision-Date: 2024-01-01 00:00+0000\n"
 "Last-Translator: YOUR NAME <your@email.com>\n"
 "Language: en\n"
@@ -13,6 +13,46 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
+
+#: pyscripts/config.py:22
+msgid "Отправлен код в репозиторий"
+msgstr "New code in repository"
+
+#: pyscripts/config.py:23
+msgid "Запрос на отправку кода"
+msgstr "New pull request"
+
+#: pyscripts/config.py:24
+msgid "Открыт новый вопрос"
+msgstr "New issue opened"
+
+#: pyscripts/config.py:25
+msgid "Создан новый репозиторий"
+msgstr "New repository created"
+
+#: pyscripts/config.py:26
+msgid "Сделан форк репозитория"
+msgstr "Repository forked"
+
+#: pyscripts/config.py:28
+msgid "Новое наблюдение"
+msgstr "New nature observation"
+
+#: pyscripts/config.py:30
+msgid "Новый пост"
+msgstr "New channel post"
+
+#: pyscripts/config.py:32
+msgid "Новое прослушивание"
+msgstr "Listened to track"
+
+#: pyscripts/config.py:34
+msgid "Обновление информации"
+msgstr "Bio updated"
+
+#: pyscripts/config.py:36
+msgid "Новый рейс"
+msgstr "New flight"
 
 #: pyscripts/date_formatters.py:21
 msgid "Прям вот-вот"
@@ -47,13 +87,10 @@ msgstr "%(month)d month ago"
 msgid "%(year)d лет назад"
 msgstr "%(year)d years ago"
 
-#: pyscripts/date_formatters.py:39 pyscripts/date_formatters.py:62
+#: pyscripts/date_formatters.py:39 pyscripts/date_formatters.py:49
+#: pyscripts/date_formatters.py:61
 msgid "Неверная дата"
 msgstr "Invalid date"
-
-#: pyscripts/date_formatters.py:57
-msgid " в "
-msgstr " at "
 
 #: templates/about.html:3 templates/about.html:5 templates/index.html:21
 msgid "Об этом сайте"
@@ -67,7 +104,7 @@ msgstr ""
 "<p>This site updates daily information about my latest posts in social "
 "networks and other services</p>"
 
-#: templates/base.html:23
+#: templates/base.html:27
 msgid "На главную"
 msgstr "Main"
 
@@ -98,18 +135,10 @@ msgid "Написать мне"
 msgstr "Contact"
 
 #: templates/contact.html:11
-msgid "Тема:"
-msgstr "Subject"
-
-#: templates/contact.html:15
 msgid "Сообщение:"
 msgstr "Message:"
 
-#: templates/contact.html:19
-msgid "Адрес почты для ответа:"
-msgstr "Address for the answer:"
-
-#: templates/contact.html:22
+#: templates/contact.html:16
 msgid "Отправить"
 msgstr "Send"
 
@@ -132,3 +161,4 @@ msgstr "Last update"
 #: templates/index.html:22
 msgid "Написать"
 msgstr "Contact"
+

@@ -14,7 +14,7 @@ from flask_limiter.util import get_remote_address
 from flask_mail import Mail, Message
 
 from pyscripts import log_config
-from pyscripts.config import config
+from pyscripts.config import EVENT_TYPES, config
 from pyscripts.database.dbmanager import DatabaseManager
 from pyscripts.date_formatters import format_full_date, format_time_ago
 
@@ -204,6 +204,17 @@ def get_updates() -> Tuple[Response, int]:
     except Exception as e:
         logger.error(f'Error fetching updates: {str(e)}\n{format_exc()}')
         return jsonify({'error': 'Internal Server Error'}), 500
+
+
+@app.route('/api/event-types')
+@limiter.limit("10 per minute")
+def get_event_types():
+    """Return all event types with translations based on current locale."""
+    translations = {
+        event_type: gettext(description)
+        for event_type, description in EVENT_TYPES.items()
+    }
+    return jsonify(translations)
 
 
 @app.route('/api/log-error', methods=['POST'])

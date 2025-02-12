@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 from dotenv import find_dotenv, load_dotenv
+from flask_babel import lazy_gettext as _
 
 from .log_config import setup_logging
 
@@ -14,6 +15,25 @@ logger = setup_logging()
 DATETIME_FORMAT = {
     'db': '%Y-%m-%d %H:%M:%S',
     'iso': '%Y-%m-%dT%H:%M:%S%z',
+}
+
+EVENT_TYPES = {
+    # GitHub events
+    'github_push': _('Отправлен код в репозиторий'),
+    'github_pr': _('Запрос на отправку кода'),
+    'github_issue': _('Открыт новый вопрос'),
+    'github_create': _('Создан новый репозиторий'),
+    'github_fork': _('Сделан форк репозитория'),
+    # iNaturalist events
+    'inat_observation': _('Новое наблюдение'),
+    # Telegram events
+    'telegram_post': _('Новый пост'),
+    # Last.fm events
+    'lastfm_scrobble': _('Новое прослушивание'),
+    # LinkedIn events
+    'linkedin_post': _('Обновление информации'),
+    # FlightRadar events
+    'fr24_flight': _('Новый рейс'),
 }
 
 
