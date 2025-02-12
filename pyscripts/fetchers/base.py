@@ -3,6 +3,8 @@ from datetime import datetime
 from functools import wraps
 from typing import Tuple
 
+import pytz
+
 from ..config import FetcherConfig
 from ..log_config import setup_logging
 from ..models import FetchResult
@@ -79,7 +81,11 @@ class BaseFetcher(ABC):
         Returns tuple of (raw_datetime, formatted_datetime).
         """
         try:
+            # Parse the date string with the input format
             dt = datetime.strptime(date_str, self.config.date_format['input'])
+            # Convert to UTC
+            dt = dt.astimezone(pytz.utc)
+            # Format the date string with the output format
             return date_str, dt.strftime(self.config.date_format['output']).lower()
         except (ValueError, AttributeError) as e:
             self.logger.error(f'Failed to parse date {date_str}: {e}')

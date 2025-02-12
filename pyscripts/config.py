@@ -13,7 +13,7 @@ logger = setup_logging()
 
 # Constants for standardized datetime handling
 DATETIME_FORMAT = {
-    'db': '%Y-%m-%d %H:%M:%S',
+    'db': '%Y-%m-%dT%H:%M:%S%z',
     'iso': '%Y-%m-%dT%H:%M:%S%z',
 }
 

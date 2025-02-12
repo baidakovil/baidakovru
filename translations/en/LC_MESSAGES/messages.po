@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  1.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-02-12 21:25+0300\n"
+"POT-Creation-Date: 2025-02-12 23:33+0300\n"
 "PO-Revision-Date: 2024-01-01 00:00+0000\n"
 "Last-Translator: YOUR NAME <your@email.com>\n"
 "Language: en\n"
@@ -54,47 +54,54 @@ msgstr "New job"
 msgid "Новый рейс"
 msgstr "New flight"
 
-#: pyscripts/date_formatters.py:32
+#: pyscripts/date_formatters.py:36
 msgid "Только что"
 msgstr "Just now"
 
-#: pyscripts/date_formatters.py:34
+#: pyscripts/date_formatters.py:39
 #, python-format
-msgid "%(hour)d часов назад"
+msgid "%(hour)d %(hour_word)s назад"
 msgstr "%(hour)d hours ago"
 
-#: pyscripts/date_formatters.py:36
+#: pyscripts/date_formatters.py:44
 msgid "Сегодня"
 msgstr "Today"
 
-#: pyscripts/date_formatters.py:38
+#: pyscripts/date_formatters.py:46
 msgid "Вчера"
 msgstr "Yesterday"
 
-#: pyscripts/date_formatters.py:42
+#: pyscripts/date_formatters.py:50
 #, python-format
 msgid "%(day)d %(day_word)s назад"
 msgstr "%(day)d days ago"
 
-#: pyscripts/date_formatters.py:49
+#: pyscripts/date_formatters.py:57
 #, python-format
 msgid "%(week)d %(week_word)s назад"
 msgstr "%(week)d weeks ago"
 
-#: pyscripts/date_formatters.py:56
+#: pyscripts/date_formatters.py:64
 #, python-format
 msgid "%(month)d %(month_word)s назад"
 msgstr "%(month)d months ago"
 
-#: pyscripts/date_formatters.py:63
+#: pyscripts/date_formatters.py:71
 #, python-format
 msgid "%(year)d %(year_word)s назад"
 msgstr "%(year)d years ago"
 
-#: pyscripts/date_formatters.py:68 pyscripts/date_formatters.py:78
-#: pyscripts/date_formatters.py:88
-msgid "Неверная дата"
-msgstr "Invalid date"
+#: pyscripts/date_formatters.py:76
+msgid "Ошибка вычисления разницы дат"
+msgstr "Time difference calculation error"
+
+#: pyscripts/date_formatters.py:85
+msgid "Нет даты"
+msgstr "No date"
+
+#: pyscripts/date_formatters.py:95
+msgid "Ошибка форматирования даты"
+msgstr "Date formatting error"
 
 #: templates/about.html:3 templates/about.html:5 templates/index.html:21
 msgid "Об этом сайте"
@@ -165,7 +172,3 @@ msgstr "Last update"
 #: templates/index.html:22
 msgid "Написать"
 msgstr "Contact"
-
-#~ msgid "Обновление информации"
-#~ msgstr "Bio updated"
-

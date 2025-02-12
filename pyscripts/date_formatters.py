@@ -23,9 +23,8 @@ def format_time_ago(timestamp_str: str) -> str:
             return many
 
     try:
-        # Convert timestamp_str to a timezone-aware datetime object
         date = datetime.strptime(timestamp_str, DATETIME_FORMAT['db'])
-        date = pytz.utc.localize(date)
+        date = date.astimezone(pytz.utc)
 
         # Get the current time in the same time zone
         now = datetime.now(pytz.utc)
@@ -36,7 +35,11 @@ def format_time_ago(timestamp_str: str) -> str:
             if diff.seconds < 3600:  # Less than 1 hour
                 return _('Только что')
             elif hours < 9:  # Between 1 and 9 hours
-                return _('%(hour)d часов назад', hour=hours)
+                return _(
+                    '%(hour)d %(hour_word)s назад',
+                    hour=hours,
+                    hour_word=pluralize(hours, 'час', 'часа', 'часов'),
+                )
             else:  # Between 9 and 24 hours
                 return _('Сегодня')
         elif diff.days == 1:
@@ -70,17 +73,16 @@ def format_time_ago(timestamp_str: str) -> str:
                 year_word=pluralize(years, 'год', 'года', 'лет'),
             )
     except Exception:
-        return _('Неверная дата')
+        return _('Ошибка вычисления разницы дат')
 
 
 def format_full_date(timestamp_str: str, locale: str = 'ru') -> str:
     """
     Format the timestamp for tooltip display using flask-babel.
-    Shows time only if it's not 00:00:00.
     Uses 24-hour format for time and localized month names.
     """
     if not timestamp_str:
-        return _('Неверная дата')
+        return _('Нет даты')
 
     try:
         date = datetime.strptime(timestamp_str, DATETIME_FORMAT['db'])
@@ -90,4 +92,4 @@ def format_full_date(timestamp_str: str, locale: str = 'ru') -> str:
 
     except (ValueError, TypeError) as e:
         print(f"Debug - Error: {str(e)}")
-        return _('Неверная дата')
+        return _('Ошибка форматирования даты')
