@@ -1,3 +1,12 @@
+function revealElements(elements, delayMultiplier = 250, callback) {
+    elements.forEach((element, index) => {
+        setTimeout(() => {
+            element.classList.add('visible');
+            if (callback && index === elements.length - 1) callback();
+        }, delayMultiplier * index);
+    });
+}
+
 function handleIndexPageAnimations() {
     const loadingOverlay = document.getElementById('loadingOverlay');
     const mainElements = document.querySelectorAll('.header-container, .top-separator, .reveal-element:not(.bottom-separator):not(.navigation)');
@@ -5,51 +14,23 @@ function handleIndexPageAnimations() {
     const navigation = document.querySelector('.navigation');
     const updatesContainer = document.querySelector('.updates-container');
     
-    const animationCompleteEvent = new Event('animationComplete');
-    
     setTimeout(() => {
         loadingOverlay.style.display = 'none';
-        
-        mainElements.forEach((element, index) => {
-            setTimeout(() => {
-                element.classList.add('visible');
-            }, 250 * index);
-        });
-
-        if (updatesContainer) {
-            setTimeout(() => {
+        revealElements(mainElements, 250, () => {
+            if (updatesContainer) {
                 updatesContainer.classList.add('visible');
-                document.dispatchEvent(animationCompleteEvent);
-            }, 250 * mainElements.length);
-        }
-
-        if (bottomSeparator) {
-            setTimeout(() => {
-                bottomSeparator.classList.add('visible');
-            }, 200 * (mainElements.length + 1));
-        }
-
-        if (navigation) {
-            setTimeout(() => {
-                navigation.classList.add('visible');
-            }, 250 * (mainElements.length + 2));
-        }
+                document.dispatchEvent(new Event('animationComplete'));
+            }
+            if (bottomSeparator) bottomSeparator.classList.add('visible');
+            if (navigation) navigation.classList.add('visible');
+        });
     }, 2000);
-}
-
-function handleRegularPageAnimations() {
-    const revealElements = document.querySelectorAll('.reveal-element');
-    revealElements.forEach((element, index) => {
-        setTimeout(() => {
-            element.classList.add('visible');
-        }, 250 * index);
-    });
 }
 
 document.addEventListener('DOMContentLoaded', function() {
     if (window.location.pathname === '/') {
         handleIndexPageAnimations();
     } else {
-        handleRegularPageAnimations();
+        revealElements(document.querySelectorAll('.reveal-element'));
     }
 });

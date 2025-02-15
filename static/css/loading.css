@@ -8,7 +8,7 @@
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding-top: 30vh; /* This will position it ~25% from the top of the viewport */
+    padding-top: 30vh;
     z-index: 1000;
 }
 
@@ -37,19 +37,10 @@
 .reveal-element {
     opacity: 0;
     transform: translateY(20px);
+    transition: opacity 1s ease, transform 1s ease;
 }
 
 .reveal-element.visible {
-    animation: reveal 1s ease forwards;
-}
-
-@keyframes reveal {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    opacity: 1;
+    transform: translateY(0);
 }
