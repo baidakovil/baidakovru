@@ -1,74 +1,97 @@
-/* Form Components */
-.form-group {
-    margin-bottom: 1rem;
-}
-
+/* Base Form Components */
 .form-group label {
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--spacing-sm);
 }
 
 .form-group input,
 .form-group textarea {
     width: 100%;
     box-sizing: border-box;
-    padding: 0.5rem;
-    color: black;
+    padding: var(--spacing-sm);
+    color: var(--color-text);
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: var(--border-radius);
     font-family: inherit;
     font-size: 1rem;
 }
 
-/* Add placeholder styling */
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
 .form-group input::placeholder,
 .form-group textarea::placeholder {
     color: #888;
 }
 
-.form-group textarea {
-    resize: vertical;
-}
-
+/* Button Styles */
 button[type="submit"] {
+    padding: var(--spacing-sm) var(--spacing-md);
     background-color: var(--color-primary);
     color: white;
-    padding: 0.5rem 1rem;
     border: none;
     border-radius: var(--border-radius);
     cursor: pointer;
     font-size: 1rem;
+    transition: background-color var(--transition-timing);
+    margin-top: var(--spacing-sm);
 }
 
 button[type="submit"]:hover {
     background-color: var(--color-primary-hover);
 }
 
-/* Error and Message Components */
-.error-message {
-    color: #721c24;
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    padding: 1rem;
-    margin: 1rem 0;
-    border-radius: 4px;
+button[type="submit"]:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Message Components */
+.form-message {
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
     text-align: center;
 }
 
-.form-message {
-    margin-top: 1rem;
-    padding: 1rem;
-    border-radius: var(--border-radius);
-}
-
-.success {
+.form-message.success {
     background-color: #d4edda;
     color: var(--color-success);
     border: 1px solid #c3e6cb;
 }
 
-.error {
+.form-message.error {
     background-color: #f8d7da;
     color: var(--color-error);
     border: 1px solid #f5c6cb;
+}
+
+/* Contact Form Specific Styles */
+
+.contact-form .turnstile-container {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: var(--spacing-sm);
+    color: transparent;
+}
+
+/* Success Message Animation */
+.contact-form .form-message.success {
+    padding: var(--spacing-lg);
+    max-width: 100%;
+    font-size: 1.2rem;
+    animation: fadeIn var(--transition-timing);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

@@ -6,9 +6,11 @@ import sys
 from traceback import format_exc
 from typing import Dict, List, Optional, Tuple, Union
 
+import requests
 from dotenv import load_dotenv
-from flask import Flask, Response, g, jsonify, render_template, request
-from flask_babel import Babel, gettext
+from flask import Flask, Response, current_app, g, jsonify, render_template, request
+from flask_babel import Babel
+from flask_babel import gettext as _
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_mail import Mail, Message
@@ -30,6 +32,10 @@ logger.info('Application startup')
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 app.config['SECRET_KEY'] = SECRET_KEY
+
+# Add Turnstile config
+app.config['TURNSTILE_SITE_KEY'] = os.getenv('TURNSTILE_SITE_KEY')
+app.config['TURNSTILE_SECRET_KEY'] = os.getenv('TURNSTILE_SECRET_KEY')
 
 # Mail configuration
 app.config.update(
@@ -93,6 +99,29 @@ def contact():
     message_type = None
 
     if request.method == 'POST':
+        # Verify Turnstile token
+        token = request.form.get('cf-turnstile-response')
+        if not token:
+            return render_template(
+                'contact.html',
+                message=_('Пожалуйста, подтвердите, что вы человек'),
+                message_type='error',
+            )
+
+        data = {'secret': current_app.config['TURNSTILE_SECRET_KEY'], 'response': token}
+
+        resp = requests.post(
+            'https://challenges.cloudflare.com/turnstile/v0/siteverify', data=data
+        )
+        result = resp.json()
+
+        if not result['success']:
+            return render_template(
+                'contact.html',
+                message=_('Проверка не пройдена. Попробуйте еще раз'),
+                message_type='error',
+            )
+
         try:
             email = request.form['email']
             subject = request.form['subject']
@@ -211,8 +240,7 @@ def get_updates() -> Tuple[Response, int]:
 def get_event_types():
     """Return all event types with translations based on current locale."""
     translations = {
-        event_type: gettext(description)
-        for event_type, description in EVENT_TYPES.items()
+        event_type: _(description) for event_type, description in EVENT_TYPES.items()
     }
     return jsonify(translations)
 

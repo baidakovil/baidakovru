@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-02-15 10:58+0300\n"
+"POT-Creation-Date: 2025-02-15 12:58+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -135,11 +135,11 @@ msgid ""
 "    <p>Пока!</p>"
 msgstr ""
 
-#: templates/contact.html:3 templates/contact.html:5
+#: templates/contact.html:3 templates/contact.html:4
 msgid "Написать мне"
 msgstr ""
 
-#: templates/contact.html:11
+#: templates/contact.html:10
 msgid "Сообщение:"
 msgstr ""
 
@@ -147,8 +147,16 @@ msgstr ""
 msgid "Не забудьте указать адрес для ответа"
 msgstr ""
 
-#: templates/contact.html:16
+#: templates/contact.html:21 templates/contact.html:37
 msgid "Отправить"
+msgstr ""
+
+#: templates/contact.html:38
+msgid "Подождите..."
+msgstr ""
+
+#: templates/contact.html:103
+msgid "Сообщение успешно отправлено!"
 msgstr ""
 
 #: templates/index.html:3

@@ -1,24 +1,127 @@
 {% extends "base.html" %}
 
 {% block title %}{{ _('Написать мне') }}{% endblock %}
-
 {% block page_title %}{{ _('Написать мне') }}{% endblock %}
 
 {% block content %}
 <div class="content-container">
-    <form id="contact-form" method="POST" action="{{ url_for('contact') }}">
+    <form id="contact-form" class="contact-form" method="POST" action="{{ url_for('contact') }}">
         <div class="form-group">
             <label for="message">{{ _('Сообщение:') }}</label>
-            <textarea id="message" name="message" rows="5" required placeholder="{{ _('Не забудьте указать адрес для ответа') }}"></textarea>
+            <textarea id="message" name="message" required 
+                placeholder="{{ _('Не забудьте указать адрес для ответа') }}"></textarea>
         </div>
+        
         <input type="hidden" id="subject" name="subject" value="SubjectPlaceholder">
         <input type="hidden" id="email" name="email" value="EmailPlaceholder">
-        <button type="submit">{{ _('Отправить') }}</button>
-        {% if message %}
-        <div class="form-message {{ message_type }}">
-            {{ message }}
+        
+        <div id="turnstile-container" class="turnstile-container" hidden></div>
+        
+        <div class="form-actions">
+            <button type="submit" id="submit-button">{{ _('Отправить') }}</button>
         </div>
+
+        {% if message %}
+        <div class="form-message {{ message_type }}">{{ message }}</div>
         {% endif %}
     </form>
 </div>
+
+<script>
+const form = {
+    element: document.getElementById('contact-form'),
+    button: document.getElementById('submit-button'),
+    turnstileContainer: document.getElementById('turnstile-container'),
+    messageArea: document.getElementById('message'),
+    buttonText: {
+        default: '{{ _("Отправить") }}',
+        loading: '{{ _("Подождите...") }}'
+    }
+};
+
+let turnstile = {
+    loaded: false,
+    widgetId: null
+};
+
+async function handleSubmit(e) {
+    e.preventDefault();
+    if (form.element.dataset.submitting === 'true') return;
+
+    try {
+        setSubmitting(true);
+        await showCaptcha();
+    } catch (error) {
+        console.error('Form submission error:', error);
+        setSubmitting(false);
+    }
+}
+
+async function showCaptcha() {
+    form.turnstileContainer.hidden = false;
+
+    if (!turnstile.loaded) {
+        await loadTurnstileScript();
+        turnstile.loaded = true;
+    }
+
+    if (turnstile.widgetId) {
+        window.turnstile.reset(turnstile.widgetId);
+    }
+
+    turnstile.widgetId = window.turnstile.render('#turnstile-container', {
+        sitekey: '{{ config.TURNSTILE_SITE_KEY }}',
+        callback: submitForm,
+        'error-callback': () => setSubmitting(false)
+    });
+}
+
+async function submitForm(token) {
+    const formData = new FormData(form.element);
+    formData.append('cf-turnstile-response', token);
+
+    try {
+        const response = await fetch('{{ url_for("contact") }}', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            showSuccess();
+        } else {
+            throw new Error('Submit failed');
+        }
+    } catch (error) {
+        console.error('Submission error:', error);
+        setSubmitting(false);
+    }
+}
+
+function showSuccess() {
+    form.element.innerHTML = `
+        <div class="form-message success">
+            {{ _("Сообщение успешно отправлено!") }}
+        </div>
+    `;
+}
+
+function setSubmitting(isSubmitting) {
+    form.element.dataset.submitting = isSubmitting;
+    form.button.disabled = isSubmitting;
+    form.button.textContent = isSubmitting ? form.buttonText.loading : form.buttonText.default;
+}
+
+function loadTurnstileScript() {
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+        script.async = script.defer = true;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+    });
+}
+
+form.element.addEventListener('submit', handleSubmit);
+</script>
 {% endblock %}
