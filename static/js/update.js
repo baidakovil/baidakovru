@@ -15,20 +15,37 @@ class UpdatesManager {
     constructor() {
         this.container = document.querySelector('#updates-content');
         this.eventTypes = {};
+        this.loadedData = null;
     }
 
     async init() {
         try {
-            // Load event types first
-            const response = await fetch(CONFIG.API_ENDPOINTS.eventTypes);
-            this.eventTypes = await response.json();
+            // Start loading data immediately
+            const [eventTypes, updates] = await Promise.all([
+                this.fetchEventTypes(),
+                this.fetchUpdates()
+            ]);
             
-            // Then load and render updates
-            const data = await this.fetchUpdates();
-            this.renderUpdates(data);
+            this.eventTypes = eventTypes;
+            this.loadedData = updates;
+            
+            // Wait for animation complete event
+            await this.waitForAnimation();
+            this.renderUpdates(this.loadedData);
         } catch (error) {
             this.handleError(error);
         }
+    }
+
+    async fetchEventTypes() {
+        const response = await fetch(CONFIG.API_ENDPOINTS.eventTypes);
+        return response.json();
+    }
+
+    waitForAnimation() {
+        return new Promise(resolve => {
+            document.addEventListener('animationComplete', () => resolve(), { once: true });
+        });
     }
 
     async fetchUpdates() {
@@ -184,8 +201,9 @@ class UpdatesManager {
         if (!this.container) {
             throw new Error('Updates container not found');
         }
-        this.container.innerHTML = '';
         
+        // Prepare content while container is still invisible
+        this.container.innerHTML = '';
         data.forEach(platform => {
             const row = this.createUpdateRow(platform);
             this.container.appendChild(row);

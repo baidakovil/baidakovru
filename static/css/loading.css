@@ -1,0 +1,55 @@
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 30vh; /* This will position it ~25% from the top of the viewport */
+    z-index: 1000;
+}
+
+.loading-ring {
+    width: 50px;
+    height: 50px;
+    opacity: 0.2;
+    animation: ring-scale 2s ease-in-out forwards;
+}
+
+@keyframes ring-scale {
+    0% {
+        transform: scale(1);
+        opacity: 0.2;
+    }
+    50% {
+        opacity: 0.1;
+    }
+    100% {
+        transform: scale(7);
+        opacity: 0;
+    }
+}
+
+/* Content reveal animations */
+.reveal-element {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.reveal-element.visible {
+    animation: reveal 1s ease forwards;
+}
+
+@keyframes reveal {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

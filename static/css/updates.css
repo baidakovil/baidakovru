@@ -3,12 +3,24 @@
     max-width: var(--max-content-width);
     margin: 0 auto;
     padding: 0 var(--container-padding);
+    opacity: 0; /* Ensure the entire container starts invisible */
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    will-change: opacity, transform;
+}
+
+.updates-container.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .updates-grid {
     display: flex;
     flex-direction: column;
     width: 100%;
+    min-height: 150px; /* Increase reserved space */
+    opacity: 1 !important; /* Prevent child opacity inheritance */
+    transform: none !important; /* Prevent child transform inheritance */
 }
 
 .updates-header {
@@ -18,12 +30,16 @@
     margin-bottom: var(--spacing-md);
     font-weight: bold;
     width: 100%;
+    opacity: 1 !important;
+    transform: none !important;
 }
 
 .updates-content {
     display: flex;
     flex-direction: column;
     width: 100%;
+    opacity: 1 !important;
+    transform: none !important;
 }
 
 .updates-row {
