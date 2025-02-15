@@ -108,7 +108,6 @@ h1 {
         margin: 0 auto;
         margin-top: var(--spacing-md);
         margin-bottom: var(--spacing-md);
-        align-content: left;
     }
 
     .navigation {
