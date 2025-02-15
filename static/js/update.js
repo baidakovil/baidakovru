@@ -6,7 +6,7 @@ const CONFIG = {
     },
     ANIMATION: {
         DURATION: 5000,
-        SCROLL_MARGIN: 50,
+        SCROLL_MARGIN: 70,
         SCROLL_THRESHOLD: 5
     }
 };

@@ -87,7 +87,7 @@ def format_full_date(timestamp_str: str, locale: str = 'ru') -> str:
     try:
         date = datetime.strptime(timestamp_str, DATETIME_FORMAT['db'])
         # First, let's see what we get from format_date
-        formatted_date = format_date(date, "EEEE, d MMMM y")
+        formatted_date = format_date(date, "d MMMM y")
         return formatted_date
 
     except (ValueError, TypeError) as e:

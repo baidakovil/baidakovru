@@ -4,7 +4,8 @@
     --spacing-sm: 10px;
     --spacing-md: 20px;
     --spacing-lg: 25px;
-    --spacing-xl: 60px;
+    --spacing-xl: 45px;
+    --spacing-xs: 5px; /* New spacing variable */
     
     /* Colors */
     --color-primary: #36c;
@@ -39,7 +40,6 @@ body {
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
     text-align: left;
-    margin-bottom: 20px;
     white-space: nowrap;
 }
 
@@ -54,21 +54,22 @@ a:hover {
 }
 
 /* Container layouts */
-.header-container, .content-container {
+.header-container, .content-container{
     max-width: var(--max-content-width);
     margin: 0 auto;
-    padding: 0 var(--container-padding);
-}
-
-.header-container {
     margin-top: var(--spacing-xl);
     margin-bottom: var(--spacing-xl);
+    padding: 0 var(--container-padding); /* Ensure padding is applied */
+}
+
+h1 {
+    margin: 0;
 }
 
 .separator {
     width: var(--max-content-width);
     max-width: 100%;
-    margin: 2rem auto;
+    margin: var(--spacing-md) auto;
     padding: 0 var(--container-padding);
     box-sizing: border-box;
 }
@@ -76,7 +77,7 @@ a:hover {
 /* Navigation Component */
 .navigation {
     text-align: center;
-    margin: 1rem 0;
+    margin-top:  var(--spacing-xl);
 }
 
 .navigation a {
@@ -96,26 +97,25 @@ a:hover {
 }
 
 /* Media Queries */
+/* Media Queries */
 @media screen and (max-width: 768px) {
     .site-title, .page-title {
         font-size: 13px;
     }
 
     .header-container, .content-container {
-        padding: var(--spacing-lg);
+        width: 92%;
+        margin: 0 auto;
+        margin-top: var(--spacing-md);
+        margin-bottom: var(--spacing-md);
+        align-content: left;
     }
 
-    .header-container {
-        margin: 0;
-        width: 100%;
-    }
-
-    .content-container {
-        max-width: 100%;
+    .navigation {
+        margin-top: var(--spacing-lg);
     }
 
     .separator {
         width: 92%;
-        margin: 2rem auto;
     }
 }
