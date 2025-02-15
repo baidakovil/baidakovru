@@ -200,7 +200,7 @@ def get_updates() -> Tuple[Response, int]:
             for platform_id, platform_name, formatted_datetime, update_desc, update_event, platform_url in updates
         ]
 
-        return jsonify(data)
+        return jsonify(data), 200
     except Exception as e:
         logger.error(f'Error fetching updates: {str(e)}\n{format_exc()}')
         return jsonify({'error': 'Internal Server Error'}), 500
