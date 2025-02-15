@@ -135,7 +135,7 @@
 }
 
 @media screen and (max-width: 768px) {
-    .updates-container {
+    .updates-container, .header-container {
         max-width: 92%;
         padding: 0 var(--spacing-sm);
     }
@@ -147,20 +147,12 @@
 
     .updates-header {
         margin: 0 auto;
-        margin-bottom: var(--spacing-xs); /* Adjusted spacing */
+        margin-bottom: var(--spacing-xs);
         
         div {
-            margin-top: var(--spacing-xs); /* Adjusted spacing */
+            margin-top: var(--spacing-xs);
             white-space: normal;
         }
-    }
-
-    .updates-row {
-        grid-template-columns: 1.7fr 2fr 0.1fr;
-    }
-    
-    .updates-row.processed {
-        grid-template-columns: 3.7fr 0fr 0.1fr;
     }
 
     @keyframes scrollText {
