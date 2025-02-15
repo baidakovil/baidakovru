@@ -13,11 +13,17 @@
     width: 100%;
     box-sizing: border-box;
     padding: 0.5rem;
-    color: white;;
+    color: black;
     border: 1px solid #ddd;
     border-radius: 4px;
     font-family: inherit;
     font-size: 1rem;
+}
+
+/* Add placeholder styling */
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #888;
 }
 
 .form-group textarea {

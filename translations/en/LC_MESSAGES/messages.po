@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  1.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-02-12 23:33+0300\n"
+"POT-Creation-Date: 2025-02-15 10:58+0300\n"
 "PO-Revision-Date: 2024-01-01 00:00+0000\n"
 "Last-Translator: YOUR NAME <your@email.com>\n"
 "Language: en\n"
@@ -149,6 +149,10 @@ msgstr "Contact"
 msgid "Сообщение:"
 msgstr "Message:"
 
+#: templates/contact.html:12
+msgid "Не забудьте указать адрес для ответа"
+msgstr "Don't forget to provide the reply address"
+
 #: templates/contact.html:16
 msgid "Отправить"
 msgstr "Send"
@@ -172,3 +176,4 @@ msgstr "Last update"
 #: templates/index.html:22
 msgid "Написать"
 msgstr "Contact"
+

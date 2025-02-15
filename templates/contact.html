@@ -9,7 +9,7 @@
     <form id="contact-form" method="POST" action="{{ url_for('contact') }}">
         <div class="form-group">
             <label for="message">{{ _('Сообщение:') }}</label>
-            <textarea id="message" name="message" rows="5" required></textarea>
+            <textarea id="message" name="message" rows="5" required placeholder="{{ _('Не забудьте указать адрес для ответа') }}"></textarea>
         </div>
         <input type="hidden" id="subject" name="subject" value="SubjectPlaceholder">
         <input type="hidden" id="email" name="email" value="EmailPlaceholder">
