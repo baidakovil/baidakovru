@@ -3,8 +3,22 @@ from datetime import datetime, time
 import pytz
 from flask_babel import format_date, format_datetime
 from flask_babel import gettext as _
+from flask_babel import pgettext
 
 from .config import DATETIME_FORMAT
+
+
+def pluralize(number, words):
+    if number == 1:
+        return words['singular']
+    elif 11 <= number % 100 <= 14:
+        return words['many']
+    elif number % 10 == 1:
+        return words['ones']
+    elif 2 <= number % 10 <= 4:
+        return words['few']
+    else:
+        return words['many']
 
 
 def format_time_ago(timestamp_str: str) -> str:
@@ -12,15 +26,38 @@ def format_time_ago(timestamp_str: str) -> str:
     Convert timestamp to human-readable format
     """
 
-    def pluralize(number, one, few, many):
-        if 11 <= number % 100 <= 14:
-            return many
-        elif number % 10 == 1:
-            return one
-        elif 2 <= number % 10 <= 4:
-            return few
-        else:
-            return many
+    words = {
+        'hour': {
+            'singular': pgettext('time_singular', 'час'),
+            'ones': pgettext('time', 'час'),
+            'few': pgettext('time', 'часа'),
+            'many': pgettext('time', 'часов'),
+        },
+        'day': {
+            'singular': pgettext('time_singular', 'день'),
+            'ones': pgettext('time', 'день'),
+            'few': pgettext('time', 'дня'),
+            'many': pgettext('time', 'дней'),
+        },
+        'week': {
+            'singular': pgettext('time_singular', 'неделя'),
+            'ones': pgettext('time', 'неделя'),
+            'few': pgettext('time', 'недели'),
+            'many': pgettext('time', 'недель'),
+        },
+        'month': {
+            'singular': pgettext('time_singular', 'месяц'),
+            'ones': pgettext('time', 'месяц'),
+            'few': pgettext('time', 'месяца'),
+            'many': pgettext('time', 'месяцев'),
+        },
+        'year': {
+            'singular': pgettext('time_singular', 'год'),
+            'ones': pgettext('time', 'год'),
+            'few': pgettext('time', 'года'),
+            'many': pgettext('time', 'лет'),
+        },
+    }
 
     try:
         date = datetime.strptime(timestamp_str, DATETIME_FORMAT['db'])
@@ -38,7 +75,7 @@ def format_time_ago(timestamp_str: str) -> str:
                 return _(
                     '%(hour)d %(hour_word)s назад',
                     hour=hours,
-                    hour_word=pluralize(hours, 'час', 'часа', 'часов'),
+                    hour_word=pluralize(hours, words['hour']),
                 )
             else:  # Between 9 and 24 hours
                 return _('Сегодня')
@@ -49,28 +86,34 @@ def format_time_ago(timestamp_str: str) -> str:
             return _(
                 '%(day)d %(day_word)s назад',
                 day=diff.days,
-                day_word=pluralize(diff.days, 'день', 'дня', 'дней'),
+                day_word=pluralize(diff.days, words['day']),
             )
         elif diff.days < 30:
             weeks = diff.days // 7
             return _(
                 '%(week)d %(week_word)s назад',
                 week=weeks,
-                week_word=pluralize(weeks, 'неделя', 'недели', 'недель'),
+                week_word=pluralize(weeks, words['week']),
             )
         elif diff.days < 365:
             months = diff.days // 30
+            if months == 12:
+                return _(
+                    '%(year)d %(year_word)s назад',
+                    year=1,
+                    year_word=pluralize(1, words['year']),
+                )
             return _(
                 '%(month)d %(month_word)s назад',
                 month=months,
-                month_word=pluralize(months, 'месяц', 'месяца', 'месяцев'),
+                month_word=pluralize(months, words['month']),
             )
         else:
             years = diff.days // 365
             return _(
                 '%(year)d %(year_word)s назад',
                 year=years,
-                year_word=pluralize(years, 'год', 'года', 'лет'),
+                year_word=pluralize(years, words['year']),
             )
     except Exception:
         return _('Ошибка вычисления разницы дат')

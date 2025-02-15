@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  1.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-02-15 12:58+0300\n"
+"POT-Creation-Date: 2025-02-15 23:45+0300\n"
 "PO-Revision-Date: 2024-01-01 00:00+0000\n"
 "Last-Translator: YOUR NAME <your@email.com>\n"
 "Language: en\n"
@@ -54,52 +54,152 @@ msgstr "New job"
 msgid "Новый рейс"
 msgstr "New flight"
 
-#: pyscripts/date_formatters.py:36
+#: pyscripts/date_formatters.py:31
+msgctxt "time_singular"
+msgid "час"
+msgstr "hour"
+
+#: pyscripts/date_formatters.py:32
+msgctxt "time"
+msgid "час"
+msgstr "hours"
+
+#: pyscripts/date_formatters.py:33
+msgctxt "time"
+msgid "часа"
+msgstr "ours"
+
+#: pyscripts/date_formatters.py:34
+msgctxt "time"
+msgid "часов"
+msgstr "hours"
+
+#: pyscripts/date_formatters.py:37
+msgctxt "time_singular"
+msgid "день"
+msgstr "day"
+
+#: pyscripts/date_formatters.py:38
+msgctxt "time"
+msgid "день"
+msgstr "days"
+
+#: pyscripts/date_formatters.py:39
+msgctxt "time"
+msgid "дня"
+msgstr "days"
+
+#: pyscripts/date_formatters.py:40
+msgctxt "time"
+msgid "дней"
+msgstr "days"
+
+#: pyscripts/date_formatters.py:43
+msgctxt "time_singular"
+msgid "неделя"
+msgstr "week"
+
+#: pyscripts/date_formatters.py:44
+msgctxt "time"
+msgid "неделя"
+msgstr "weeks"
+
+#: pyscripts/date_formatters.py:45
+msgctxt "time"
+msgid "недели"
+msgstr "weeks"
+
+#: pyscripts/date_formatters.py:46
+msgctxt "time"
+msgid "недель"
+msgstr "weeks"
+
+#: pyscripts/date_formatters.py:49
+msgctxt "time_singular"
+msgid "месяц"
+msgstr "month"
+
+#: pyscripts/date_formatters.py:50
+msgctxt "time"
+msgid "месяц"
+msgstr "months"
+
+#: pyscripts/date_formatters.py:51
+msgctxt "time"
+msgid "месяца"
+msgstr "months"
+
+#: pyscripts/date_formatters.py:52
+msgctxt "time"
+msgid "месяцев"
+msgstr "months"
+
+#: pyscripts/date_formatters.py:55
+msgctxt "time_singular"
+msgid "год"
+msgstr "year"
+
+#: pyscripts/date_formatters.py:56
+msgctxt "time"
+msgid "год"
+msgstr "years"
+
+#: pyscripts/date_formatters.py:57
+msgctxt "time"
+msgid "года"
+msgstr "years"
+
+#: pyscripts/date_formatters.py:58
+msgctxt "time"
+msgid "лет"
+msgstr "years"
+
+#: pyscripts/date_formatters.py:73
 msgid "Только что"
 msgstr "Just now"
 
-#: pyscripts/date_formatters.py:39
+#: pyscripts/date_formatters.py:76
 #, python-format
 msgid "%(hour)d %(hour_word)s назад"
 msgstr "%(hour)d hours ago"
 
-#: pyscripts/date_formatters.py:44
+#: pyscripts/date_formatters.py:81
 msgid "Сегодня"
 msgstr "Today"
 
-#: pyscripts/date_formatters.py:46
+#: pyscripts/date_formatters.py:83
 msgid "Вчера"
 msgstr "Yesterday"
 
-#: pyscripts/date_formatters.py:50
+#: pyscripts/date_formatters.py:87
 #, python-format
 msgid "%(day)d %(day_word)s назад"
-msgstr "%(day)d days ago"
+msgstr "%(day)d %(day_word)s ago"
 
-#: pyscripts/date_formatters.py:57
+#: pyscripts/date_formatters.py:94
 #, python-format
 msgid "%(week)d %(week_word)s назад"
-msgstr "%(week)d weeks ago"
+msgstr "%(week)d %(week_word)s ago"
 
-#: pyscripts/date_formatters.py:64
-#, python-format
-msgid "%(month)d %(month_word)s назад"
-msgstr "%(month)d months ago"
-
-#: pyscripts/date_formatters.py:71
+#: pyscripts/date_formatters.py:102 pyscripts/date_formatters.py:114
 #, python-format
 msgid "%(year)d %(year_word)s назад"
-msgstr "%(year)d years ago"
+msgstr "%(year)d %(year_word)s ago"
 
-#: pyscripts/date_formatters.py:76
+#: pyscripts/date_formatters.py:107
+#, python-format
+msgid "%(month)d %(month_word)s назад"
+msgstr "%(month)d %(month_word)s ago"
+
+#: pyscripts/date_formatters.py:119
 msgid "Ошибка вычисления разницы дат"
 msgstr "Time difference calculation error"
 
-#: pyscripts/date_formatters.py:85
+#: pyscripts/date_formatters.py:128
 msgid "Нет даты"
 msgstr "No date"
 
-#: pyscripts/date_formatters.py:95
+#: pyscripts/date_formatters.py:138
 msgid "Ошибка форматирования даты"
 msgstr "Date formatting error"
 
@@ -115,7 +215,7 @@ msgstr ""
 "<p>This site updates daily information about my latest posts in social "
 "networks and other services</p>"
 
-#: templates/base.html:27
+#: templates/base.html:40
 msgid "На главную"
 msgstr "Main"
 
@@ -153,15 +253,15 @@ msgstr "Message:"
 msgid "Не забудьте указать адрес для ответа"
 msgstr "Don't forget to provide the reply address"
 
-#: templates/contact.html:21 templates/contact.html:37
+#: templates/contact.html:21 templates/contact.html:35
 msgid "Отправить"
 msgstr "Send"
 
-#: templates/contact.html:38
+#: templates/contact.html:36
 msgid "Подождите..."
 msgstr "Please wait..."
 
-#: templates/contact.html:103
+#: templates/contact.html:37
 msgid "Сообщение успешно отправлено!"
 msgstr "The message has been sent successfully!"
 

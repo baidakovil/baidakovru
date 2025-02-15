@@ -36,11 +36,18 @@ body {
     padding: 0;
 }
 
+.title-container {
+    width: 92%; /* changed from max-width: 92% */
+    margin: 0 auto;
+    padding: 0 var(--container-padding);
+}
+
 .site-title, .page-title {
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
     text-align: left;
-    white-space: nowrap;
+    white-space: normal; /* changed from nowrap */
+    margin: 0;
 }
 
 /* Links */
@@ -97,13 +104,12 @@ h1 {
 }
 
 /* Media Queries */
-/* Media Queries */
 @media screen and (max-width: 768px) {
     .site-title, .page-title {
         font-size: 13px;
     }
 
-    .header-container, .content-container {
+    .header-container, .content-container, .title-container {
         width: 92%;
         margin: 0 auto;
         margin-top: var(--spacing-md);
@@ -117,4 +123,5 @@ h1 {
     .separator {
         width: 92%;
     }
+
 }

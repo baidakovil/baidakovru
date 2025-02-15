@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-02-15 12:58+0300\n"
+"POT-Creation-Date: 2025-02-15 23:45+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,52 +57,152 @@ msgstr ""
 msgid "Новый рейс"
 msgstr ""
 
-#: pyscripts/date_formatters.py:36
-msgid "Только что"
+#: pyscripts/date_formatters.py:31
+msgctxt "time_singular"
+msgid "час"
+msgstr ""
+
+#: pyscripts/date_formatters.py:32
+msgctxt "time"
+msgid "час"
+msgstr ""
+
+#: pyscripts/date_formatters.py:33
+msgctxt "time"
+msgid "часа"
+msgstr ""
+
+#: pyscripts/date_formatters.py:34
+msgctxt "time"
+msgid "часов"
+msgstr ""
+
+#: pyscripts/date_formatters.py:37
+msgctxt "time_singular"
+msgid "день"
+msgstr ""
+
+#: pyscripts/date_formatters.py:38
+msgctxt "time"
+msgid "день"
 msgstr ""
 
 #: pyscripts/date_formatters.py:39
+msgctxt "time"
+msgid "дня"
+msgstr ""
+
+#: pyscripts/date_formatters.py:40
+msgctxt "time"
+msgid "дней"
+msgstr ""
+
+#: pyscripts/date_formatters.py:43
+msgctxt "time_singular"
+msgid "неделя"
+msgstr ""
+
+#: pyscripts/date_formatters.py:44
+msgctxt "time"
+msgid "неделя"
+msgstr ""
+
+#: pyscripts/date_formatters.py:45
+msgctxt "time"
+msgid "недели"
+msgstr ""
+
+#: pyscripts/date_formatters.py:46
+msgctxt "time"
+msgid "недель"
+msgstr ""
+
+#: pyscripts/date_formatters.py:49
+msgctxt "time_singular"
+msgid "месяц"
+msgstr ""
+
+#: pyscripts/date_formatters.py:50
+msgctxt "time"
+msgid "месяц"
+msgstr ""
+
+#: pyscripts/date_formatters.py:51
+msgctxt "time"
+msgid "месяца"
+msgstr ""
+
+#: pyscripts/date_formatters.py:52
+msgctxt "time"
+msgid "месяцев"
+msgstr ""
+
+#: pyscripts/date_formatters.py:55
+msgctxt "time_singular"
+msgid "год"
+msgstr ""
+
+#: pyscripts/date_formatters.py:56
+msgctxt "time"
+msgid "год"
+msgstr ""
+
+#: pyscripts/date_formatters.py:57
+msgctxt "time"
+msgid "года"
+msgstr ""
+
+#: pyscripts/date_formatters.py:58
+msgctxt "time"
+msgid "лет"
+msgstr ""
+
+#: pyscripts/date_formatters.py:73
+msgid "Только что"
+msgstr ""
+
+#: pyscripts/date_formatters.py:76
 #, python-format
 msgid "%(hour)d %(hour_word)s назад"
 msgstr ""
 
-#: pyscripts/date_formatters.py:44
+#: pyscripts/date_formatters.py:81
 msgid "Сегодня"
 msgstr ""
 
-#: pyscripts/date_formatters.py:46
+#: pyscripts/date_formatters.py:83
 msgid "Вчера"
 msgstr ""
 
-#: pyscripts/date_formatters.py:50
+#: pyscripts/date_formatters.py:87
 #, python-format
 msgid "%(day)d %(day_word)s назад"
 msgstr ""
 
-#: pyscripts/date_formatters.py:57
+#: pyscripts/date_formatters.py:94
 #, python-format
 msgid "%(week)d %(week_word)s назад"
 msgstr ""
 
-#: pyscripts/date_formatters.py:64
-#, python-format
-msgid "%(month)d %(month_word)s назад"
-msgstr ""
-
-#: pyscripts/date_formatters.py:71
+#: pyscripts/date_formatters.py:102 pyscripts/date_formatters.py:114
 #, python-format
 msgid "%(year)d %(year_word)s назад"
 msgstr ""
 
-#: pyscripts/date_formatters.py:76
+#: pyscripts/date_formatters.py:107
+#, python-format
+msgid "%(month)d %(month_word)s назад"
+msgstr ""
+
+#: pyscripts/date_formatters.py:119
 msgid "Ошибка вычисления разницы дат"
 msgstr ""
 
-#: pyscripts/date_formatters.py:85
+#: pyscripts/date_formatters.py:128
 msgid "Нет даты"
 msgstr ""
 
-#: pyscripts/date_formatters.py:95
+#: pyscripts/date_formatters.py:138
 msgid "Ошибка форматирования даты"
 msgstr ""
 
@@ -116,7 +216,7 @@ msgid ""
 "соцсетях и в других сервисах</p>"
 msgstr ""
 
-#: templates/base.html:27
+#: templates/base.html:40
 msgid "На главную"
 msgstr ""
 
@@ -147,15 +247,15 @@ msgstr ""
 msgid "Не забудьте указать адрес для ответа"
 msgstr ""
 
-#: templates/contact.html:21 templates/contact.html:37
+#: templates/contact.html:21 templates/contact.html:35
 msgid "Отправить"
 msgstr ""
 
-#: templates/contact.html:38
+#: templates/contact.html:36
 msgid "Подождите..."
 msgstr ""
 
-#: templates/contact.html:103
+#: templates/contact.html:37
 msgid "Сообщение успешно отправлено!"
 msgstr ""
 
