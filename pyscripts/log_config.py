@@ -24,7 +24,7 @@ def setup_logging():
     if not root_logger.handlers:
         # Create a rotating file handler for DEBUG and above
         file_handler = RotatingFileHandler(
-            f"{log_dir}/app.log", maxBytes=10240, backupCount=5
+            f"{log_dir}/app.log", maxBytes=1048576, backupCount=5
         )
         file_handler.setLevel(logging.DEBUG)
         file_handler.setFormatter(file_formatter)
