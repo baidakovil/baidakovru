@@ -20,7 +20,21 @@ class UpdatesManager {
 
     async init() {
         try {
-            // Start loading data immediately
+            let animationComplete = false;
+            let dataReady = false;
+            
+            // Set up animation listener
+            const animationPromise = new Promise(resolve => {
+                document.addEventListener('animationComplete', () => {
+                    animationComplete = true;
+                    if (dataReady && this.loadedData) {
+                        this.renderUpdates(this.loadedData);
+                    }
+                    resolve();
+                }, { once: true });
+            });
+            
+            // Load data
             const [eventTypes, updates] = await Promise.all([
                 this.fetchEventTypes(),
                 this.fetchUpdates()
@@ -28,10 +42,16 @@ class UpdatesManager {
             
             this.eventTypes = eventTypes;
             this.loadedData = updates;
+            dataReady = true;
             
-            // Wait for animation complete event
-            await this.waitForAnimation();
-            this.renderUpdates(this.loadedData);
+            // If animation already completed, render immediately
+            if (animationComplete) {
+                this.renderUpdates(this.loadedData);
+            }
+            
+            // Still wait for animation to complete for proper sequencing
+            await animationPromise;
+            
         } catch (error) {
             this.handleError(error);
         }
