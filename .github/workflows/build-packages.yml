@@ -1,0 +1,45 @@
+name: Build Python Packages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'requirements.txt'
+  workflow_dispatch:
+
+jobs:
+  build-wheels:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install wheel builder
+        run: pip install wheel
+      
+      - name: Build wheels
+        run: |
+          mkdir -p dist-packages
+          pip wheel -r requirements.txt --wheel-dir=./dist-packages
+      
+      - name: Create archive
+        run: tar -czf packages.tar.gz --exclude='*.pyc' --exclude='__pycache__' ./dist-packages
+      
+      - name: Upload to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: packages.tar.gz
+          tag_name: packages-latest
+          name: Pre-built Python Packages
+          body: |
+            Pre-built wheels for all dependencies in requirements.txt
+            Generated from commit: ${{ github.sha }}
+            Date: ${{ github.event.head_commit.timestamp }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
