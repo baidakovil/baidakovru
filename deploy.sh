@@ -15,10 +15,11 @@ NGINX_CONFIG_PATH="/etc/nginx/"
 REPO_URL="https://github.com/baidakovil/baidakovru.git"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 VENV_DIR="$APP_DIR/venv"
+PACKAGES_URL="https://github.com/baidakovil/baidakovru/releases/download/packages-latest/packages.tar.gz"
 
 # Update system and install required packages
 sudo apt update
-sudo apt install -y nginx python3-venv python3-pip python3-certbot-nginx git certbot
+sudo apt install -y nginx python3-venv python3-pip python3-certbot-nginx git certbot curl
 
 # Backup current version
 sudo mkdir -p $BACKUP_DIR
@@ -50,8 +51,24 @@ if [ ! -d "$VENV_DIR" ]; then
 fi
 source $VENV_DIR/bin/activate
 
-# Install or upgrade all dependencies
-sudo $VENV_DIR/bin/pip install --upgrade -r requirements.txt
+# Download and install pre-built packages
+echo "Downloading pre-built packages from CI..."
+if curl -f -L -o packages.tar.gz "$PACKAGES_URL" 2>/dev/null; then
+    echo "Pre-built packages found. Extracting..."
+    tar -xzf packages.tar.gz
+    
+    echo "Installing from local packages (offline mode)..."
+    sudo $VENV_DIR/bin/pip install --no-index --find-links=./dist-packages -r requirements.txt
+    
+    echo "Cleaning up..."
+    rm -rf packages.tar.gz dist-packages/
+    
+    echo "Packages installed from pre-built cache."
+else
+    echo "Warning: Could not download pre-built packages from CI."
+    echo "Attempting to install from PyPI (if available)..."
+    sudo $VENV_DIR/bin/pip install --upgrade -r requirements.txt
+fi
 
 # Create and set up .env file
 echo "$ENV_FILE" > $APP_DIR/.env
