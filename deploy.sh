@@ -51,7 +51,7 @@ fi
 source $VENV_DIR/bin/activate
 
 # Install or upgrade all dependencies
-sudo $VENV_DIR/bin/pip install --upgrade -r requirements.txt --index-url https://mirror.yandex.ru/pypi/web/simple/
+sudo $VENV_DIR/bin/pip install --upgrade -r requirements.txt
 
 # Create and set up .env file
 echo "$ENV_FILE" > $APP_DIR/.env
