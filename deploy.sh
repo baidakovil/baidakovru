@@ -50,6 +50,10 @@ if [ ! -d "$VENV_DIR" ]; then
 fi
 source $VENV_DIR/bin/activate
 
+# Russian
+sudo $VENV_DIR/bin/pip config set global.index-url https://mirror.yandex.ru/pypi/web/simple/
+sudo $VENV_DIR/bin/pip config set global.trusted-host mirror.yandex.ru
+
 # Install or upgrade all dependencies
 sudo $VENV_DIR/bin/pip install --upgrade -r requirements.txt
 
