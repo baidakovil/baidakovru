@@ -1,4 +1,5 @@
 .env
+.env.github-secrets
 *.sensitive
 __pycache__
 venv
