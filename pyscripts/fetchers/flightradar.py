@@ -1,6 +1,6 @@
 from datetime import datetime
 
-import requests
+from curl_cffi import requests
 
 from ..models import FetchResult
 from .base import BaseFetcher, error_handler, require_config
@@ -23,12 +23,14 @@ class FlightRadar24Fetcher(BaseFetcher):
     def fetch(self) -> FetchResult:
         """Fetch and parse latest FlightRadar24 flight."""
         url = self.config.get_url()
-        response = requests.get(url, headers=self.config.headers)
+
+        try:
+            response = requests.get(url, impersonate='chrome120', timeout=20)
+        except Exception as e:
+            return self.create_error_result(f'FlightRadar24 request error: {e}')
 
         if response.status_code != 200:
-            return self.create_error_result(
-                f'FlightRadar24 error: {response.status_code}'
-            )
+            return self.create_error_result(f'FlightRadar24 error: {response.status_code}')
 
         html_content = response.text
         result = self.create_base_result(html_content)
