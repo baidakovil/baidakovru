@@ -129,15 +129,41 @@ def contact():
 
             # Debug logging: record form keys and message length/content summary
             try:
-                logger.info(
-                    "Contact form fields: keys=%s",
-                    list(request.form.keys()),
-                )
+                logger.info("Contact form fields: keys=%s", list(request.form.keys()))
                 logger.info(
                     "Contact request headers: Content-Type=%s Content-Length=%s",
                     request.content_type,
                     request.content_length,
                 )
+
+                # Log each form key/value with repr to reveal hidden characters
+                try:
+                    for k, v in request.form.items():
+                        logger.info("Contact form item: %s = %r", k, v)
+                except Exception:
+                    logger.info("Failed to iterate request.form items")
+
+                # Log files keys if any
+                try:
+                    logger.info("Contact files keys: %s", list(request.files.keys()))
+                except Exception:
+                    logger.info("Failed to list request.files keys")
+
+                # Dump a truncated raw request body for inspection (bytes)
+                try:
+                    raw = request.get_data(cache=True)
+                    if raw is None:
+                        logger.info("Raw request body: None")
+                    else:
+                        # limit the dump size
+                        max_dump = 2000
+                        dump = raw[:max_dump]
+                        logger.info("Raw request body (first %s bytes): %r", len(dump), dump)
+                        if len(raw) > max_dump:
+                            logger.info("(truncated raw body, total %s bytes)", len(raw))
+                except Exception as e:
+                    logger.info("Failed to get raw request body: %s", e)
+
                 logger.info(
                     "Contact form values: email=%r subject=%r message_len=%s",
                     email,
