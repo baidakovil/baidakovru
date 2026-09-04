@@ -73,7 +73,7 @@ echo "Script executed"
 # ----------------------------------------
 # This is the single file needed to run the site.
 # Project structure matters. Input data is in 
-# To manage this, do
-# chmod +x /path/to/deploy_site.sh
-# /path/to/deploy_site.sh
+# To manage this, create server.sensitive file do
+# chmod +x ~/git/baidakovru/shscripts/run_deploy.sh 
+# ~/git/baidakovru/shscripts/run_deploy.sh  
 # ----------------------------------------

@@ -18,6 +18,6 @@ echo "Script executed"
 
 # ----------------------------------------
 # To manage this, do
-# chmod +x ./shscripts/set_gh_env.sh
-# ./shscripts/set_gh_env.sh
+# chmod +x ~/git/baidakovru/shscripts/set_gh_env.sh
+# ~/git/baidakovru/shscripts/set_gh_env.sh
 # ----------------------------------------
