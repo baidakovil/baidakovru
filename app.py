@@ -129,23 +129,23 @@ def contact():
 
             # Debug logging: record form keys and message length/content summary
             try:
-                logger.debug(
+                logger.info(
                     "Contact form fields: keys=%s",
                     list(request.form.keys()),
                 )
-                logger.debug(
+                logger.info(
                     "Contact request headers: Content-Type=%s Content-Length=%s",
                     request.content_type,
                     request.content_length,
                 )
-                logger.debug(
+                logger.info(
                     "Contact form values: email=%r subject=%r message_len=%s",
                     email,
                     subject,
                     len(message_text) if message_text is not None else 'None',
                 )
             except Exception:
-                logger.debug('Failed to log contact form debug info')
+                logger.info('Failed to log contact form debug info')
 
             # Проверяем конфигурацию
             required_settings = [
