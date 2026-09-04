@@ -20,6 +20,12 @@ async function handleSubmit(e) {
 
     try {
         setSubmitting(true);
+        // Capture field values now — Turnstile widget may mutate DOM later.
+        form.snapshot = {
+            message: form.messageArea ? form.messageArea.value : (document.getElementById('message') ? document.getElementById('message').value : ''),
+            subject: document.getElementById('subject') ? document.getElementById('subject').value : '',
+            email: document.getElementById('email') ? document.getElementById('email').value : ''
+        };
         await showCaptcha();
     } catch (error) {
         console.error('Form submission error:', error);
@@ -47,24 +53,37 @@ async function showCaptcha() {
 }
 
 async function submitForm(token) {
-    const formData = new FormData(form.element);
-    formData.append('cf-turnstile-response', token);
-
+    // Build FormData explicitly from input values to avoid cases where
+    // FormData(form.element) may capture empty values due to widget interactions.
+    const fd = new FormData();
     try {
+        // Prefer the snapshot captured during initial submit to avoid widgets clearing values
+        const msgVal = (form.snapshot && form.snapshot.message !== undefined) ? form.snapshot.message : (form.messageArea ? form.messageArea.value : document.getElementById('message').value);
+        const subjVal = (form.snapshot && form.snapshot.subject !== undefined) ? form.snapshot.subject : (document.getElementById('subject') ? document.getElementById('subject').value : '');
+        const emailVal = (form.snapshot && form.snapshot.email !== undefined) ? form.snapshot.email : (document.getElementById('email') ? document.getElementById('email').value : '');
+
+        fd.append('message', msgVal);
+        fd.append('subject', subjVal);
+        fd.append('email', emailVal);
+        fd.append('cf-turnstile-response', token);
+
         const response = await fetch(form.element.action, {
             method: 'POST',
-            body: formData
+            body: fd
         });
 
         if (response.ok) {
             showSuccess();
         } else {
-            throw new Error('Submit failed');
+            console.error('Submit failed, status:', response.status);
+            setSubmitting(false);
         }
     } catch (error) {
         console.error('Submission error:', error);
         setSubmitting(false);
     }
+    // clear snapshot after attempt
+    try { delete form.snapshot; } catch (e) {}
 }
 
 function showSuccess() {
