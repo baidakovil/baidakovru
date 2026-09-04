@@ -127,6 +127,26 @@ def contact():
             subject = request.form['subject']
             message_text = request.form['message']
 
+            # Debug logging: record form keys and message length/content summary
+            try:
+                logger.debug(
+                    "Contact form fields: keys=%s",
+                    list(request.form.keys()),
+                )
+                logger.debug(
+                    "Contact request headers: Content-Type=%s Content-Length=%s",
+                    request.content_type,
+                    request.content_length,
+                )
+                logger.debug(
+                    "Contact form values: email=%r subject=%r message_len=%s",
+                    email,
+                    subject,
+                    len(message_text) if message_text is not None else 'None',
+                )
+            except Exception:
+                logger.debug('Failed to log contact form debug info')
+
             # Проверяем конфигурацию
             required_settings = [
                 'MAIL_SERVER',
