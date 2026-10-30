@@ -17,3 +17,5 @@ Add unit tests and integration tests for both app.py and scheduler.py.
 
 #### Documentation
 Add more comprehensive documentation, including a README.md file explaining the project structure, setup, and deployment process
+
+And updates!
